@@ -33,7 +33,7 @@ func newTcpHandler(exit chan struct{},
 }
 
 // Handle handles messages from a conn
-func (t *tcpHandler)Handle(conn acceptor.PlayerConn) {
+func (t *tcpHandler) Handle(conn acceptor.PlayerConn) {
 	// create a client agent and startup write goroutine
 	a := agent.NewAgent(conn, t.opts.packetDecoder, t.opts.packetEncoder, t.opts.serializer, t.opts.heartbeatTime, t.opts.messagesBufferSize, t.exit, t.opts.messageEncoder)
 
@@ -143,7 +143,7 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	case message.Notify:
 		mid = 0
 	}
-	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, t.opts.Id)
+	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, t.opts.Service.Options().Server.Options().Id)
 	endpoint := route.Service + ".Call"
 
 	req := client.NewRequest(route.SvType, endpoint, r)

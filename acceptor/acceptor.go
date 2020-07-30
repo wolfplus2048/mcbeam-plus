@@ -35,8 +35,3 @@ type Acceptor interface {
 	GetAddr() string
 	GetConnChan() chan PlayerConn
 }
-
-var (
-	DefaultAcceptor Acceptor = NewWSAcceptor(Address(DefaultAddress))
-	DefaultAddress  string   = ":3250"
-)
