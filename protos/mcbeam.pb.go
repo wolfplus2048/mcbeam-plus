@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.24.0
 // 	protoc        v3.12.1
-// source: protos/mcbeam.proto
+// source: protos/mcbeam.protos
 
 package mcbeamproto
 
@@ -22,7 +22,7 @@ const (
 )
 
 // This is a compile-time assertion that a sufficiently up-to-date version
-// of the legacy proto package is being used.
+// of the legacy protos package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
 type MsgType int32

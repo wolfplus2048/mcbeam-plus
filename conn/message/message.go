@@ -69,7 +69,7 @@ var (
 type Message struct {
 	Type       Type   // message type
 	ID         uint   // unique id, zero while notify mode
-	Route      string // route for locating service
+	Route      string // route for locating mcb
 	Data       []byte // payload
 	compressed bool   // is message compressed
 	Err        bool   // is an error message

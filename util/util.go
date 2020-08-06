@@ -28,7 +28,7 @@ import (
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
 	e "github.com/wolfplus2048/mcbeam-plus/errors"
-	gateproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
 	"github.com/wolfplus2048/mcbeam-plus/serialize/json"
@@ -38,7 +38,6 @@ import (
 	"reflect"
 	"runtime/debug"
 )
-
 
 // Pcall calls a method that returns an interface and an error and recovers in case of panic
 func Pcall(method reflect.Method, args []reflect.Value) (rets interface{}, err error) {
@@ -105,7 +104,7 @@ func GetErrorFromPayload(serializer serialize.Serializer, payload []byte) error 
 	case *json.Serializer:
 		_ = serializer.Unmarshal(payload, err)
 	case *protobuf.Serializer:
-		pErr := &gateproto.Error{Code: e.ErrUnknownCode}
+		pErr := &mcbeamproto.Error{Code: e.ErrUnknownCode}
 		_ = serializer.Unmarshal(payload, pErr)
 		err = &e.Error{Code: pErr.Code, Message: pErr.Msg, Metadata: pErr.Metadata}
 	}
@@ -121,7 +120,7 @@ func GetErrorPayload(serializer serialize.Serializer, err error) ([]byte, error)
 		code = val.Code
 		metadata = val.Metadata
 	}
-	errPayload := &gateproto.Error{
+	errPayload := &mcbeamproto.Error{
 		Code: code,
 		Msg:  msg,
 	}
@@ -130,6 +129,7 @@ func GetErrorPayload(serializer serialize.Serializer, err error) ([]byte, error)
 	}
 	return SerializeOrRaw(serializer, errPayload)
 }
+
 //
 //// ConvertProtoToMessageType converts a corona_protos.MsgType to a message.Type
 //func ConvertProtoToMessageType(protoMsgType corona_protos.MsgType) message.Type {
@@ -156,15 +156,14 @@ func GetErrorPayload(serializer serialize.Serializer, err error) ([]byte, error)
 //	return ctx, nil
 //}
 
-
 func BuildRequest(ctx context.Context,
-	rpcType gateproto.RPCType,
+	rpcType mcbeamproto.RPCType,
 	route *route.Route,
 	session *session.Session,
 	msg *message.Message,
-	frontendID string) (gateproto.Request, error){
-	req := gateproto.Request{
-		Msg:        &gateproto.Msg{
+	frontendID string) (*mcbeamproto.Request, error) {
+	req := &mcbeamproto.Request{
+		Msg: &mcbeamproto.Msg{
 			Route: route.String(),
 			Data:  msg.Data,
 		},
@@ -172,17 +171,17 @@ func BuildRequest(ctx context.Context,
 	req.FrontendID = frontendID
 	switch msg.Type {
 	case message.Request:
-		req.Msg.Type = gateproto.MsgType_MsgRequest
+		req.Msg.Type = mcbeamproto.MsgType_MsgRequest
 	case message.Notify:
-		req.Msg.Type = gateproto.MsgType_MsgNotify
+		req.Msg.Type = mcbeamproto.MsgType_MsgNotify
 	}
-	if rpcType == gateproto.RPCType_Sys {
+	if rpcType == mcbeamproto.RPCType_Sys {
 		mid := uint(0)
 		if msg.Type == message.Request {
 			mid = msg.ID
 		}
 		req.Msg.Id = uint64(mid)
-		req.Session = &gateproto.Session{
+		req.Session = &mcbeamproto.Session{
 			Id:   session.ID(),
 			Uid:  session.UID(),
 			Data: session.GetDataEncoded(),

@@ -27,10 +27,10 @@ type Type byte
 
 const (
 	_ Type = iota
-	// Handshake represents a handshake: request(client) <====> handshake response(server)
+	// Handshake represents a handshake: request(client) <====> handshake response(tcp)
 	Handshake = 0x01
 
-	// HandshakeAck represents a handshake ack from client to server
+	// HandshakeAck represents a handshake ack from client to tcp
 	HandshakeAck = 0x02
 
 	// Heartbeat represents a heartbeat
@@ -40,7 +40,7 @@ const (
 	Data = 0x04
 
 	// Kick represents a kick off packet
-	Kick = 0x05 // disconnect message from server
+	Kick = 0x05 // disconnect message from tcp
 )
 
 // ErrWrongPomeloPacketType represents a wrong packet type.

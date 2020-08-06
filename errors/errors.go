@@ -21,7 +21,7 @@
 package errors
 
 // ErrUnknownCode is a string code representing an unknown error
-// This will be used when no error code is sent by the handler
+// This will be used when no error code is sent by the mcb_server
 const ErrUnknownCode = "PIT-000"
 
 // ErrInternalCode is a string code representing an internal Corona error

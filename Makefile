@@ -4,10 +4,10 @@ GOPATH:=$(shell go env GOPATH)
 .PHONY: proto
 proto:
 	protoc --proto_path=. --micro_out=. --go_out=. protos/mcbeam.proto
-#	pbjs -t static-module -w commonjs -o proto/tcp/bundle.js proto/tcp/tcp.proto
-#	pbts -o proto/tcp/bundle.d.ts proto/tcp/bundle.js
-#	protoc --js_out=import_style=commonjs,binary:. proto/gate/gate.proto
-#	browserify proto/gate/exports.js > proto/gate/bundle.js
+#	pbjs -t static-module -w commonjs -o protos/tcp/bundle.js protos/tcp/tcp.protos
+#	pbts -o protos/tcp/bundle.d.ts protos/tcp/bundle.js
+#	protoc --js_out=import_style=commonjs,binary:. protos/gate/gate.protos
+#	browserify protos/gate/exports.js > protos/gate/bundle.js
 
     
 

@@ -7,8 +7,21 @@ import (
 type Service interface {
 	Init(opts ...Option) error
 	Options() Options
-	Handler(name string, handler interface{})
+	Register(name string, comp Component)
+	Module(name string, module Module)
 	Run() error
+}
+type Module interface {
+	Init() error
+	AfterInit()
+	BeforeShutdown()
+	Shutdown() error
+}
+type Component interface {
+	Init()
+	AfterInit()
+	BeforeShutdown()
+	Shutdown()
 }
 
 //Mcbeam basic Defaults
@@ -18,5 +31,5 @@ var (
 	DefaultMessagesBufferSize int           = 100
 	DefaultClientAddress                    = ":3250"
 
-	NewService func(...Option) Service = newTcpService
+	NewService func(...Option) Service = newMcbService
 )

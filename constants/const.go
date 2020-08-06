@@ -62,8 +62,8 @@ var SpanPropagateCtxKey = "opentracing-span"
 // PeerIDKey is the key holding the peer id to be sent over the context
 var PeerIDKey = "peer.id"
 
-// PeerServiceKey is the key holding the peer service to be sent over the context
-var PeerServiceKey = "peer.service"
+// PeerServiceKey is the key holding the peer mcb to be sent over the context
+var PeerServiceKey = "peer.mcb"
 
 // StartTimeKey is the key holding the request start time (in ns) to be sent over the context
 var StartTimeKey = "req-start-time"
@@ -78,19 +78,19 @@ var RouteKey = "req-route"
 // to be reported
 var MetricTagsKey = "metric-tags"
 
-// GRPCHostKey is the key for grpc host on server metadata
+// GRPCHostKey is the key for grpc host on tcp metadata
 var GRPCHostKey = "grpcHost"
 
-// GRPCExternalHostKey is the key for grpc external host on server metadata
+// GRPCExternalHostKey is the key for grpc external host on tcp metadata
 var GRPCExternalHostKey = "grpc-external-host"
 
-// GRPCPortKey is the key for grpc port on server metadata
+// GRPCPortKey is the key for grpc port on tcp metadata
 var GRPCPortKey = "grpcPort"
 
-// GRPCExternalPortKey is the key for grpc external port on server metadata
+// GRPCExternalPortKey is the key for grpc external port on tcp metadata
 var GRPCExternalPortKey = "grpc-external-port"
 
-// RegionKey is the key to save the region server is on
+// RegionKey is the key to save the region tcp is on
 var RegionKey = "region"
 
 // IP constants

@@ -37,7 +37,7 @@ var (
 
 // Route struct
 type Route struct {
-	SvID	string
+	SvID    string
 	SvType  string
 	Service string
 	Method  string
@@ -59,7 +59,7 @@ func (r *Route) String() string {
 	return r.Short()
 }
 
-// Short transforms the route into a string without the server type
+// Short transforms the route into a string without the tcp type
 func (r *Route) Short() string {
 	return fmt.Sprintf("%s.%s", r.Service, r.Method)
 }

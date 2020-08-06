@@ -1,4 +1,4 @@
-package mcbeam
+package tcp
 
 import (
 	"context"
@@ -19,11 +19,11 @@ import (
 )
 
 type tcpHandler struct {
-	exit chan struct{}
 	opts Options
+	exit chan bool
 }
 
-func newTcpHandler(exit chan struct{},
+func newTcpHandler(exit chan bool,
 	opts Options,
 ) *tcpHandler {
 	return &tcpHandler{
@@ -35,7 +35,7 @@ func newTcpHandler(exit chan struct{},
 // Handle handles messages from a conn
 func (t *tcpHandler) Handle(conn acceptor.PlayerConn) {
 	// create a client agent and startup write goroutine
-	a := agent.NewAgent(conn, t.opts.packetDecoder, t.opts.packetEncoder, t.opts.serializer, t.opts.heartbeatTime, t.opts.messagesBufferSize, t.exit, t.opts.messageEncoder)
+	a := agent.NewAgent(conn, t.opts.PacketDecoder, t.opts.PacketEncoder, t.opts.Serializer, t.opts.HeartbeatTime, t.opts.MessagesBufferSize, t.exit, t.opts.MessageEncoder)
 
 	// startup agent goroutine
 	go a.Handle()
@@ -56,7 +56,7 @@ func (t *tcpHandler) Handle(conn acceptor.PlayerConn) {
 			return
 		}
 
-		packets, err := t.opts.packetDecoder.Decode(msg)
+		packets, err := t.opts.PacketDecoder.Decode(msg)
 		if err != nil {
 			logger.Errorf("Failed to decode message: %s", err.Error())
 			return
@@ -144,7 +144,7 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 		mid = 0
 	}
 	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, t.opts.Service.Options().Server.Options().Id)
-	endpoint := route.Service + ".Call"
+	endpoint := "Mcbeam.Call"
 
 	req := client.NewRequest(route.SvType, endpoint, r)
 	rsp := &gateproto.Response{}
@@ -152,10 +152,10 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 
 	if msg.Type != message.Notify {
 		if err != nil {
-			logger.Errorf("Failed to process handler message: %s", err.Error())
+			logger.Errorf("Failed to process mcb_server message: %s", err.Error())
 			a.AnswerWithError(ctx, mid, err)
 		} else {
-			a.Session.ResponseMID(ctx, mid, rsp)
+			a.Session.ResponseMID(ctx, mid, rsp.Data)
 		}
 	}
 }

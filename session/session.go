@@ -89,8 +89,8 @@ type Session struct {
 	OnCloseCallbacks  []func()               //onClose callbacks
 	IsFrontend        bool                   // if session is a frontend session
 	frontendID        string                 // the id of the frontend that owns the session
-	frontendSessionID int64                  // the id of the session on the frontend server
-	Subscriptions     []*nats.Subscription   // subscription created on bind when using nats rpc server
+	frontendSessionID int64                  // the id of the session on the frontend tcp
+	Subscriptions     []*nats.Subscription   // subscription created on bind when using nats rpc tcp
 }
 
 type sessionIDService struct {
@@ -110,7 +110,7 @@ func (c *sessionIDService) sessionID() int64 {
 
 // New returns a new session instance
 // a NetworkEntity is a low-level network instance
-func New(entity NetworkEntity) *Session {
+func New(entity NetworkEntity, frontend bool, UID ...string) *Session {
 	s := &Session{
 		id:               sessionIDSvc.sessionID(),
 		entity:           entity,
@@ -118,6 +118,14 @@ func New(entity NetworkEntity) *Session {
 		handshakeData:    nil,
 		lastTime:         time.Now().Unix(),
 		OnCloseCallbacks: []func(){},
+		IsFrontend:       frontend,
+	}
+	if frontend {
+		sessionsByID.Store(s.id, s)
+		atomic.AddInt64(&SessionCount, 1)
+	}
+	if len(UID) > 0 {
+		s.uid = UID[0]
 	}
 	return s
 }
@@ -131,7 +139,7 @@ func GetSessionByUID(uid string) *Session {
 	return nil
 }
 
-// GetSessionByID return a session bound to a frontend server id
+// GetSessionByID return a session bound to a frontend tcp id
 func GetSessionByID(id int64) *Session {
 	// TODO: Block this operation in backend servers
 	if val, ok := sessionsByID.Load(id); ok {
@@ -289,12 +297,12 @@ func (s *Session) Bind(ctx context.Context, uid string) error {
 		}
 	}
 
-	// if code running on frontend server
+	// if code running on frontend tcp
 	if s.IsFrontend {
 		sessionsByUID.Store(uid, s)
 	} else {
-		// If frontentID is set this means it is a remote call and the current server
-		// is not the frontend server that received the user request
+		// If frontentID is set this means it is a remote call and the current tcp
+		// is not the frontend tcp that received the user request
 		err := s.bindInFront(ctx)
 		if err != nil {
 			logger.Error("error while trying to push session to front: ", err)
@@ -330,9 +338,9 @@ func (s *Session) Close() {
 	atomic.AddInt64(&SessionCount, -1)
 	sessionsByID.Delete(s.ID())
 	sessionsByUID.Delete(s.UID())
-	// TODO: this logic should be moved to nats rpc server
+	// TODO: this logic should be moved to nats rpc tcp
 	if s.IsFrontend && s.Subscriptions != nil && len(s.Subscriptions) > 0 {
-		// if the user is bound to an userid and nats rpc server is being used we need to unsubscribe
+		// if the user is bound to an userid and nats rpc tcp is being used we need to unsubscribe
 		for _, sub := range s.Subscriptions {
 			err := sub.Unsubscribe()
 			if err != nil {
@@ -358,6 +366,7 @@ func (s *Session) GetRemoteAddr() string {
 	return ""
 
 }
+
 // Remove delete data associated with the key from session storage
 func (s *Session) Remove(key string) error {
 	s.Lock()
@@ -669,7 +678,7 @@ func (s *Session) sendRequestToFront(ctx context.Context, route string, includeD
 	//if includeData {
 	//	sessionData.Data = s.encodedData
 	//}
-	//b, err := proto.Marshal(sessionData)
+	//b, err := protos.Marshal(sessionData)
 	//if err != nil {
 	//	return err
 	//}

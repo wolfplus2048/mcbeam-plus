@@ -1,4 +1,4 @@
-package mcbeam
+package tcp
 
 import (
 	"context"
@@ -15,7 +15,6 @@ type Options struct {
 	Name          string
 	ClientAddress string
 	Handler       interface{}
-	Service       micro.Service
 
 	// Alternative Options
 	Context context.Context
@@ -30,10 +29,11 @@ type Options struct {
 	TSLKey             string
 	WSPath             string
 	Acceptors          []acceptor.Acceptor
+	Service            micro.Service
 }
 type Option func(o *Options)
 
-func NewOptions(opt ...Option) Options {
+func newOptions(opt ...Option) Options {
 	opts := Options{
 		Context:            context.TODO(),
 		PacketDecoder:      codec.NewPomeloPacketDecoder(),
@@ -42,8 +42,7 @@ func NewOptions(opt ...Option) Options {
 		Serializer:         protobuf.NewSerializer(),
 		HeartbeatTime:      DefaultHeartbeatTime,
 		MessagesBufferSize: DefaultMessagesBufferSize,
-		WSPath:             "/ws",
-		Service:            micro.NewService(),
+		WSPath:             DefaultWSPath,
 		ClientAddress:      DefaultClientAddress,
 	}
 	for _, o := range opt {
@@ -62,10 +61,19 @@ func Acceptor(acc acceptor.Acceptor) Option {
 		o.Acceptors = append(o.Acceptors, acc)
 	}
 }
+func WSPath(path string) Option {
+	return func(o *Options) {
+		o.WSPath = path
+	}
+}
 func ClientAddress(c string) Option {
 	return func(o *Options) {
 		o.ClientAddress = c
-		o.Acceptors = append(o.Acceptors, acceptor.NewWSAcceptor(acceptor.Address(o.ClientAddress)))
+	}
+}
+func Service(s micro.Service) Option {
+	return func(o *Options) {
+		o.Service = s
 	}
 }
 
@@ -75,10 +83,5 @@ func ClientAddress(c string) Option {
 func Context(ctx context.Context) Option {
 	return func(o *Options) {
 		o.Context = ctx
-	}
-}
-func WithService(s micro.Service) Option {
-	return func(o *Options) {
-		o.Service = s
 	}
 }

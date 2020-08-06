@@ -42,8 +42,6 @@ import (
 	"sync/atomic"
 	"time"
 
-
-
 	opentracing "github.com/opentracing/opentracing-go"
 )
 
@@ -55,13 +53,13 @@ var (
 	once sync.Once
 )
 
-const handlerType = "handler"
+const handlerType = "mcb_server"
 
 type (
 	// Agent corresponds to a user and is used for storing raw Conn information
 	Agent struct {
 		Session            *session.Session    // session
-		appDieChan         chan struct{}           // app die channel
+		appDieChan         chan bool           // app die channel
 		chDie              chan struct{}       // wait for close
 		chSend             chan pendingMessage // push message queue
 		chStopHeartbeat    chan struct{}       // stop heartbeats
@@ -73,7 +71,7 @@ type (
 		heartbeatTimeout   time.Duration
 		lastAt             int64 // last heartbeat unix time stamp
 		messageEncoder     message.Encoder
-		messagesBufferSize int // size of the pending messages buffer
+		messagesBufferSize int                  // size of the pending messages buffer
 		serializer         serialize.Serializer // message serializer
 		state              int32                // current agent state
 	}
@@ -96,7 +94,7 @@ func NewAgent(
 	serializer serialize.Serializer,
 	heartbeatTime time.Duration,
 	messagesBufferSize int,
-	dieChan chan struct{},
+	dieChan chan bool,
 	messageEncoder message.Encoder,
 ) *Agent {
 	// initialize heartbeat and handshake data on first user connection
@@ -124,7 +122,7 @@ func NewAgent(
 	}
 
 	// binding session
-	s := session.New(a)
+	s := session.New(a, true)
 	a.Session = s
 	return a
 }
@@ -410,7 +408,7 @@ func (a *Agent) write() {
 	}
 }
 
-// SendRequest sends a request to a server
+// SendRequest sends a request to a tcp
 func (a *Agent) SendRequest(ctx context.Context, serverID, route string, v interface{}) (interface{}, error) {
 	return nil, e.New("not implemented")
 }
