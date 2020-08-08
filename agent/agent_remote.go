@@ -47,7 +47,7 @@ type Remote struct {
 	encoder        codec.PacketEncoder  // binary encoder
 	frontendID     string               // the frontend that sent the request
 	reply          string               // nats reply topic
-	rpcClient      micro.Service        // rpc client
+	rpcClient      mcbeamproto.McbeamService    // rpc client
 	serializer     serialize.Serializer // message serializer
 }
 
@@ -55,7 +55,7 @@ type Remote struct {
 func NewRemote(
 	sess *mcbeamproto.Session,
 	reply string,
-	rpcClient micro.Service,
+	rpcClient mcbeamproto.McbeamService,
 	encoder codec.PacketEncoder,
 	serializer serialize.Serializer,
 	frontendID string,
@@ -100,10 +100,7 @@ func (a *Remote) Kick(ctx context.Context) error {
 
 // Push pushes the message to the user
 func (a *Remote) Push(route string, v interface{}) error {
-	if (reflect.TypeOf(a.rpcClient) == reflect.TypeOf(&cluster.NatsRPCClient{}) &&
-		a.Session.UID() == "") {
-		return constants.ErrNoUIDBind
-	}
+
 	switch d := v.(type) {
 	case []byte:
 		logger.Debugf("Type=Push, ID=%d, UID=%d, Route=%s, Data=%dbytes",
@@ -113,13 +110,8 @@ func (a *Remote) Push(route string, v interface{}) error {
 			a.Session.ID(), a.Session.UID(), route, v)
 	}
 
-	sv, err := a.serviceDiscovery.GetServer(a.frontendID)
-	if err != nil {
-		return err
-	}
 	return a.sendPush(
-		pendingMessage{typ: message.Push, route: route, payload: v},
-		a.Session.UID(), sv,
+		pendingMessage{typ: message.Push, route: route, payload: v}, a.Session.UID(),
 	)
 }
 
@@ -196,7 +188,7 @@ func (a *Remote) send(m pendingMessage, to string) (err error) {
 	return a.rpcClient.Send(to, bt)
 }
 
-func (a *Remote) sendPush(m pendingMessage, userID string, sv *cluster.Server) (err error) {
+func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
 	payload, err := util.SerializeOrRaw(a.serializer, m.payload)
 	if err != nil {
 		return err
@@ -206,7 +198,8 @@ func (a *Remote) sendPush(m pendingMessage, userID string, sv *cluster.Server) (
 		Uid:   a.Session.UID(),
 		Data:  payload,
 	}
-	return a.rpcClient.SendPush(userID, sv, push)
+	_, err = a.rpcClient.PushToUser(context.Background(), push)
+	return err
 }
 
 // SendRequest sends a request to a server
@@ -223,9 +216,17 @@ func (a *Remote) SendRequest(ctx context.Context, serverID, reqRoute string, v i
 		Route: reqRoute,
 		Data:  payload,
 	}
+	req := mcbeamproto.Request{
+		Type:       mcbeamproto.RPCType_User,
+		Session:    a.Session,
+		Msg:        nil,
+		FrontendID: "",
+		Metadata:   nil,
+	}
 	server, err := a.serviceDiscovery.GetServer(serverID)
 	if err != nil {
 		return nil, err
 	}
+	return a.rpcClient.Call(ctx, )
 	return a.rpcClient.Call(ctx, mcbeamproto.RPCType_User, r, nil, msg, server)
 }
