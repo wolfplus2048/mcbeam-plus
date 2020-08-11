@@ -1,10 +1,9 @@
-package tcp
+package api
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/acceptor"
 	"github.com/wolfplus2048/mcbeam-plus/agent"
@@ -144,12 +143,8 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 		mid = 0
 	}
 	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, t.opts.Service.Options().Server.Options().Id)
-	endpoint := "Mcbeam.Call"
 
-	req := client.NewRequest(route.SvType, endpoint, r)
-	rsp := &gateproto.Response{}
-	err = client.Call(ctx, req, rsp)
-
+	rsp, err := t.opts.rpcClient.Call(ctx, r)
 	if msg.Type != message.Notify {
 		if err != nil {
 			logger.Errorf("Failed to process mcb_server message: %s", err.Error())

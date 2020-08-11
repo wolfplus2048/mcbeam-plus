@@ -3,6 +3,7 @@ package mcbeam
 import (
 	"context"
 	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/registry"
 	"github.com/wolfplus2048/mcbeam-plus/acceptor"
 	"github.com/wolfplus2048/mcbeam-plus/conn/codec"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
@@ -16,6 +17,7 @@ type Options struct {
 	ClientAddress string
 	Handler       interface{}
 	Service       micro.Service
+	Registry  	registry.Registry
 
 	// Alternative Options
 	Context context.Context
@@ -68,7 +70,11 @@ func ClientAddress(c string) Option {
 		o.Acceptors = append(o.Acceptors, acceptor.NewWSAcceptor(acceptor.Address(o.ClientAddress)))
 	}
 }
-
+func Registry(r registry.Registry) Option {
+	return func(o *Options) {
+		o.Registry = r
+	}
+}
 // Context specifies a context for the mcb.
 // Can be used to signal shutdown of the mcb.
 // Can be used for extra option values.

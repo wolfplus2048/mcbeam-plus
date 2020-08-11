@@ -17,12 +17,15 @@ type Module interface {
 	BeforeShutdown()
 	Shutdown() error
 }
+
+
 type Component interface {
 	Init()
 	AfterInit()
 	BeforeShutdown()
 	Shutdown()
 }
+
 
 //Mcbeam basic Defaults
 var (

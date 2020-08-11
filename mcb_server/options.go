@@ -1,14 +1,23 @@
 package mcb_server
 
-import "github.com/wolfplus2048/mcbeam-plus/serialize"
+import (
+	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/serialize"
+)
 
 type Options struct {
 	name       string
 	nameFunc   func(string) string
 	serializer serialize.Serializer
+	rpcClient mcbeamproto.McbAppService
 }
 type Option func(options *Options)
 
+func RpcClient(appClient mcbeamproto.McbAppService) Option {
+	return func(o *Options) {
+		o.rpcClient = appClient
+	}
+}
 func WithName(name string) Option {
 	return func(o *Options) {
 		o.name = name

@@ -49,9 +49,20 @@
         let rsp = proto.gate.GreeterRes.deserializeBinary(data)
         console.log(rsp)
         v.messages.push({name:'system', content:rsp.getMessage()});
-    };
 
+        let req = new proto.gate.GreeterReq()
+        req.setMessage("wolfplus")
+        let buff = req.serializeBinary()
+        starx.notify("gate.handler.hello", buff)
+    };
+    var onHello = function (msg) {
+        console.log(data);
+        let rsp = proto.gate.GreeterRes.deserializeBinary(data)
+        console.log(rsp)
+        v.messages.push({name:'system', content:rsp.getMessage()});
+    }
     starx.init({host: '127.0.0.1', port: 3250, path: '/ws'}, function () {
+        starx.on("hello", onHello);
         console.log("initialized");
         let req = new proto.gate.GreeterReq()
         req.setMessage("wolfplus")

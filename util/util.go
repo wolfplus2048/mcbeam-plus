@@ -189,3 +189,13 @@ func BuildRequest(ctx context.Context,
 	}
 	return req, nil
 }
+
+// GetSessionFromCtx retrieves a session from a given context
+func GetSessionFromCtx(ctx context.Context) *session.Session {
+	sessionVal := ctx.Value(constants.SessionCtxKey)
+	if sessionVal == nil {
+		logger.Debug("ctx doesn't contain a session, are you calling GetSessionFromCtx from inside a remote?")
+		return nil
+	}
+	return sessionVal.(*session.Session)
+}

@@ -1,4 +1,4 @@
-package tcp
+package api
 
 import (
 	"sync"
@@ -14,7 +14,7 @@ type TcpServer struct {
 	exit    chan bool
 }
 
-func NewTcpServer(exit chan bool, opt ...Option) *TcpServer {
+func NewTcpServer(exit chan bool, opt ...Option) Server {
 	opts := newOptions(opt...)
 	t := &TcpServer{
 		opts:    opts,
@@ -64,7 +64,9 @@ func (t *TcpServer) Stop() error {
 
 	return nil
 }
-
+func (t *TcpServer) String() string {
+	return "tcpServer"
+}
 // Enable current tcp accept connection
 func (t *TcpServer) listenAndServe() {
 	for _, acc := range t.opts.Acceptors {

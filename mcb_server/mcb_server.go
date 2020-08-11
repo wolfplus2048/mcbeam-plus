@@ -5,11 +5,13 @@ import (
 	"errors"
 	"github.com/golang/protobuf/proto"
 	"github.com/micro/go-micro/v2/logger"
+	"github.com/wolfplus2048/mcbeam-plus/agent"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
 	e "github.com/wolfplus2048/mcbeam-plus/errors"
 	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
+	"github.com/wolfplus2048/mcbeam-plus/session"
 	"github.com/wolfplus2048/mcbeam-plus/util"
 	"reflect"
 )
@@ -54,6 +56,7 @@ func NewMcbServer(handler interface{}, opts ...Option) *McbServer {
 	s.ExtractHandler()
 	return s
 }
+
 func (m *McbServer) ExtractHandler() error {
 	typeName := reflect.Indirect(m.receiver).Type().Name()
 	if typeName == "" {
@@ -156,7 +159,8 @@ func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, 
 	} else if err != nil {
 		logger.Warnf("invalid message type, error: %s", err.Error())
 	}
-
+	a, err := agent.NewRemote(req.GetSession(), req.Msg.Reply, m.Opts.rpcClient, req.FrontendID, m.Opts.serializer)
+	ctx = context.WithValue(ctx, constants.SessionCtxKey, a.Session)
 	args := []reflect.Value{handler.Receiver, reflect.ValueOf(ctx)}
 	arg, err := unmarshalHandlerArg(handler, m.Opts.serializer, req.GetMsg().GetData())
 	if err != nil {
@@ -227,14 +231,20 @@ func (h *Handler) ValidateMessageType(msgType message.Type) (exitOnError bool, e
 	return
 }
 
-func (m *McbServer) PushToUser(ctx context.Context, push *mcbeamproto.Push, response *mcbeamproto.Response) error {
+func (m *McbServer) Push(ctx context.Context, push *mcbeamproto.PushMsg, res *mcbeamproto.Response) error {
+	logger.Debugf("sending push to user %s: %v", push.GetUid(), string(push.Data))
+	s := session.GetSessionByUID(push.GetUid())
+	if s == nil {
+		return constants.ErrSessionNotFound
+	}
+	err := s.Push(push.Route, push.Data)
+	return err
+}
+
+func (m *McbServer) Bind(ctx context.Context, msg *mcbeamproto.BindMsg, response *mcbeamproto.Response) error {
 	panic("implement me")
 }
 
-func (m *McbServer) SessionBindRemote(ctx context.Context, msg *mcbeamproto.BindMsg, response *mcbeamproto.Response) error {
-	panic("implement me")
-}
-
-func (m *McbServer) KickUser(ctx context.Context, msg *mcbeamproto.KickMsg, answer *mcbeamproto.KickAnswer) error {
+func (m *McbServer) Kick(ctx context.Context, msg *mcbeamproto.KickMsg, answer *mcbeamproto.KickAnswer) error {
 	panic("implement me")
 }

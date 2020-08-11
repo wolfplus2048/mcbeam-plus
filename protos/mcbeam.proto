@@ -13,11 +13,11 @@ enum RPCType {
     User = 1;
 }
 
-service Mcbeam {
+service McbApp {
     rpc Call(Request) returns (Response) {}
-    rpc PushToUser(Push) returns (Response) {}
-    rpc SessionBindRemote(BindMsg) returns (Response) {}
-    rpc KickUser(KickMsg) returns (KickAnswer) {}
+    rpc Push(PushMsg) returns (Response) {}
+    rpc Bind(BindMsg) returns (Response) {}
+    rpc Kick(KickMsg) returns (KickAnswer) {}
 }
 message Error {
     string code = 1;
@@ -57,7 +57,7 @@ message KickMsg {
 message KickAnswer {
     bool kicked = 1;
 }
-message Push {
+message PushMsg {
     string route = 1;
     string uid = 2;
     bytes data = 3;
