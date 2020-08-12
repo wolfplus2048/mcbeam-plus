@@ -10,7 +10,6 @@ import (
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/conn/packet"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
-	e "github.com/wolfplus2048/mcbeam-plus/errors"
 	gateproto "github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/session"
@@ -132,7 +131,7 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	route, err := route.Decode(msg.Route)
 	if err != nil {
 		logger.Errorf("Failed to decode route: %s", err.Error())
-		a.AnswerWithError(ctx, msg.ID, e.NewError(err, e.ErrBadRequestCode))
+		a.AnswerWithError(ctx, msg.ID, err)
 		return
 	}
 	var mid uint
@@ -147,7 +146,7 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	rsp, err := t.opts.rpcClient.Call(ctx, r)
 	if msg.Type != message.Notify {
 		if err != nil {
-			logger.Errorf("Failed to process mcb_server message: %s", err.Error())
+			logger.Errorf("Failed to process remote message: %s", err.Error())
 			a.AnswerWithError(ctx, mid, err)
 		} else {
 			a.Session.ResponseMID(ctx, mid, rsp.Data)

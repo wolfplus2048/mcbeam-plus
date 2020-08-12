@@ -3,6 +3,7 @@ package mcbeam
 import (
 	"github.com/micro/go-micro/v2"
 	"github.com/wolfplus2048/mcbeam-plus/api"
+	"github.com/wolfplus2048/mcbeam-plus/gate_server"
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
 	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
 	"strings"
@@ -13,7 +14,6 @@ type mcbService struct {
 	opts Options
 	sync.RWMutex
 	tcpServer api.Server
-	remoteSrv *mcb_server.McbServer
 	started   bool
 	exit      chan bool
 }
@@ -30,14 +30,15 @@ func newMcbService(opt ...Option) Service {
 }
 
 func (t *mcbService) Register(name string, handler Component) {
-	client := mcbeamproto.NewMcbAppService("gate", t.opts.Service.Client())
-	t.remoteSrv = mcb_server.NewMcbServer(handler,
+	client := mcbeamproto.NewMcbGateService(name, t.opts.Service.Client())
+	srv := mcb_server.NewMcbServer(handler,
 		mcb_server.WithName(name),
 		mcb_server.WithNameFunc(strings.ToLower),
 		mcb_server.Serializer(t.opts.Serializer),
 		mcb_server.RpcClient(client),
 	)
-	mcbeamproto.RegisterMcbAppHandler(t.opts.Service.Server(), t.remoteSrv)
+	mcbeamproto.RegisterMcbAppHandler(t.opts.Service.Server(), srv)
+
 }
 func (t *mcbService) Module(name string, module Module) {
 	panic("implement me")
@@ -79,7 +80,6 @@ func (t *mcbService) Init(opts ...Option) error {
 	client := mcbeamproto.NewMcbAppService("gate", t.opts.Service.Client())
 	serverOpts = append(serverOpts, api.Client(client))
 
-
 	t.tcpServer.Init(serverOpts...)
 
 	var serviceOpts []micro.Option
@@ -91,6 +91,9 @@ func (t *mcbService) Init(opts ...Option) error {
 	}
 	t.opts.Service.Init(serviceOpts...)
 
+	if len(t.opts.Acceptors) > 0 {
+		mcbeamproto.RegisterMcbGateHandler(t.opts.Service.Server(), &gate_server.Server{})
+	}
 	return nil
 }
 

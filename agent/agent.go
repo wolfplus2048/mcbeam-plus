@@ -30,7 +30,6 @@ import (
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/conn/packet"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
-	"github.com/wolfplus2048/mcbeam-plus/errors"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
 	"github.com/wolfplus2048/mcbeam-plus/session"
 	"github.com/wolfplus2048/mcbeam-plus/util"
@@ -130,7 +129,7 @@ func NewAgent(
 func (a *Agent) send(m pendingMessage) (err error) {
 	defer func() {
 		if e := recover(); e != nil {
-			err = errors.NewError(constants.ErrBrokenPipe, errors.ErrClientClosedRequest)
+			err = constants.ErrBrokenPipe
 		}
 	}()
 	a.chSend <- m
@@ -140,7 +139,7 @@ func (a *Agent) send(m pendingMessage) (err error) {
 // Push implementation for session.NetworkEntity interface
 func (a *Agent) Push(route string, v interface{}) error {
 	if a.GetStatus() == constants.StatusClosed {
-		return errors.NewError(constants.ErrBrokenPipe, errors.ErrClientClosedRequest)
+		return constants.ErrBrokenPipe
 	}
 
 	switch d := v.(type) {
@@ -162,7 +161,7 @@ func (a *Agent) ResponseMID(ctx context.Context, mid uint, v interface{}, isErro
 		err = isError[0]
 	}
 	if a.GetStatus() == constants.StatusClosed {
-		err := errors.NewError(constants.ErrBrokenPipe, errors.ErrClientClosedRequest)
+		err := constants.ErrBrokenPipe
 		//tracing.FinishSpan(ctx, err)
 		//metrics.ReportTimingFromCtx(ctx, a.metricsReporters, handlerType, err)
 		return err

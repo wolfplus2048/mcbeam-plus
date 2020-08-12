@@ -7,8 +7,8 @@ import (
 	"github.com/wolfplus2048/mcbeam-plus"
 	"github.com/wolfplus2048/mcbeam-plus/example/protos/gate"
 )
-type Handler struct {
 
+type Handler struct {
 }
 
 func (h *Handler) Init() {
@@ -29,7 +29,7 @@ func (h *Handler) Shutdown() {
 func (h *Handler) Greeter(ctx context.Context, req *gate.GreeterReq) (*gate.GreeterRes, error) {
 	logger.Infof("request: %s", req.Message)
 	res := &gate.GreeterRes{}
-	res.Message = "Hello " + req.Message
+	res.Message = "Srv Hello " + req.Message
 	return res, nil
 }
 

@@ -24,15 +24,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	e "github.com/micro/go-micro/v2/errors"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
-	e "github.com/wolfplus2048/mcbeam-plus/errors"
 	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
-	"github.com/wolfplus2048/mcbeam-plus/serialize/json"
-	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
 	"github.com/wolfplus2048/mcbeam-plus/session"
 	"os"
 	"reflect"
@@ -99,35 +97,17 @@ func FileExists(filename string) bool {
 
 // GetErrorFromPayload gets the error from payload
 func GetErrorFromPayload(serializer serialize.Serializer, payload []byte) error {
-	err := &e.Error{Code: e.ErrUnknownCode}
-	switch serializer.(type) {
-	case *json.Serializer:
-		_ = serializer.Unmarshal(payload, err)
-	case *protobuf.Serializer:
-		pErr := &mcbeamproto.Error{Code: e.ErrUnknownCode}
-		_ = serializer.Unmarshal(payload, pErr)
-		err = &e.Error{Code: pErr.Code, Message: pErr.Msg, Metadata: pErr.Metadata}
+	err := &e.Error{}
+	e := serializer.Unmarshal(payload, err)
+	if e != nil {
+		return e
 	}
 	return err
 }
 
 // GetErrorPayload creates and serializes an error payload
 func GetErrorPayload(serializer serialize.Serializer, err error) ([]byte, error) {
-	code := e.ErrUnknownCode
-	msg := err.Error()
-	metadata := map[string]string{}
-	if val, ok := err.(*e.Error); ok {
-		code = val.Code
-		metadata = val.Metadata
-	}
-	errPayload := &mcbeamproto.Error{
-		Code: code,
-		Msg:  msg,
-	}
-	if len(metadata) > 0 {
-		errPayload.Metadata = metadata
-	}
-	return SerializeOrRaw(serializer, errPayload)
+	return SerializeOrRaw(serializer, err)
 }
 
 //
@@ -168,6 +148,7 @@ func BuildRequest(ctx context.Context,
 			Data:  msg.Data,
 		},
 	}
+	req.Type = rpcType
 	req.FrontendID = frontendID
 	switch msg.Type {
 	case message.Request:
@@ -175,7 +156,7 @@ func BuildRequest(ctx context.Context,
 	case message.Notify:
 		req.Msg.Type = mcbeamproto.MsgType_MsgNotify
 	}
-	if rpcType == mcbeamproto.RPCType_Sys {
+	if rpcType == mcbeamproto.RPCType_User {
 		mid := uint(0)
 		if msg.Type == message.Request {
 			mid = msg.ID

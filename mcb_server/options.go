@@ -9,11 +9,11 @@ type Options struct {
 	name       string
 	nameFunc   func(string) string
 	serializer serialize.Serializer
-	rpcClient mcbeamproto.McbAppService
+	rpcClient  mcbeamproto.McbGateService
 }
 type Option func(options *Options)
 
-func RpcClient(appClient mcbeamproto.McbAppService) Option {
+func RpcClient(appClient mcbeamproto.McbGateService) Option {
 	return func(o *Options) {
 		o.rpcClient = appClient
 	}

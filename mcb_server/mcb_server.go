@@ -2,16 +2,14 @@ package mcb_server
 
 import (
 	"context"
-	"errors"
 	"github.com/golang/protobuf/proto"
+	"github.com/micro/go-micro/v2/errors"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/agent"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
-	e "github.com/wolfplus2048/mcbeam-plus/errors"
 	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
-	"github.com/wolfplus2048/mcbeam-plus/session"
 	"github.com/wolfplus2048/mcbeam-plus/util"
 	"reflect"
 )
@@ -60,10 +58,10 @@ func NewMcbServer(handler interface{}, opts ...Option) *McbServer {
 func (m *McbServer) ExtractHandler() error {
 	typeName := reflect.Indirect(m.receiver).Type().Name()
 	if typeName == "" {
-		return errors.New("no service name for type " + m.typ.String())
+		return errors.InternalServerError(m.name, "no service name for type %s", m.typ.String())
 	}
 	if !isExported(typeName) {
-		return errors.New("type " + typeName + " is not exported")
+		return errors.InternalServerError(m.name, " %s is not exported", typeName)
 	}
 	m.handlers = suitableHandlerMethods(m.typ, m.Opts.nameFunc)
 
@@ -76,7 +74,7 @@ func (m *McbServer) ExtractHandler() error {
 		} else {
 			str = "type " + m.name + " has no exported methods of handler type"
 		}
-		return errors.New(str)
+		return errors.InternalServerError(m.name, str)
 	}
 
 	for i := range m.handlers {
@@ -92,14 +90,7 @@ func (m *McbServer) ExtractHandler() error {
 func (m *McbServer) Call(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response) error {
 	rt, err := route.Decode(req.GetMsg().GetRoute())
 	if err != nil {
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrBadRequestCode,
-			Msg:  "cannot decode route",
-			Metadata: map[string]string{
-				"route": req.GetMsg().GetRoute(),
-			},
-		}
-		return errors.New(e.ErrBadRequestCode)
+		return errors.BadRequest(m.name, "cannot decode route: %s", req.GetMsg().GetRoute())
 	}
 	switch {
 	case req.Type == mcbeamproto.RPCType_User:
@@ -107,55 +98,26 @@ func (m *McbServer) Call(ctx context.Context, req *mcbeamproto.Request, res *mcb
 	case req.Type == mcbeamproto.RPCType_Sys:
 		return m.handleRPCSys(ctx, req, res, rt)
 	default:
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrBadRequestCode,
-			Msg:  "invalid rpc type",
-			Metadata: map[string]string{
-				"route": req.GetMsg().GetRoute(),
-			},
-		}
-		return errors.New(e.ErrBadRequestCode)
+		return errors.BadRequest(m.name, "invalid rpc type:%s", req.Type)
 	}
 }
 func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
-	rt, err := route.Decode(req.GetMsg().GetRoute())
-	if err != nil {
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrNotFoundCode,
-			Msg:  "cannot decode route",
-			Metadata: map[string]string{
-				"route": req.GetMsg().GetRoute(),
-			},
-		}
-		return errors.New(e.ErrNotFoundCode)
-	}
+	return nil
+}
+func (m *McbServer) handleRPCUser(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
+
 	handler, ok := m.handlers[rt.Method]
 	if !ok {
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrNotFoundCode,
-			Msg:  "route not found",
-			Metadata: map[string]string{
-				"route": rt.Short(),
-			},
-		}
-		return errors.New(e.ErrNotFoundCode)
+		return errors.NotFound(m.name, "not find method:%s", rt.Method)
 	}
 	msgType, err := getMsgType(req.GetMsg().GetType())
 	if err != nil {
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrInternalCode,
-			Msg:  err.Error(),
-		}
-		return errors.New(e.ErrInternalCode)
+		return errors.BadRequest(m.name, "invalid rpc type:%s", req.Type)
 	}
 
 	exit, err := handler.ValidateMessageType(msgType)
 	if exit && err != nil {
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrBadRequestCode,
-			Msg:  err.Error(),
-		}
-		return errors.New(e.ErrNotFoundCode)
+		return errors.BadRequest(m.name, "invalid rpc type:%s", req.Type)
 	} else if err != nil {
 		logger.Warnf("invalid message type, error: %s", err.Error())
 	}
@@ -164,11 +126,7 @@ func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, 
 	args := []reflect.Value{handler.Receiver, reflect.ValueOf(ctx)}
 	arg, err := unmarshalHandlerArg(handler, m.Opts.serializer, req.GetMsg().GetData())
 	if err != nil {
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrBadRequestCode,
-			Msg:  err.Error(),
-		}
-		return err
+		return errors.BadRequest(m.name, "invalid arg:%s", err.Error())
 	}
 	if arg != nil {
 		args = append(args, reflect.ValueOf(arg))
@@ -183,38 +141,10 @@ func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, 
 	}
 
 	if err != nil {
-		logger.Warnf(err.Error())
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrUnknownCode,
-			Msg:  err.Error(),
-		}
-
-		if val, ok := err.(*e.Error); ok {
-			res.Error.Code = val.Code
-			if val.Metadata != nil {
-				res.Error.Metadata = val.Metadata
-			}
-		}
-	} else {
-		data, _ := serializeReturn(m.Opts.serializer, resp)
-		res.Data = data
+		return errors.BadRequest(m.name, err.Error())
 	}
-	return err
-
-}
-func (m *McbServer) handleRPCUser(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
-	_, ok := m.handlers[rt.Short()]
-	if !ok {
-		res.Error = &mcbeamproto.Error{
-			Code: e.ErrNotFoundCode,
-			Msg:  "route not found",
-			Metadata: map[string]string{
-				"route": rt.Short(),
-			},
-		}
-		return errors.New("route not found")
-	}
-	//params := []reflect.Value{handler.Receiver, reflect.ValueOf(ctx)}
+	data, _ := serializeReturn(m.Opts.serializer, resp)
+	res.Data = data
 	return nil
 }
 func (h *Handler) ValidateMessageType(msgType message.Type) (exitOnError bool, err error) {
@@ -229,22 +159,4 @@ func (h *Handler) ValidateMessageType(msgType message.Type) (exitOnError bool, e
 		}
 	}
 	return
-}
-
-func (m *McbServer) Push(ctx context.Context, push *mcbeamproto.PushMsg, res *mcbeamproto.Response) error {
-	logger.Debugf("sending push to user %s: %v", push.GetUid(), string(push.Data))
-	s := session.GetSessionByUID(push.GetUid())
-	if s == nil {
-		return constants.ErrSessionNotFound
-	}
-	err := s.Push(push.Route, push.Data)
-	return err
-}
-
-func (m *McbServer) Bind(ctx context.Context, msg *mcbeamproto.BindMsg, response *mcbeamproto.Response) error {
-	panic("implement me")
-}
-
-func (m *McbServer) Kick(ctx context.Context, msg *mcbeamproto.KickMsg, answer *mcbeamproto.KickAnswer) error {
-	panic("implement me")
 }

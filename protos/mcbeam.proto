@@ -12,11 +12,13 @@ enum RPCType {
     Sys = 0;
     User = 1;
 }
-
 service McbApp {
     rpc Call(Request) returns (Response) {}
+}
+service McbGate {
     rpc Push(PushMsg) returns (Response) {}
-    rpc Bind(BindMsg) returns (Response) {}
+    rpc PushSession(Session) returns (Response) {}
+    rpc Bind(Session) returns (Response) {}
     rpc Kick(KickMsg) returns (KickAnswer) {}
 }
 message Error {
@@ -61,8 +63,4 @@ message PushMsg {
     string route = 1;
     string uid = 2;
     bytes data = 3;
-}
-message BindMsg {
-    string uid = 1;
-    string fid = 2;
 }

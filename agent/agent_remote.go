@@ -34,12 +34,12 @@ import (
 
 // Remote corresponding to another server
 type Remote struct {
-	Session        *session.Session // session
-	chDie          chan struct{}    // wait for close
-	frontendID     string               // the frontend that sent the request
-	reply          string               // nats reply topic
-	rpcClient      mcbeamproto.McbAppService    // rpc client
-	serializer       serialize.Serializer     // message serializer
+	Session    *session.Session           // session
+	chDie      chan struct{}              // wait for close
+	frontendID string                     // the frontend that sent the request
+	reply      string                     // nats reply topic
+	rpcClient  mcbeamproto.McbGateService // rpc client
+	serializer serialize.Serializer       // message serializer
 
 }
 
@@ -47,18 +47,17 @@ type Remote struct {
 func NewRemote(
 	sess *mcbeamproto.Session,
 	reply string,
-	rpcClient mcbeamproto.McbAppService,
+	rpcClient mcbeamproto.McbGateService,
 	frontendID string,
 	serializer serialize.Serializer,
 
 ) (*Remote, error) {
 	a := &Remote{
-		chDie:          make(chan struct{}),
-		reply:          reply, // TODO this is totally coupled with NATS
-		rpcClient:      rpcClient,
-		frontendID:     frontendID,
-		serializer:       serializer,
-
+		chDie:      make(chan struct{}),
+		reply:      reply, // TODO this is totally coupled with NATS
+		rpcClient:  rpcClient,
+		frontendID: frontendID,
+		serializer: serializer,
 	}
 
 	// binding session
@@ -104,25 +103,8 @@ func (a *Remote) Push(route string, v interface{}) error {
 
 // ResponseMID reponds the message with mid to the user
 func (a *Remote) ResponseMID(ctx context.Context, mid uint, v interface{}, isError ...bool) error {
-	err := false
-	if len(isError) > 0 {
-		err = isError[0]
-	}
-
-	if mid <= 0 {
-		return constants.ErrSessionOnNotify
-	}
-
-	switch d := v.(type) {
-	case []byte:
-		logger.Debugf("Type=Response, ID=%d, MID=%d, Data=%dbytes",
-			a.Session.ID(), mid, len(d))
-	default:
-		logger.Infof("Type=Response, ID=%d, MID=%d, Data=%+v",
-			a.Session.ID(), mid, v)
-	}
-
-	return a.send(pendingMessage{ctx: ctx, typ: message.Response, mid: mid, payload: v, err: err}, a.reply)
+	logger.Fatal(constants.ErrNotImplemented.Error())
+	return nil
 }
 
 // Close closes the remote
@@ -131,11 +113,9 @@ func (a *Remote) Close() error { return nil }
 // RemoteAddr returns the remote address of the user
 func (a *Remote) RemoteAddr() net.Addr { return nil }
 
-
-
 func (a *Remote) send(m pendingMessage, to string) (err error) {
 	logger.Fatal(constants.ErrNotImplemented.Error())
-	return constants.ErrNotImplemented
+	return nil
 }
 
 func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
@@ -154,5 +134,12 @@ func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
 
 // SendRequest sends a request to a server
 func (a *Remote) SendRequest(ctx context.Context, serverID, reqRoute string, v interface{}) (interface{}, error) {
+	if reqRoute == constants.SessionBindRoute {
+		bind := &mcbeamproto.Session{
+			Id:  a.Session.ID(),
+			Uid: a.Session.UID(),
+		}
+		return a.rpcClient.Bind(ctx, bind)
+	}
 	return nil, nil
 }
