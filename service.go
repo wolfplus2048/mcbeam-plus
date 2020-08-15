@@ -1,14 +1,15 @@
 package mcbeam
 
 import (
+	"github.com/wolfplus2048/mcbeam-plus/component"
 	"time"
 )
 
 type Service interface {
 	Init(opts ...Option) error
 	Options() Options
-	Register(name string, comp Component)
-	Module(name string, module Module)
+	Register(comp component.Component, opts ...component.HandlerOption)
+	Module(module Module)
 	Run() error
 }
 type Module interface {
@@ -17,15 +18,6 @@ type Module interface {
 	BeforeShutdown()
 	Shutdown() error
 }
-
-
-type Component interface {
-	Init()
-	AfterInit()
-	BeforeShutdown()
-	Shutdown()
-}
-
 
 //Mcbeam basic Defaults
 var (

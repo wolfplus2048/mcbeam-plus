@@ -52,7 +52,7 @@ var (
 	once sync.Once
 )
 
-const handlerType = "mcb_server"
+const handlerType = "component"
 
 type (
 	// Agent corresponds to a user and is used for storing raw Conn information

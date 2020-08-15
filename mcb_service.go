@@ -3,10 +3,9 @@ package mcbeam
 import (
 	"github.com/micro/go-micro/v2"
 	"github.com/wolfplus2048/mcbeam-plus/api"
+	"github.com/wolfplus2048/mcbeam-plus/component"
 	"github.com/wolfplus2048/mcbeam-plus/gate_server"
-	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
 	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
-	"strings"
 	"sync"
 )
 
@@ -14,6 +13,7 @@ type mcbService struct {
 	opts Options
 	sync.RWMutex
 	tcpServer api.Server
+	remoteSrv *component.McbServer
 	started   bool
 	exit      chan bool
 }
@@ -26,21 +26,20 @@ func newMcbService(opt ...Option) Service {
 		exit:    make(chan bool),
 	}
 	t.tcpServer = api.NewTcpServer(t.exit)
+	client := mcbeamproto.NewMcbGateService(t.opts.Name, t.opts.Service.Client())
+	t.remoteSrv = component.NewMcbServer(
+		component.WithName(t.opts.Name),
+		component.Serializer(t.opts.Serializer),
+		component.RpcClient(client),
+	)
+
 	return t
 }
 
-func (t *mcbService) Register(name string, handler Component) {
-	client := mcbeamproto.NewMcbGateService(name, t.opts.Service.Client())
-	srv := mcb_server.NewMcbServer(handler,
-		mcb_server.WithName(name),
-		mcb_server.WithNameFunc(strings.ToLower),
-		mcb_server.Serializer(t.opts.Serializer),
-		mcb_server.RpcClient(client),
-	)
-	mcbeamproto.RegisterMcbAppHandler(t.opts.Service.Server(), srv)
-
+func (t *mcbService) Register(handler component.Component, opts ...component.HandlerOption) {
+	t.remoteSrv.Handle(handler, opts...)
 }
-func (t *mcbService) Module(name string, module Module) {
+func (t *mcbService) Module(module Module) {
 	panic("implement me")
 }
 func (t *mcbService) Run() error {
@@ -77,8 +76,7 @@ func (t *mcbService) Init(opts ...Option) error {
 	if t.opts.Service != nil {
 		serverOpts = append(serverOpts, api.Service(t.opts.Service))
 	}
-	client := mcbeamproto.NewMcbAppService("gate", t.opts.Service.Client())
-	serverOpts = append(serverOpts, api.Client(client))
+	serverOpts = append(serverOpts, api.Client(t.opts.Service.Client()))
 
 	t.tcpServer.Init(serverOpts...)
 
@@ -94,6 +92,8 @@ func (t *mcbService) Init(opts ...Option) error {
 	if len(t.opts.Acceptors) > 0 {
 		mcbeamproto.RegisterMcbGateHandler(t.opts.Service.Server(), &gate_server.Server{})
 	}
+	mcbeamproto.RegisterMcbAppHandler(t.opts.Service.Server(), t.remoteSrv)
+
 	return nil
 }
 

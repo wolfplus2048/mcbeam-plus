@@ -50,15 +50,15 @@
         console.log(rsp)
         v.messages.push({name:'system', content:rsp.getMessage()});
 
-        // let req = new proto.gate.GreeterReq()
-        // req.setMessage("wolfplus")
-        // let buff = req.serializeBinary()
-        // starx.request("srv.handler.hello", (data)=>{
-        //     console.log(data);
-        //     let rsp = proto.gate.GreeterRes.deserializeBinary(data)
-        //     console.log(rsp)
-        //     v.messages.push({name:'system', content:rsp.getMessage()});
-        // })
+        let req = new proto.gate.GreeterReq()
+        req.setMessage("wolfplus")
+        let buff = req.serializeBinary()
+        starx.request("srv.handler.hello", buff, (data)=>{
+            console.log(data);
+            let rsp = proto.gate.GreeterRes.deserializeBinary(data)
+            console.log(rsp)
+            v.messages.push({name:'system', content:rsp.getMessage()});
+        })
     };
     var onHello = function (msg) {
         console.log(data);
@@ -72,7 +72,7 @@
         let req = new proto.gate.GreeterReq()
         req.setMessage("wolfplus")
         let buff = req.serializeBinary()
-        starx.request("srv.handler.greeter", buff, onGreeter);
+        starx.request("gate.auth.greeter", buff, onGreeter);
     })
 </script>
 </body>

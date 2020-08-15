@@ -25,6 +25,7 @@ import (
 	"encoding/json"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
+	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
 	"net"
 	"reflect"
 	"strings"
@@ -671,21 +672,18 @@ func (s *Session) GetHandshakeData() *HandshakeData {
 }
 
 func (s *Session) sendRequestToFront(ctx context.Context, route string, includeData bool) error {
-	//sessionData := &corona_protos.Session{
-	//	Id:  s.frontendSessionID,
-	//	Uid: s.uid,
-	//}
-	//if includeData {
-	//	sessionData.Data = s.encodedData
-	//}
-	//b, err := protos.Marshal(sessionData)
-	//if err != nil {
-	//	return err
-	//}
-	//res, err := s.entity.SendRequest(ctx, s.frontendID, route, b)
-	//if err != nil {
-	//	return err
-	//}
-	//logger.Debugf("%s Got response: %+v", route, res)
+	sessionData := &mcbeamproto.Session{
+		Id:  s.frontendSessionID,
+		Uid: s.uid,
+	}
+	if includeData {
+		sessionData.Data = s.encodedData
+	}
+
+	res, err := s.entity.SendRequest(ctx, s.frontendID, route, sessionData)
+	if err != nil {
+		return err
+	}
+	logger.Debugf("%s Got response: %+v", route, res)
 	return nil
 }

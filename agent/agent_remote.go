@@ -135,11 +135,7 @@ func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
 // SendRequest sends a request to a server
 func (a *Remote) SendRequest(ctx context.Context, serverID, reqRoute string, v interface{}) (interface{}, error) {
 	if reqRoute == constants.SessionBindRoute {
-		bind := &mcbeamproto.Session{
-			Id:  a.Session.ID(),
-			Uid: a.Session.UID(),
-		}
-		return a.rpcClient.Bind(ctx, bind)
+		return a.rpcClient.Bind(ctx, v.(*mcbeamproto.Session))
 	}
 	return nil, nil
 }

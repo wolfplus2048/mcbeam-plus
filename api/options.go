@@ -3,10 +3,10 @@ package api
 import (
 	"context"
 	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/wolfplus2048/mcbeam-plus/acceptor"
 	"github.com/wolfplus2048/mcbeam-plus/conn/codec"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
-	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
 	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
 	"time"
@@ -30,7 +30,7 @@ type Options struct {
 	WSPath             string
 	Acceptors          []acceptor.Acceptor
 	Service            micro.Service
-	rpcClient	mcbeamproto.McbAppService
+	rpcClient          client.Client
 }
 type Option func(o *Options)
 
@@ -52,7 +52,7 @@ func newOptions(opt ...Option) Options {
 
 	return opts
 }
-func Client(c mcbeamproto.McbAppService) Option {
+func Client(c client.Client) Option {
 	return func(o *Options) {
 		o.rpcClient = c
 	}

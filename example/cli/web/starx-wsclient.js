@@ -90,7 +90,7 @@
       return this;
     }
 
-    // remove specific handler
+    // remove specific component
     var cb;
     for (var i = 0; i < callbacks.length; i++) {
       cb = callbacks[i];

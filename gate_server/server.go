@@ -54,7 +54,7 @@ func (s *Server) Kick(ctx context.Context, msg *protos.KickMsg, res *protos.Kick
 
 func (s *Server) Push(ctx context.Context, push *protos.PushMsg, res *protos.Response) error {
 	sess := session.GetSessionByUID(push.GetUid())
-	if s == nil {
+	if sess == nil {
 		return constants.ErrSessionNotFound
 	}
 	err := sess.Push(push.Route, push.Data)

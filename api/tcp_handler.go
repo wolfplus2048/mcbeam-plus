@@ -143,7 +143,10 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	}
 	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, t.opts.Service.Options().Server.Options().Id)
 
-	rsp, err := t.opts.rpcClient.Call(ctx, r)
+	req := t.opts.rpcClient.NewRequest(route.SvType, "McbApp.Call", r)
+	rsp := new(gateproto.Response)
+	err = t.opts.rpcClient.Call(ctx, req, rsp)
+
 	if msg.Type != message.Notify {
 		if err != nil {
 			logger.Errorf("Failed to process remote message: %s", err.Error())

@@ -1,4 +1,4 @@
-var gateProto = require('./gate_pb.js')
+var gate = require('./gate_pb.js')
 module.exports = {
-    DataProto: gateProto
+    DataProto: gate
 }

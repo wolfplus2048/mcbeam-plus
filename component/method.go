@@ -1,4 +1,4 @@
-package mcb_server
+package component
 
 import (
 	"errors"
@@ -48,7 +48,7 @@ func suitableHandlerMethods(typ reflect.Type, nameFunc func(string) string) map[
 	return methods
 }
 
-// isHandlerMethod decide a method is suitable handler method
+// isHandlerMethod decide a method is suitable component method
 func isHandlerMethod(method reflect.Method) bool {
 	mt := method.Type
 	// Method must be exported.

@@ -1,9 +1,10 @@
-package mcb_server
+package component
 
 import (
 	"context"
+	"fmt"
 	"github.com/golang/protobuf/proto"
-	"github.com/micro/go-micro/v2/errors"
+	e "github.com/micro/go-micro/v2/errors"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/agent"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
@@ -31,58 +32,63 @@ type (
 	}
 )
 type McbServer struct {
-	Opts     Options
-	name     string
-	typ      reflect.Type
-	receiver reflect.Value
+	opts     Options
 	handlers map[string]*Handler
 }
 
-func NewMcbServer(handler interface{}, opts ...Option) *McbServer {
+func NewMcbServer(opts ...Option) *McbServer {
 	s := &McbServer{
-		typ:      reflect.TypeOf(handler),
-		receiver: reflect.ValueOf(handler),
+		handlers: make(map[string]*Handler),
 	}
 	for _, o := range opts {
-		o(&s.Opts)
+		o(&s.opts)
 	}
-	if name := s.Opts.name; name != "" {
-		s.name = name
-	} else {
-		s.name = reflect.Indirect(s.receiver).Type().Name()
-	}
-	s.ExtractHandler()
 	return s
 }
+func (m *McbServer) Handle(handler interface{}, opt ...HandlerOption) error {
+	typ := reflect.TypeOf(handler)
+	receiver := reflect.ValueOf(handler)
+	typeName := reflect.Indirect(receiver).Type().Name()
+	opts := HandlerOptions{}
+	for _, o := range opt {
+		o(&opts)
+	}
+	name := opts.name
+	if name == "" {
+		name = typeName
+		if opts.nameFunc != nil {
+			name = opts.nameFunc(name)
+		}
+	}
 
-func (m *McbServer) ExtractHandler() error {
-	typeName := reflect.Indirect(m.receiver).Type().Name()
 	if typeName == "" {
-		return errors.InternalServerError(m.name, "no service name for type %s", m.typ.String())
+		return fmt.Errorf("no service name for type %s", typ.String())
 	}
 	if !isExported(typeName) {
-		return errors.InternalServerError(m.name, " %s is not exported", typeName)
+		return fmt.Errorf(" %s is not exported", typeName)
 	}
-	m.handlers = suitableHandlerMethods(m.typ, m.Opts.nameFunc)
+	handlers := suitableHandlerMethods(typ, opts.nameFunc)
 
-	if len(m.handlers) == 0 {
+	if len(handlers) == 0 {
 		str := ""
 		// To help the user, see if a pointer receiver would work.
-		method := suitableHandlerMethods(reflect.PtrTo(m.typ), m.Opts.nameFunc)
+		method := suitableHandlerMethods(reflect.PtrTo(typ), opts.nameFunc)
 		if len(method) != 0 {
-			str = "type " + m.name + " has no exported methods of handler type (hint: pass a pointer to value of that type)"
+			str = "type " + typeName + " has no exported methods of component type (hint: pass a pointer to value of that type)"
 		} else {
-			str = "type " + m.name + " has no exported methods of handler type"
+			str = "type " + typeName + " has no exported methods of component type"
 		}
-		return errors.InternalServerError(m.name, str)
+		return fmt.Errorf(str)
 	}
 
-	for i := range m.handlers {
-		m.handlers[i].Receiver = m.receiver
+	for i := range handlers {
+		handlers[i].Receiver = receiver
 	}
 
-	for name := range m.handlers {
-		logger.Infof("registered handler %s, isRawArg: %s", name, m.handlers[name].IsRawArg)
+	for n, handler := range handlers {
+		key := fmt.Sprintf("%s.%s", name, n)
+		m.handlers[key] = handler
+		logger.Infof("registered component %s, isRawArg: %s", key, m.handlers[key].IsRawArg)
 	}
 	return nil
 }
@@ -90,7 +96,7 @@ func (m *McbServer) ExtractHandler() error {
 func (m *McbServer) Call(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response) error {
 	rt, err := route.Decode(req.GetMsg().GetRoute())
 	if err != nil {
-		return errors.BadRequest(m.name, "cannot decode route: %s", req.GetMsg().GetRoute())
+		return e.BadRequest(m.opts.name, "cannot decode route: %s", req.GetMsg().GetRoute())
 	}
 	switch {
 	case req.Type == mcbeamproto.RPCType_User:
@@ -98,7 +104,7 @@ func (m *McbServer) Call(ctx context.Context, req *mcbeamproto.Request, res *mcb
 	case req.Type == mcbeamproto.RPCType_Sys:
 		return m.handleRPCSys(ctx, req, res, rt)
 	default:
-		return errors.BadRequest(m.name, "invalid rpc type:%s", req.Type)
+		return e.BadRequest(m.opts.name, "invalid rpc type:%s", req.Type)
 	}
 }
 func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
@@ -106,27 +112,27 @@ func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, 
 }
 func (m *McbServer) handleRPCUser(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
 
-	handler, ok := m.handlers[rt.Method]
+	handler, ok := m.handlers[rt.Short()]
 	if !ok {
-		return errors.NotFound(m.name, "not find method:%s", rt.Method)
+		return e.NotFound(m.opts.name, "not find method:%s", rt.Method)
 	}
 	msgType, err := getMsgType(req.GetMsg().GetType())
 	if err != nil {
-		return errors.BadRequest(m.name, "invalid rpc type:%s", req.Type)
+		return e.BadRequest(m.opts.name, "invalid rpc type:%s", req.Type)
 	}
 
 	exit, err := handler.ValidateMessageType(msgType)
 	if exit && err != nil {
-		return errors.BadRequest(m.name, "invalid rpc type:%s", req.Type)
+		return e.BadRequest(m.opts.name, "invalid rpc type:%s", req.Type)
 	} else if err != nil {
 		logger.Warnf("invalid message type, error: %s", err.Error())
 	}
-	a, err := agent.NewRemote(req.GetSession(), req.Msg.Reply, m.Opts.rpcClient, req.FrontendID, m.Opts.serializer)
+	a, err := agent.NewRemote(req.GetSession(), req.Msg.Reply, m.opts.rpcClient, req.FrontendID, m.opts.serializer)
 	ctx = context.WithValue(ctx, constants.SessionCtxKey, a.Session)
 	args := []reflect.Value{handler.Receiver, reflect.ValueOf(ctx)}
-	arg, err := unmarshalHandlerArg(handler, m.Opts.serializer, req.GetMsg().GetData())
+	arg, err := unmarshalHandlerArg(handler, m.opts.serializer, req.GetMsg().GetData())
 	if err != nil {
-		return errors.BadRequest(m.name, "invalid arg:%s", err.Error())
+		return e.BadRequest(m.opts.name, "invalid arg:%s", err.Error())
 	}
 	if arg != nil {
 		args = append(args, reflect.ValueOf(arg))
@@ -141,9 +147,9 @@ func (m *McbServer) handleRPCUser(ctx context.Context, req *mcbeamproto.Request,
 	}
 
 	if err != nil {
-		return errors.BadRequest(m.name, err.Error())
+		return e.BadRequest(m.opts.name, err.Error())
 	}
-	data, _ := serializeReturn(m.Opts.serializer, resp)
+	data, _ := serializeReturn(m.opts.serializer, resp)
 	res.Data = data
 	return nil
 }
