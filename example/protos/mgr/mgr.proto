@@ -11,3 +11,10 @@ message GetRoomListReq {
 message GetRoomListRes {
   repeated Room rooms = 1;
 }
+message CreateRoomReq {
+  string name = 1;
+}
+message CreateRoomRes {
+  string code = 1;
+  Room room = 2;
+}

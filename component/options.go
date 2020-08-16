@@ -1,14 +1,14 @@
 package component
 
 import (
-	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
 )
 
 type Options struct {
 	name       string
 	serializer serialize.Serializer
-	rpcClient  mcbeamproto.McbGateService
+	rpcClient  client.Client
 }
 type HandlerOptions struct {
 	name     string
@@ -17,7 +17,7 @@ type HandlerOptions struct {
 type Option func(options *Options)
 type HandlerOption func(options *HandlerOptions)
 
-func RpcClient(appClient mcbeamproto.McbGateService) Option {
+func RpcClient(appClient client.Client) Option {
 	return func(o *Options) {
 		o.rpcClient = appClient
 	}

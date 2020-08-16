@@ -22,10 +22,12 @@ package agent
 
 import (
 	"context"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
 	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
 	"github.com/wolfplus2048/mcbeam-plus/session"
 	"github.com/wolfplus2048/mcbeam-plus/util"
@@ -34,12 +36,12 @@ import (
 
 // Remote corresponding to another server
 type Remote struct {
-	Session    *session.Session           // session
-	chDie      chan struct{}              // wait for close
-	frontendID string                     // the frontend that sent the request
-	reply      string                     // nats reply topic
-	rpcClient  mcbeamproto.McbGateService // rpc client
-	serializer serialize.Serializer       // message serializer
+	Session    *session.Session     // session
+	chDie      chan struct{}        // wait for close
+	frontendID string               // the frontend that sent the request
+	reply      string               // nats reply topic
+	rpcClient  client.Client        // rpc client
+	serializer serialize.Serializer // message serializer
 
 }
 
@@ -47,7 +49,7 @@ type Remote struct {
 func NewRemote(
 	sess *mcbeamproto.Session,
 	reply string,
-	rpcClient mcbeamproto.McbGateService,
+	rpcClient client.Client,
 	frontendID string,
 	serializer serialize.Serializer,
 
@@ -77,7 +79,7 @@ func (a *Remote) Kick(ctx context.Context) error {
 	if a.Session.UID() == "" {
 		return constants.ErrNoUIDBind
 	}
-	_, err := a.rpcClient.Kick(ctx, &mcbeamproto.KickMsg{
+	_, err := a.SendRequest(ctx, "gate.McbGate.Kick", &mcbeamproto.KickMsg{
 		UserId: a.Session.UID(),
 	})
 	return err
@@ -128,14 +130,20 @@ func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
 		Uid:   a.Session.UID(),
 		Data:  payload,
 	}
-	_, err = a.rpcClient.Push(context.Background(), push)
+
+	_, err = a.SendRequest(context.Background(), "gate.McbGate.Push", push)
 	return err
 }
 
 // SendRequest sends a request to a server
-func (a *Remote) SendRequest(ctx context.Context, serverID, reqRoute string, v interface{}) (interface{}, error) {
-	if reqRoute == constants.SessionBindRoute {
-		return a.rpcClient.Bind(ctx, v.(*mcbeamproto.Session))
+func (a *Remote) SendRequest(ctx context.Context, reqRoute string, v interface{}) (interface{}, error) {
+	route, err := route.Decode(reqRoute)
+	if err != nil {
+		logger.Errorf("Failed to decode route: %s", err.Error())
+		return nil, err
 	}
-	return nil, nil
+	req := a.rpcClient.NewRequest(route.SvType, route.Short(), v)
+	rsp := new(mcbeamproto.Message)
+	err = a.rpcClient.Call(ctx, req, rsp)
+	return rsp, err
 }

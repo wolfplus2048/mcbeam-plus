@@ -43,7 +43,7 @@ type NetworkEntity interface {
 	Close() error
 	Kick(ctx context.Context) error
 	RemoteAddr() net.Addr
-	SendRequest(ctx context.Context, serverID, route string, v interface{}) (interface{}, error)
+	SendRequest(ctx context.Context, route string, v interface{}) (interface{}, error)
 }
 
 var (
