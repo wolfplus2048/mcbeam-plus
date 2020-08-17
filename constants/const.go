@@ -34,10 +34,11 @@ const (
 
 const (
 	// SessionPushRoute is the route used for updating session
-	SessionPushRoute = "gate.McbGate.PushSession"
+	PushSessionRoute = "gate.McbGate.PushSession"
 
+	PushRoute = "gate.McbGate.Push"
 	// SessionBindRoute is the route used for binding session
-	SessionBindRoute = "gate.McbGate.Bind"
+	BindRoute = "gate.McbGate.Bind"
 
 	// KickRoute is the route used for kicking an user
 	KickRoute = "gate.McbGate.Kick"

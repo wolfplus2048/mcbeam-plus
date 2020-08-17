@@ -637,7 +637,12 @@ func (s *Session) Value(key string) interface{} {
 }
 
 func (s *Session) bindInFront(ctx context.Context) error {
-	return s.sendRequestToFront(ctx, constants.SessionBindRoute, false)
+	sessionData := &mcbeamproto.Session{
+		Id:  s.frontendSessionID,
+		Uid: s.uid,
+	}
+	err := s.entity.SendRequest(ctx, constants.PushSessionRoute, sessionData, &mcbeamproto.Response{})
+	return err
 }
 
 // PushToFront updates the session in the frontend
@@ -645,7 +650,13 @@ func (s *Session) PushToFront(ctx context.Context) error {
 	if s.IsFrontend {
 		return constants.ErrFrontSessionCantPushToFront
 	}
-	return s.sendRequestToFront(ctx, constants.SessionPushRoute, true)
+	sessionData := &mcbeamproto.Session{
+		Id:   s.frontendSessionID,
+		Uid:  s.uid,
+		Data: s.encodedData,
+	}
+	err := s.entity.SendRequest(ctx, constants.PushSessionRoute, sessionData, &mcbeamproto.Response{})
+	return err
 }
 
 // Clear releases all data related to current session
@@ -669,21 +680,4 @@ func (s *Session) SetHandshakeData(data *HandshakeData) {
 // GetHandshakeData gets the handshake data received by the client.
 func (s *Session) GetHandshakeData() *HandshakeData {
 	return s.handshakeData
-}
-
-func (s *Session) sendRequestToFront(ctx context.Context, route string, includeData bool) error {
-	sessionData := &mcbeamproto.Session{
-		Id:  s.frontendSessionID,
-		Uid: s.uid,
-	}
-	if includeData {
-		sessionData.Data = s.encodedData
-	}
-
-	res, err := s.entity.SendRequest(ctx, route, sessionData)
-	if err != nil {
-		return err
-	}
-	logger.Debugf("%s Got response: %+v", route, res)
-	return nil
 }

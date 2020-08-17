@@ -408,8 +408,8 @@ func (a *Agent) write() {
 }
 
 // SendRequest sends a request to a tcp
-func (a *Agent) SendRequest(ctx context.Context, route string, v interface{}) (interface{}, error) {
-	return nil, e.New("not implemented")
+func (a *Agent) SendRequest(ctx context.Context, route string, arg interface{}, reply interface{}) error {
+	return e.New("not implemented")
 }
 
 // AnswerWithError answers with an error

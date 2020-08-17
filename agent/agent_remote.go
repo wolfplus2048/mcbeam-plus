@@ -79,9 +79,10 @@ func (a *Remote) Kick(ctx context.Context) error {
 	if a.Session.UID() == "" {
 		return constants.ErrNoUIDBind
 	}
-	_, err := a.SendRequest(ctx, "gate.McbGate.Kick", &mcbeamproto.KickMsg{
-		UserId: a.Session.UID(),
-	})
+	rsp := &mcbeamproto.KickAnswer{}
+	err := a.SendRequest(ctx, constants.KickRoute,
+		&mcbeamproto.KickMsg{UserId: a.Session.UID()},
+		rsp)
 	return err
 }
 
@@ -131,19 +132,18 @@ func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
 		Data:  payload,
 	}
 
-	_, err = a.SendRequest(context.Background(), "gate.McbGate.Push", push)
+	err = a.SendRequest(context.Background(), constants.PushRoute, push, &mcbeamproto.Response{})
 	return err
 }
 
 // SendRequest sends a request to a server
-func (a *Remote) SendRequest(ctx context.Context, reqRoute string, v interface{}) (interface{}, error) {
-	route, err := route.Decode(reqRoute)
+func (a *Remote) SendRequest(ctx context.Context, routeStr string, arg interface{}, reply interface{}) error {
+	route, err := route.Decode(routeStr)
 	if err != nil {
 		logger.Errorf("Failed to decode route: %s", err.Error())
-		return nil, err
+		return err
 	}
-	req := a.rpcClient.NewRequest(route.SvType, route.Short(), v)
-	rsp := new(mcbeamproto.Message)
-	err = a.rpcClient.Call(ctx, req, rsp)
-	return rsp, err
+	req := a.rpcClient.NewRequest(route.SvType, route.Short(), arg)
+	err = a.rpcClient.Call(ctx, req, reply)
+	return err
 }
