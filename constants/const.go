@@ -34,13 +34,13 @@ const (
 
 const (
 	// SessionPushRoute is the route used for updating session
-	SessionPushRoute = "sys.pushsession"
+	SessionPushRoute = "gate.McbGate.PushSession"
 
 	// SessionBindRoute is the route used for binding session
-	SessionBindRoute = "sys.bindsession"
+	SessionBindRoute = "gate.McbGate.Bind"
 
 	// KickRoute is the route used for kicking an user
-	KickRoute = "sys.kick"
+	KickRoute = "gate.McbGate.Kick"
 )
 
 // SessionCtxKey is the context key where the session will be set

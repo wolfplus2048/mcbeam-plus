@@ -2083,6 +2083,408 @@ $root.proto = (function() {
             return GetRoomListRes;
         })();
 
+        mgr.CreateRoomReq = (function() {
+
+            /**
+             * Properties of a CreateRoomReq.
+             * @memberof proto.mgr
+             * @interface ICreateRoomReq
+             * @property {string|null} [name] CreateRoomReq name
+             */
+
+            /**
+             * Constructs a new CreateRoomReq.
+             * @memberof proto.mgr
+             * @classdesc Represents a CreateRoomReq.
+             * @implements ICreateRoomReq
+             * @constructor
+             * @param {proto.mgr.ICreateRoomReq=} [properties] Properties to set
+             */
+            function CreateRoomReq(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * CreateRoomReq name.
+             * @member {string} name
+             * @memberof proto.mgr.CreateRoomReq
+             * @instance
+             */
+            CreateRoomReq.prototype.name = "";
+
+            /**
+             * Creates a new CreateRoomReq instance using the specified properties.
+             * @function create
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {proto.mgr.ICreateRoomReq=} [properties] Properties to set
+             * @returns {proto.mgr.CreateRoomReq} CreateRoomReq instance
+             */
+            CreateRoomReq.create = function create(properties) {
+                return new CreateRoomReq(properties);
+            };
+
+            /**
+             * Encodes the specified CreateRoomReq message. Does not implicitly {@link proto.mgr.CreateRoomReq.verify|verify} messages.
+             * @function encode
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {proto.mgr.ICreateRoomReq} message CreateRoomReq message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomReq.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified CreateRoomReq message, length delimited. Does not implicitly {@link proto.mgr.CreateRoomReq.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {proto.mgr.ICreateRoomReq} message CreateRoomReq message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomReq.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer.
+             * @function decode
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {proto.mgr.CreateRoomReq} CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomReq.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.mgr.CreateRoomReq();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.name = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {proto.mgr.CreateRoomReq} CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomReq.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a CreateRoomReq message.
+             * @function verify
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CreateRoomReq.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    if (!$util.isString(message.name))
+                        return "name: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a CreateRoomReq message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {proto.mgr.CreateRoomReq} CreateRoomReq
+             */
+            CreateRoomReq.fromObject = function fromObject(object) {
+                if (object instanceof $root.proto.mgr.CreateRoomReq)
+                    return object;
+                var message = new $root.proto.mgr.CreateRoomReq();
+                if (object.name != null)
+                    message.name = String(object.name);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a CreateRoomReq message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof proto.mgr.CreateRoomReq
+             * @static
+             * @param {proto.mgr.CreateRoomReq} message CreateRoomReq
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CreateRoomReq.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults)
+                    object.name = "";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
+                return object;
+            };
+
+            /**
+             * Converts this CreateRoomReq to JSON.
+             * @function toJSON
+             * @memberof proto.mgr.CreateRoomReq
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CreateRoomReq.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return CreateRoomReq;
+        })();
+
+        mgr.CreateRoomRes = (function() {
+
+            /**
+             * Properties of a CreateRoomRes.
+             * @memberof proto.mgr
+             * @interface ICreateRoomRes
+             * @property {string|null} [code] CreateRoomRes code
+             * @property {proto.mgr.IRoom|null} [room] CreateRoomRes room
+             */
+
+            /**
+             * Constructs a new CreateRoomRes.
+             * @memberof proto.mgr
+             * @classdesc Represents a CreateRoomRes.
+             * @implements ICreateRoomRes
+             * @constructor
+             * @param {proto.mgr.ICreateRoomRes=} [properties] Properties to set
+             */
+            function CreateRoomRes(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * CreateRoomRes code.
+             * @member {string} code
+             * @memberof proto.mgr.CreateRoomRes
+             * @instance
+             */
+            CreateRoomRes.prototype.code = "";
+
+            /**
+             * CreateRoomRes room.
+             * @member {proto.mgr.IRoom|null|undefined} room
+             * @memberof proto.mgr.CreateRoomRes
+             * @instance
+             */
+            CreateRoomRes.prototype.room = null;
+
+            /**
+             * Creates a new CreateRoomRes instance using the specified properties.
+             * @function create
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {proto.mgr.ICreateRoomRes=} [properties] Properties to set
+             * @returns {proto.mgr.CreateRoomRes} CreateRoomRes instance
+             */
+            CreateRoomRes.create = function create(properties) {
+                return new CreateRoomRes(properties);
+            };
+
+            /**
+             * Encodes the specified CreateRoomRes message. Does not implicitly {@link proto.mgr.CreateRoomRes.verify|verify} messages.
+             * @function encode
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {proto.mgr.ICreateRoomRes} message CreateRoomRes message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomRes.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.code != null && Object.hasOwnProperty.call(message, "code"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.code);
+                if (message.room != null && Object.hasOwnProperty.call(message, "room"))
+                    $root.proto.mgr.Room.encode(message.room, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                return writer;
+            };
+
+            /**
+             * Encodes the specified CreateRoomRes message, length delimited. Does not implicitly {@link proto.mgr.CreateRoomRes.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {proto.mgr.ICreateRoomRes} message CreateRoomRes message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomRes.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer.
+             * @function decode
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {proto.mgr.CreateRoomRes} CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomRes.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.mgr.CreateRoomRes();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.code = reader.string();
+                        break;
+                    case 2:
+                        message.room = $root.proto.mgr.Room.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {proto.mgr.CreateRoomRes} CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomRes.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a CreateRoomRes message.
+             * @function verify
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CreateRoomRes.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.code != null && message.hasOwnProperty("code"))
+                    if (!$util.isString(message.code))
+                        return "code: string expected";
+                if (message.room != null && message.hasOwnProperty("room")) {
+                    var error = $root.proto.mgr.Room.verify(message.room);
+                    if (error)
+                        return "room." + error;
+                }
+                return null;
+            };
+
+            /**
+             * Creates a CreateRoomRes message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {proto.mgr.CreateRoomRes} CreateRoomRes
+             */
+            CreateRoomRes.fromObject = function fromObject(object) {
+                if (object instanceof $root.proto.mgr.CreateRoomRes)
+                    return object;
+                var message = new $root.proto.mgr.CreateRoomRes();
+                if (object.code != null)
+                    message.code = String(object.code);
+                if (object.room != null) {
+                    if (typeof object.room !== "object")
+                        throw TypeError(".proto.mgr.CreateRoomRes.room: object expected");
+                    message.room = $root.proto.mgr.Room.fromObject(object.room);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a CreateRoomRes message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof proto.mgr.CreateRoomRes
+             * @static
+             * @param {proto.mgr.CreateRoomRes} message CreateRoomRes
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CreateRoomRes.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.code = "";
+                    object.room = null;
+                }
+                if (message.code != null && message.hasOwnProperty("code"))
+                    object.code = message.code;
+                if (message.room != null && message.hasOwnProperty("room"))
+                    object.room = $root.proto.mgr.Room.toObject(message.room, options);
+                return object;
+            };
+
+            /**
+             * Converts this CreateRoomRes to JSON.
+             * @function toJSON
+             * @memberof proto.mgr.CreateRoomRes
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CreateRoomRes.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return CreateRoomRes;
+        })();
+
         return mgr;
     })();
 
@@ -2311,7 +2713,7 @@ $root.proto = (function() {
              * Properties of a Room.
              * @memberof proto.room
              * @interface IRoom
-             * @property {number|null} [id] Room id
+             * @property {string|null} [id] Room id
              * @property {string|null} [name] Room name
              * @property {Array.<proto.room.IUser>|null} [users] Room users
              */
@@ -2334,11 +2736,11 @@ $root.proto = (function() {
 
             /**
              * Room id.
-             * @member {number} id
+             * @member {string} id
              * @memberof proto.room.Room
              * @instance
              */
-            Room.prototype.id = 0;
+            Room.prototype.id = "";
 
             /**
              * Room name.
@@ -2381,7 +2783,7 @@ $root.proto = (function() {
                 if (!writer)
                     writer = $Writer.create();
                 if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
                 if (message.name != null && Object.hasOwnProperty.call(message, "name"))
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
                 if (message.users != null && message.users.length)
@@ -2422,7 +2824,7 @@ $root.proto = (function() {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
                     case 1:
-                        message.id = reader.int32();
+                        message.id = reader.string();
                         break;
                     case 2:
                         message.name = reader.string();
@@ -2468,8 +2870,8 @@ $root.proto = (function() {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id))
-                        return "id: integer expected";
+                    if (!$util.isString(message.id))
+                        return "id: string expected";
                 if (message.name != null && message.hasOwnProperty("name"))
                     if (!$util.isString(message.name))
                         return "name: string expected";
@@ -2498,7 +2900,7 @@ $root.proto = (function() {
                     return object;
                 var message = new $root.proto.room.Room();
                 if (object.id != null)
-                    message.id = object.id | 0;
+                    message.id = String(object.id);
                 if (object.name != null)
                     message.name = String(object.name);
                 if (object.users) {
@@ -2530,7 +2932,7 @@ $root.proto = (function() {
                 if (options.arrays || options.defaults)
                     object.users = [];
                 if (options.defaults) {
-                    object.id = 0;
+                    object.id = "";
                     object.name = "";
                 }
                 if (message.id != null && message.hasOwnProperty("id"))
@@ -2565,7 +2967,7 @@ $root.proto = (function() {
              * Properties of a JoinReq.
              * @memberof proto.room
              * @interface IJoinReq
-             * @property {number|null} [id] JoinReq id
+             * @property {string|null} [id] JoinReq id
              */
 
             /**
@@ -2585,11 +2987,11 @@ $root.proto = (function() {
 
             /**
              * JoinReq id.
-             * @member {number} id
+             * @member {string} id
              * @memberof proto.room.JoinReq
              * @instance
              */
-            JoinReq.prototype.id = 0;
+            JoinReq.prototype.id = "";
 
             /**
              * Creates a new JoinReq instance using the specified properties.
@@ -2616,7 +3018,7 @@ $root.proto = (function() {
                 if (!writer)
                     writer = $Writer.create();
                 if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
                 return writer;
             };
 
@@ -2652,7 +3054,7 @@ $root.proto = (function() {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
                     case 1:
-                        message.id = reader.int32();
+                        message.id = reader.string();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -2690,8 +3092,8 @@ $root.proto = (function() {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id))
-                        return "id: integer expected";
+                    if (!$util.isString(message.id))
+                        return "id: string expected";
                 return null;
             };
 
@@ -2708,7 +3110,7 @@ $root.proto = (function() {
                     return object;
                 var message = new $root.proto.room.JoinReq();
                 if (object.id != null)
-                    message.id = object.id | 0;
+                    message.id = String(object.id);
                 return message;
             };
 
@@ -2726,7 +3128,7 @@ $root.proto = (function() {
                     options = {};
                 var object = {};
                 if (options.defaults)
-                    object.id = 0;
+                    object.id = "";
                 if (message.id != null && message.hasOwnProperty("id"))
                     object.id = message.id;
                 return object;
@@ -3566,6 +3968,408 @@ $root.proto = (function() {
             };
 
             return UserAction;
+        })();
+
+        room.CreateRoomReq = (function() {
+
+            /**
+             * Properties of a CreateRoomReq.
+             * @memberof proto.room
+             * @interface ICreateRoomReq
+             * @property {string|null} [name] CreateRoomReq name
+             */
+
+            /**
+             * Constructs a new CreateRoomReq.
+             * @memberof proto.room
+             * @classdesc Represents a CreateRoomReq.
+             * @implements ICreateRoomReq
+             * @constructor
+             * @param {proto.room.ICreateRoomReq=} [properties] Properties to set
+             */
+            function CreateRoomReq(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * CreateRoomReq name.
+             * @member {string} name
+             * @memberof proto.room.CreateRoomReq
+             * @instance
+             */
+            CreateRoomReq.prototype.name = "";
+
+            /**
+             * Creates a new CreateRoomReq instance using the specified properties.
+             * @function create
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {proto.room.ICreateRoomReq=} [properties] Properties to set
+             * @returns {proto.room.CreateRoomReq} CreateRoomReq instance
+             */
+            CreateRoomReq.create = function create(properties) {
+                return new CreateRoomReq(properties);
+            };
+
+            /**
+             * Encodes the specified CreateRoomReq message. Does not implicitly {@link proto.room.CreateRoomReq.verify|verify} messages.
+             * @function encode
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {proto.room.ICreateRoomReq} message CreateRoomReq message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomReq.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified CreateRoomReq message, length delimited. Does not implicitly {@link proto.room.CreateRoomReq.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {proto.room.ICreateRoomReq} message CreateRoomReq message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomReq.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer.
+             * @function decode
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {proto.room.CreateRoomReq} CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomReq.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.room.CreateRoomReq();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.name = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {proto.room.CreateRoomReq} CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomReq.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a CreateRoomReq message.
+             * @function verify
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CreateRoomReq.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    if (!$util.isString(message.name))
+                        return "name: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a CreateRoomReq message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {proto.room.CreateRoomReq} CreateRoomReq
+             */
+            CreateRoomReq.fromObject = function fromObject(object) {
+                if (object instanceof $root.proto.room.CreateRoomReq)
+                    return object;
+                var message = new $root.proto.room.CreateRoomReq();
+                if (object.name != null)
+                    message.name = String(object.name);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a CreateRoomReq message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof proto.room.CreateRoomReq
+             * @static
+             * @param {proto.room.CreateRoomReq} message CreateRoomReq
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CreateRoomReq.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults)
+                    object.name = "";
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
+                return object;
+            };
+
+            /**
+             * Converts this CreateRoomReq to JSON.
+             * @function toJSON
+             * @memberof proto.room.CreateRoomReq
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CreateRoomReq.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return CreateRoomReq;
+        })();
+
+        room.CreateRoomRes = (function() {
+
+            /**
+             * Properties of a CreateRoomRes.
+             * @memberof proto.room
+             * @interface ICreateRoomRes
+             * @property {string|null} [code] CreateRoomRes code
+             * @property {proto.room.IRoom|null} [room] CreateRoomRes room
+             */
+
+            /**
+             * Constructs a new CreateRoomRes.
+             * @memberof proto.room
+             * @classdesc Represents a CreateRoomRes.
+             * @implements ICreateRoomRes
+             * @constructor
+             * @param {proto.room.ICreateRoomRes=} [properties] Properties to set
+             */
+            function CreateRoomRes(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * CreateRoomRes code.
+             * @member {string} code
+             * @memberof proto.room.CreateRoomRes
+             * @instance
+             */
+            CreateRoomRes.prototype.code = "";
+
+            /**
+             * CreateRoomRes room.
+             * @member {proto.room.IRoom|null|undefined} room
+             * @memberof proto.room.CreateRoomRes
+             * @instance
+             */
+            CreateRoomRes.prototype.room = null;
+
+            /**
+             * Creates a new CreateRoomRes instance using the specified properties.
+             * @function create
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {proto.room.ICreateRoomRes=} [properties] Properties to set
+             * @returns {proto.room.CreateRoomRes} CreateRoomRes instance
+             */
+            CreateRoomRes.create = function create(properties) {
+                return new CreateRoomRes(properties);
+            };
+
+            /**
+             * Encodes the specified CreateRoomRes message. Does not implicitly {@link proto.room.CreateRoomRes.verify|verify} messages.
+             * @function encode
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {proto.room.ICreateRoomRes} message CreateRoomRes message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomRes.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.code != null && Object.hasOwnProperty.call(message, "code"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.code);
+                if (message.room != null && Object.hasOwnProperty.call(message, "room"))
+                    $root.proto.room.Room.encode(message.room, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                return writer;
+            };
+
+            /**
+             * Encodes the specified CreateRoomRes message, length delimited. Does not implicitly {@link proto.room.CreateRoomRes.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {proto.room.ICreateRoomRes} message CreateRoomRes message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CreateRoomRes.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer.
+             * @function decode
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {proto.room.CreateRoomRes} CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomRes.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.room.CreateRoomRes();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.code = reader.string();
+                        break;
+                    case 2:
+                        message.room = $root.proto.room.Room.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {proto.room.CreateRoomRes} CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CreateRoomRes.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a CreateRoomRes message.
+             * @function verify
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CreateRoomRes.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.code != null && message.hasOwnProperty("code"))
+                    if (!$util.isString(message.code))
+                        return "code: string expected";
+                if (message.room != null && message.hasOwnProperty("room")) {
+                    var error = $root.proto.room.Room.verify(message.room);
+                    if (error)
+                        return "room." + error;
+                }
+                return null;
+            };
+
+            /**
+             * Creates a CreateRoomRes message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {proto.room.CreateRoomRes} CreateRoomRes
+             */
+            CreateRoomRes.fromObject = function fromObject(object) {
+                if (object instanceof $root.proto.room.CreateRoomRes)
+                    return object;
+                var message = new $root.proto.room.CreateRoomRes();
+                if (object.code != null)
+                    message.code = String(object.code);
+                if (object.room != null) {
+                    if (typeof object.room !== "object")
+                        throw TypeError(".proto.room.CreateRoomRes.room: object expected");
+                    message.room = $root.proto.room.Room.fromObject(object.room);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a CreateRoomRes message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof proto.room.CreateRoomRes
+             * @static
+             * @param {proto.room.CreateRoomRes} message CreateRoomRes
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CreateRoomRes.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.code = "";
+                    object.room = null;
+                }
+                if (message.code != null && message.hasOwnProperty("code"))
+                    object.code = message.code;
+                if (message.room != null && message.hasOwnProperty("room"))
+                    object.room = $root.proto.room.Room.toObject(message.room, options);
+                return object;
+            };
+
+            /**
+             * Converts this CreateRoomRes to JSON.
+             * @function toJSON
+             * @memberof proto.room.CreateRoomRes
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CreateRoomRes.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return CreateRoomRes;
         })();
 
         return room;

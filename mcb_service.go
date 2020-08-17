@@ -26,11 +26,10 @@ func newMcbService(opt ...Option) Service {
 		exit:    make(chan bool),
 	}
 	t.tcpServer = api.NewTcpServer(t.exit)
-	client := mcbeamproto.NewMcbGateService(t.opts.Name, t.opts.Service.Client())
 	t.remoteSrv = component.NewMcbServer(
 		component.WithName(t.opts.Name),
 		component.Serializer(t.opts.Serializer),
-		component.RpcClient(client),
+		component.RpcClient(t.opts.Service.Client()),
 	)
 
 	return t

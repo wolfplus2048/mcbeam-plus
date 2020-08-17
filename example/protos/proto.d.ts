@@ -944,6 +944,192 @@ export namespace proto {
              */
             public toJSON(): { [k: string]: any };
         }
+
+        /** Properties of a CreateRoomReq. */
+        interface ICreateRoomReq {
+
+            /** CreateRoomReq name */
+            name?: (string|null);
+        }
+
+        /** Represents a CreateRoomReq. */
+        class CreateRoomReq implements ICreateRoomReq {
+
+            /**
+             * Constructs a new CreateRoomReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.mgr.ICreateRoomReq);
+
+            /** CreateRoomReq name. */
+            public name: string;
+
+            /**
+             * Creates a new CreateRoomReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns CreateRoomReq instance
+             */
+            public static create(properties?: proto.mgr.ICreateRoomReq): proto.mgr.CreateRoomReq;
+
+            /**
+             * Encodes the specified CreateRoomReq message. Does not implicitly {@link proto.mgr.CreateRoomReq.verify|verify} messages.
+             * @param message CreateRoomReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.mgr.ICreateRoomReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified CreateRoomReq message, length delimited. Does not implicitly {@link proto.mgr.CreateRoomReq.verify|verify} messages.
+             * @param message CreateRoomReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.mgr.ICreateRoomReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.mgr.CreateRoomReq;
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.mgr.CreateRoomReq;
+
+            /**
+             * Verifies a CreateRoomReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a CreateRoomReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CreateRoomReq
+             */
+            public static fromObject(object: { [k: string]: any }): proto.mgr.CreateRoomReq;
+
+            /**
+             * Creates a plain object from a CreateRoomReq message. Also converts values to other types if specified.
+             * @param message CreateRoomReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.mgr.CreateRoomReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CreateRoomReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a CreateRoomRes. */
+        interface ICreateRoomRes {
+
+            /** CreateRoomRes code */
+            code?: (string|null);
+
+            /** CreateRoomRes room */
+            room?: (proto.mgr.IRoom|null);
+        }
+
+        /** Represents a CreateRoomRes. */
+        class CreateRoomRes implements ICreateRoomRes {
+
+            /**
+             * Constructs a new CreateRoomRes.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.mgr.ICreateRoomRes);
+
+            /** CreateRoomRes code. */
+            public code: string;
+
+            /** CreateRoomRes room. */
+            public room?: (proto.mgr.IRoom|null);
+
+            /**
+             * Creates a new CreateRoomRes instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns CreateRoomRes instance
+             */
+            public static create(properties?: proto.mgr.ICreateRoomRes): proto.mgr.CreateRoomRes;
+
+            /**
+             * Encodes the specified CreateRoomRes message. Does not implicitly {@link proto.mgr.CreateRoomRes.verify|verify} messages.
+             * @param message CreateRoomRes message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.mgr.ICreateRoomRes, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified CreateRoomRes message, length delimited. Does not implicitly {@link proto.mgr.CreateRoomRes.verify|verify} messages.
+             * @param message CreateRoomRes message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.mgr.ICreateRoomRes, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.mgr.CreateRoomRes;
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.mgr.CreateRoomRes;
+
+            /**
+             * Verifies a CreateRoomRes message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a CreateRoomRes message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CreateRoomRes
+             */
+            public static fromObject(object: { [k: string]: any }): proto.mgr.CreateRoomRes;
+
+            /**
+             * Creates a plain object from a CreateRoomRes message. Also converts values to other types if specified.
+             * @param message CreateRoomRes
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.mgr.CreateRoomRes, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CreateRoomRes to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Namespace room. */
@@ -1049,7 +1235,7 @@ export namespace proto {
         interface IRoom {
 
             /** Room id */
-            id?: (number|null);
+            id?: (string|null);
 
             /** Room name */
             name?: (string|null);
@@ -1068,7 +1254,7 @@ export namespace proto {
             constructor(properties?: proto.room.IRoom);
 
             /** Room id. */
-            public id: number;
+            public id: string;
 
             /** Room name. */
             public name: string;
@@ -1151,7 +1337,7 @@ export namespace proto {
         interface IJoinReq {
 
             /** JoinReq id */
-            id?: (number|null);
+            id?: (string|null);
         }
 
         /** Represents a JoinReq. */
@@ -1164,7 +1350,7 @@ export namespace proto {
             constructor(properties?: proto.room.IJoinReq);
 
             /** JoinReq id. */
-            public id: number;
+            public id: string;
 
             /**
              * Creates a new JoinReq instance using the specified properties.
@@ -1610,6 +1796,192 @@ export namespace proto {
 
             /**
              * Converts this UserAction to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a CreateRoomReq. */
+        interface ICreateRoomReq {
+
+            /** CreateRoomReq name */
+            name?: (string|null);
+        }
+
+        /** Represents a CreateRoomReq. */
+        class CreateRoomReq implements ICreateRoomReq {
+
+            /**
+             * Constructs a new CreateRoomReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.room.ICreateRoomReq);
+
+            /** CreateRoomReq name. */
+            public name: string;
+
+            /**
+             * Creates a new CreateRoomReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns CreateRoomReq instance
+             */
+            public static create(properties?: proto.room.ICreateRoomReq): proto.room.CreateRoomReq;
+
+            /**
+             * Encodes the specified CreateRoomReq message. Does not implicitly {@link proto.room.CreateRoomReq.verify|verify} messages.
+             * @param message CreateRoomReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.room.ICreateRoomReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified CreateRoomReq message, length delimited. Does not implicitly {@link proto.room.CreateRoomReq.verify|verify} messages.
+             * @param message CreateRoomReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.room.ICreateRoomReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.room.CreateRoomReq;
+
+            /**
+             * Decodes a CreateRoomReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns CreateRoomReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.room.CreateRoomReq;
+
+            /**
+             * Verifies a CreateRoomReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a CreateRoomReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CreateRoomReq
+             */
+            public static fromObject(object: { [k: string]: any }): proto.room.CreateRoomReq;
+
+            /**
+             * Creates a plain object from a CreateRoomReq message. Also converts values to other types if specified.
+             * @param message CreateRoomReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.room.CreateRoomReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CreateRoomReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a CreateRoomRes. */
+        interface ICreateRoomRes {
+
+            /** CreateRoomRes code */
+            code?: (string|null);
+
+            /** CreateRoomRes room */
+            room?: (proto.room.IRoom|null);
+        }
+
+        /** Represents a CreateRoomRes. */
+        class CreateRoomRes implements ICreateRoomRes {
+
+            /**
+             * Constructs a new CreateRoomRes.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.room.ICreateRoomRes);
+
+            /** CreateRoomRes code. */
+            public code: string;
+
+            /** CreateRoomRes room. */
+            public room?: (proto.room.IRoom|null);
+
+            /**
+             * Creates a new CreateRoomRes instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns CreateRoomRes instance
+             */
+            public static create(properties?: proto.room.ICreateRoomRes): proto.room.CreateRoomRes;
+
+            /**
+             * Encodes the specified CreateRoomRes message. Does not implicitly {@link proto.room.CreateRoomRes.verify|verify} messages.
+             * @param message CreateRoomRes message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.room.ICreateRoomRes, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified CreateRoomRes message, length delimited. Does not implicitly {@link proto.room.CreateRoomRes.verify|verify} messages.
+             * @param message CreateRoomRes message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.room.ICreateRoomRes, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.room.CreateRoomRes;
+
+            /**
+             * Decodes a CreateRoomRes message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns CreateRoomRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.room.CreateRoomRes;
+
+            /**
+             * Verifies a CreateRoomRes message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a CreateRoomRes message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns CreateRoomRes
+             */
+            public static fromObject(object: { [k: string]: any }): proto.room.CreateRoomRes;
+
+            /**
+             * Creates a plain object from a CreateRoomRes message. Also converts values to other types if specified.
+             * @param message CreateRoomRes
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.room.CreateRoomRes, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this CreateRoomRes to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

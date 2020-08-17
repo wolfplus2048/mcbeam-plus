@@ -27,3 +27,6 @@ func (h Handler) Shutdown() {
 func (h *Handler) GetRoomList(ctx context.Context, req *proto_mgr.GetRoomListReq) {
 
 }
+func (h *Handler) CreateRoom(ctx context.Context, req *proto_mgr.CreateRoomReq) {
+
+}

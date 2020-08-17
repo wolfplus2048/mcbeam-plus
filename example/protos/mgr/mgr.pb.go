@@ -173,6 +173,108 @@ func (x *GetRoomListRes) GetRooms() []*Room {
 	return nil
 }
 
+type CreateRoomReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *CreateRoomReq) Reset() {
+	*x = CreateRoomReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_mgr_mgr_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateRoomReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRoomReq) ProtoMessage() {}
+
+func (x *CreateRoomReq) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_mgr_mgr_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRoomReq.ProtoReflect.Descriptor instead.
+func (*CreateRoomReq) Descriptor() ([]byte, []int) {
+	return file_protos_mgr_mgr_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *CreateRoomReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type CreateRoomRes struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	Room *Room  `protobuf:"bytes,2,opt,name=room,proto3" json:"room,omitempty"`
+}
+
+func (x *CreateRoomRes) Reset() {
+	*x = CreateRoomRes{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_mgr_mgr_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateRoomRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRoomRes) ProtoMessage() {}
+
+func (x *CreateRoomRes) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_mgr_mgr_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRoomRes.ProtoReflect.Descriptor instead.
+func (*CreateRoomRes) Descriptor() ([]byte, []int) {
+	return file_protos_mgr_mgr_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CreateRoomRes) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *CreateRoomRes) GetRoom() *Room {
+	if x != nil {
+		return x.Room
+	}
+	return nil
+}
+
 var File_protos_mgr_mgr_proto protoreflect.FileDescriptor
 
 var file_protos_mgr_mgr_proto_rawDesc = []byte{
@@ -187,7 +289,14 @@ var file_protos_mgr_mgr_proto_rawDesc = []byte{
 	0x6f, 0x6d, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x12, 0x25, 0x0a, 0x05, 0x72, 0x6f, 0x6f,
 	0x6d, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x2e, 0x6d, 0x67, 0x72, 0x2e, 0x52, 0x6f, 0x6f, 0x6d, 0x52, 0x05, 0x72, 0x6f, 0x6f, 0x6d, 0x73,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0x23, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x6d, 0x52, 0x65,
+	0x71, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x48, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52,
+	0x6f, 0x6f, 0x6d, 0x52, 0x65, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x23, 0x0a, 0x04, 0x72, 0x6f,
+	0x6f, 0x6d, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2e, 0x6d, 0x67, 0x72, 0x2e, 0x52, 0x6f, 0x6f, 0x6d, 0x52, 0x04, 0x72, 0x6f, 0x6f, 0x6d, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -202,19 +311,22 @@ func file_protos_mgr_mgr_proto_rawDescGZIP() []byte {
 	return file_protos_mgr_mgr_proto_rawDescData
 }
 
-var file_protos_mgr_mgr_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_protos_mgr_mgr_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_protos_mgr_mgr_proto_goTypes = []interface{}{
 	(*Room)(nil),           // 0: proto.mgr.Room
 	(*GetRoomListReq)(nil), // 1: proto.mgr.GetRoomListReq
 	(*GetRoomListRes)(nil), // 2: proto.mgr.GetRoomListRes
+	(*CreateRoomReq)(nil),  // 3: proto.mgr.CreateRoomReq
+	(*CreateRoomRes)(nil),  // 4: proto.mgr.CreateRoomRes
 }
 var file_protos_mgr_mgr_proto_depIdxs = []int32{
 	0, // 0: proto.mgr.GetRoomListRes.rooms:type_name -> proto.mgr.Room
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // 1: proto.mgr.CreateRoomRes.room:type_name -> proto.mgr.Room
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_protos_mgr_mgr_proto_init() }
@@ -259,6 +371,30 @@ func file_protos_mgr_mgr_proto_init() {
 				return nil
 			}
 		}
+		file_protos_mgr_mgr_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateRoomReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protos_mgr_mgr_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateRoomRes); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -266,7 +402,7 @@ func file_protos_mgr_mgr_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protos_mgr_mgr_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -43,7 +43,7 @@ type NetworkEntity interface {
 	Close() error
 	Kick(ctx context.Context) error
 	RemoteAddr() net.Addr
-	SendRequest(ctx context.Context, route string, v interface{}) (interface{}, error)
+	SendRequest(ctx context.Context, route string, arg interface{}, reply interface{}) error
 }
 
 var (
@@ -680,7 +680,7 @@ func (s *Session) sendRequestToFront(ctx context.Context, route string, includeD
 		sessionData.Data = s.encodedData
 	}
 
-	res, err := s.entity.SendRequest(ctx, s.frontendID, route, sessionData)
+	res, err := s.entity.SendRequest(ctx, route, sessionData)
 	if err != nil {
 		return err
 	}

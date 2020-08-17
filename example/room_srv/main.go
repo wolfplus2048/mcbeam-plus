@@ -6,7 +6,7 @@ import (
 	"github.com/micro/go-micro/v2/registry/etcd"
 	"github.com/wolfplus2048/mcbeam-plus"
 	"github.com/wolfplus2048/mcbeam-plus/component"
-	"github.com/wolfplus2048/mcbeam-plus/example/protos/gate"
+	proto_room "github.com/wolfplus2048/mcbeam-plus/example/protos/room"
 	"strings"
 )
 
@@ -28,10 +28,18 @@ func (h *Handler) BeforeShutdown() {
 func (h *Handler) Shutdown() {
 	panic("implement me")
 }
-func (h *Handler) Hello(ctx context.Context, req *gate.GreeterReq) (*gate.GreeterRes, error) {
-	logger.Infof("request: %s", req.Message)
-	res := &gate.GreeterRes{}
-	res.Message = "Srv Hello " + req.Message
+func (h *Handler) CreateRoom(ctx context.Context, req *proto_room.CreateRoomReq) (*proto_room.CreateRoomRes, error) {
+	r, err := New(req.Name)
+	if err != nil {
+		return nil, err
+	}
+	res := &proto_room.CreateRoomRes{
+		Code: "",
+		Room: &proto_room.Room{
+			Id:   r.id,
+			Name: r.name,
+		},
+	}
 	return res, nil
 }
 
