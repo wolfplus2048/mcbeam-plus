@@ -1,4 +1,4 @@
-package component
+package mcb_server
 
 import (
 	"errors"

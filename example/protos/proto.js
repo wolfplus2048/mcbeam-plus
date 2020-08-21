@@ -446,25 +446,24 @@ $root.proto = (function() {
             return LoginRes;
         })();
 
-        gate.User = (function() {
+        gate.GetUserInfoReq = (function() {
 
             /**
-             * Properties of a User.
+             * Properties of a GetUserInfoReq.
              * @memberof proto.gate
-             * @interface IUser
-             * @property {number|null} [uid] User uid
-             * @property {string|null} [username] User username
+             * @interface IGetUserInfoReq
+             * @property {string|null} [uid] GetUserInfoReq uid
              */
 
             /**
-             * Constructs a new User.
+             * Constructs a new GetUserInfoReq.
              * @memberof proto.gate
-             * @classdesc Represents a User.
-             * @implements IUser
+             * @classdesc Represents a GetUserInfoReq.
+             * @implements IGetUserInfoReq
              * @constructor
-             * @param {proto.gate.IUser=} [properties] Properties to set
+             * @param {proto.gate.IGetUserInfoReq=} [properties] Properties to set
              */
-            function User(properties) {
+            function GetUserInfoReq(properties) {
                 if (properties)
                     for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null)
@@ -472,87 +471,289 @@ $root.proto = (function() {
             }
 
             /**
-             * User uid.
-             * @member {number} uid
-             * @memberof proto.gate.User
+             * GetUserInfoReq uid.
+             * @member {string} uid
+             * @memberof proto.gate.GetUserInfoReq
              * @instance
              */
-            User.prototype.uid = 0;
+            GetUserInfoReq.prototype.uid = "";
 
             /**
-             * User username.
-             * @member {string} username
-             * @memberof proto.gate.User
-             * @instance
-             */
-            User.prototype.username = "";
-
-            /**
-             * Creates a new User instance using the specified properties.
+             * Creates a new GetUserInfoReq instance using the specified properties.
              * @function create
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoReq
              * @static
-             * @param {proto.gate.IUser=} [properties] Properties to set
-             * @returns {proto.gate.User} User instance
+             * @param {proto.gate.IGetUserInfoReq=} [properties] Properties to set
+             * @returns {proto.gate.GetUserInfoReq} GetUserInfoReq instance
              */
-            User.create = function create(properties) {
-                return new User(properties);
+            GetUserInfoReq.create = function create(properties) {
+                return new GetUserInfoReq(properties);
             };
 
             /**
-             * Encodes the specified User message. Does not implicitly {@link proto.gate.User.verify|verify} messages.
+             * Encodes the specified GetUserInfoReq message. Does not implicitly {@link proto.gate.GetUserInfoReq.verify|verify} messages.
              * @function encode
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoReq
              * @static
-             * @param {proto.gate.IUser} message User message or plain object to encode
+             * @param {proto.gate.IGetUserInfoReq} message GetUserInfoReq message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            User.encode = function encode(message, writer) {
+            GetUserInfoReq.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
                 if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.uid);
-                if (message.username != null && Object.hasOwnProperty.call(message, "username"))
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.username);
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.uid);
                 return writer;
             };
 
             /**
-             * Encodes the specified User message, length delimited. Does not implicitly {@link proto.gate.User.verify|verify} messages.
+             * Encodes the specified GetUserInfoReq message, length delimited. Does not implicitly {@link proto.gate.GetUserInfoReq.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoReq
              * @static
-             * @param {proto.gate.IUser} message User message or plain object to encode
+             * @param {proto.gate.IGetUserInfoReq} message GetUserInfoReq message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            User.encodeDelimited = function encodeDelimited(message, writer) {
+            GetUserInfoReq.encodeDelimited = function encodeDelimited(message, writer) {
                 return this.encode(message, writer).ldelim();
             };
 
             /**
-             * Decodes a User message from the specified reader or buffer.
+             * Decodes a GetUserInfoReq message from the specified reader or buffer.
              * @function decode
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoReq
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {proto.gate.User} User
+             * @returns {proto.gate.GetUserInfoReq} GetUserInfoReq
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            User.decode = function decode(reader, length) {
+            GetUserInfoReq.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.gate.User();
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.gate.GetUserInfoReq();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
                     case 1:
-                        message.uid = reader.int32();
+                        message.uid = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a GetUserInfoReq message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof proto.gate.GetUserInfoReq
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {proto.gate.GetUserInfoReq} GetUserInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GetUserInfoReq.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a GetUserInfoReq message.
+             * @function verify
+             * @memberof proto.gate.GetUserInfoReq
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            GetUserInfoReq.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.uid != null && message.hasOwnProperty("uid"))
+                    if (!$util.isString(message.uid))
+                        return "uid: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a GetUserInfoReq message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof proto.gate.GetUserInfoReq
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {proto.gate.GetUserInfoReq} GetUserInfoReq
+             */
+            GetUserInfoReq.fromObject = function fromObject(object) {
+                if (object instanceof $root.proto.gate.GetUserInfoReq)
+                    return object;
+                var message = new $root.proto.gate.GetUserInfoReq();
+                if (object.uid != null)
+                    message.uid = String(object.uid);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a GetUserInfoReq message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof proto.gate.GetUserInfoReq
+             * @static
+             * @param {proto.gate.GetUserInfoReq} message GetUserInfoReq
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GetUserInfoReq.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults)
+                    object.uid = "";
+                if (message.uid != null && message.hasOwnProperty("uid"))
+                    object.uid = message.uid;
+                return object;
+            };
+
+            /**
+             * Converts this GetUserInfoReq to JSON.
+             * @function toJSON
+             * @memberof proto.gate.GetUserInfoReq
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GetUserInfoReq.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return GetUserInfoReq;
+        })();
+
+        gate.GetUserInfoRes = (function() {
+
+            /**
+             * Properties of a GetUserInfoRes.
+             * @memberof proto.gate
+             * @interface IGetUserInfoRes
+             * @property {string|null} [code] GetUserInfoRes code
+             * @property {string|null} [uid] GetUserInfoRes uid
+             * @property {string|null} [username] GetUserInfoRes username
+             */
+
+            /**
+             * Constructs a new GetUserInfoRes.
+             * @memberof proto.gate
+             * @classdesc Represents a GetUserInfoRes.
+             * @implements IGetUserInfoRes
+             * @constructor
+             * @param {proto.gate.IGetUserInfoRes=} [properties] Properties to set
+             */
+            function GetUserInfoRes(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * GetUserInfoRes code.
+             * @member {string} code
+             * @memberof proto.gate.GetUserInfoRes
+             * @instance
+             */
+            GetUserInfoRes.prototype.code = "";
+
+            /**
+             * GetUserInfoRes uid.
+             * @member {string} uid
+             * @memberof proto.gate.GetUserInfoRes
+             * @instance
+             */
+            GetUserInfoRes.prototype.uid = "";
+
+            /**
+             * GetUserInfoRes username.
+             * @member {string} username
+             * @memberof proto.gate.GetUserInfoRes
+             * @instance
+             */
+            GetUserInfoRes.prototype.username = "";
+
+            /**
+             * Creates a new GetUserInfoRes instance using the specified properties.
+             * @function create
+             * @memberof proto.gate.GetUserInfoRes
+             * @static
+             * @param {proto.gate.IGetUserInfoRes=} [properties] Properties to set
+             * @returns {proto.gate.GetUserInfoRes} GetUserInfoRes instance
+             */
+            GetUserInfoRes.create = function create(properties) {
+                return new GetUserInfoRes(properties);
+            };
+
+            /**
+             * Encodes the specified GetUserInfoRes message. Does not implicitly {@link proto.gate.GetUserInfoRes.verify|verify} messages.
+             * @function encode
+             * @memberof proto.gate.GetUserInfoRes
+             * @static
+             * @param {proto.gate.IGetUserInfoRes} message GetUserInfoRes message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GetUserInfoRes.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.code != null && Object.hasOwnProperty.call(message, "code"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.code);
+                if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.uid);
+                if (message.username != null && Object.hasOwnProperty.call(message, "username"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.username);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified GetUserInfoRes message, length delimited. Does not implicitly {@link proto.gate.GetUserInfoRes.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof proto.gate.GetUserInfoRes
+             * @static
+             * @param {proto.gate.IGetUserInfoRes} message GetUserInfoRes message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GetUserInfoRes.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a GetUserInfoRes message from the specified reader or buffer.
+             * @function decode
+             * @memberof proto.gate.GetUserInfoRes
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {proto.gate.GetUserInfoRes} GetUserInfoRes
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GetUserInfoRes.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.gate.GetUserInfoRes();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.code = reader.string();
                         break;
                     case 2:
+                        message.uid = reader.string();
+                        break;
+                    case 3:
                         message.username = reader.string();
                         break;
                     default:
@@ -564,35 +765,38 @@ $root.proto = (function() {
             };
 
             /**
-             * Decodes a User message from the specified reader or buffer, length delimited.
+             * Decodes a GetUserInfoRes message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoRes
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {proto.gate.User} User
+             * @returns {proto.gate.GetUserInfoRes} GetUserInfoRes
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            User.decodeDelimited = function decodeDelimited(reader) {
+            GetUserInfoRes.decodeDelimited = function decodeDelimited(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies a User message.
+             * Verifies a GetUserInfoRes message.
              * @function verify
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoRes
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            User.verify = function verify(message) {
+            GetUserInfoRes.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
+                if (message.code != null && message.hasOwnProperty("code"))
+                    if (!$util.isString(message.code))
+                        return "code: string expected";
                 if (message.uid != null && message.hasOwnProperty("uid"))
-                    if (!$util.isInteger(message.uid))
-                        return "uid: integer expected";
+                    if (!$util.isString(message.uid))
+                        return "uid: string expected";
                 if (message.username != null && message.hasOwnProperty("username"))
                     if (!$util.isString(message.username))
                         return "username: string expected";
@@ -600,41 +804,46 @@ $root.proto = (function() {
             };
 
             /**
-             * Creates a User message from a plain object. Also converts values to their respective internal types.
+             * Creates a GetUserInfoRes message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoRes
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {proto.gate.User} User
+             * @returns {proto.gate.GetUserInfoRes} GetUserInfoRes
              */
-            User.fromObject = function fromObject(object) {
-                if (object instanceof $root.proto.gate.User)
+            GetUserInfoRes.fromObject = function fromObject(object) {
+                if (object instanceof $root.proto.gate.GetUserInfoRes)
                     return object;
-                var message = new $root.proto.gate.User();
+                var message = new $root.proto.gate.GetUserInfoRes();
+                if (object.code != null)
+                    message.code = String(object.code);
                 if (object.uid != null)
-                    message.uid = object.uid | 0;
+                    message.uid = String(object.uid);
                 if (object.username != null)
                     message.username = String(object.username);
                 return message;
             };
 
             /**
-             * Creates a plain object from a User message. Also converts values to other types if specified.
+             * Creates a plain object from a GetUserInfoRes message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoRes
              * @static
-             * @param {proto.gate.User} message User
+             * @param {proto.gate.GetUserInfoRes} message GetUserInfoRes
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            User.toObject = function toObject(message, options) {
+            GetUserInfoRes.toObject = function toObject(message, options) {
                 if (!options)
                     options = {};
                 var object = {};
                 if (options.defaults) {
-                    object.uid = 0;
+                    object.code = "";
+                    object.uid = "";
                     object.username = "";
                 }
+                if (message.code != null && message.hasOwnProperty("code"))
+                    object.code = message.code;
                 if (message.uid != null && message.hasOwnProperty("uid"))
                     object.uid = message.uid;
                 if (message.username != null && message.hasOwnProperty("username"))
@@ -643,832 +852,17 @@ $root.proto = (function() {
             };
 
             /**
-             * Converts this User to JSON.
+             * Converts this GetUserInfoRes to JSON.
              * @function toJSON
-             * @memberof proto.gate.User
+             * @memberof proto.gate.GetUserInfoRes
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            User.prototype.toJSON = function toJSON() {
+            GetUserInfoRes.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
 
-            return User;
-        })();
-
-        gate.UserNot = (function() {
-
-            /**
-             * Properties of a UserNot.
-             * @memberof proto.gate
-             * @interface IUserNot
-             * @property {number|null} [action] UserNot action
-             * @property {proto.gate.IUser|null} [user] UserNot user
-             */
-
-            /**
-             * Constructs a new UserNot.
-             * @memberof proto.gate
-             * @classdesc Represents a UserNot.
-             * @implements IUserNot
-             * @constructor
-             * @param {proto.gate.IUserNot=} [properties] Properties to set
-             */
-            function UserNot(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * UserNot action.
-             * @member {number} action
-             * @memberof proto.gate.UserNot
-             * @instance
-             */
-            UserNot.prototype.action = 0;
-
-            /**
-             * UserNot user.
-             * @member {proto.gate.IUser|null|undefined} user
-             * @memberof proto.gate.UserNot
-             * @instance
-             */
-            UserNot.prototype.user = null;
-
-            /**
-             * Creates a new UserNot instance using the specified properties.
-             * @function create
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {proto.gate.IUserNot=} [properties] Properties to set
-             * @returns {proto.gate.UserNot} UserNot instance
-             */
-            UserNot.create = function create(properties) {
-                return new UserNot(properties);
-            };
-
-            /**
-             * Encodes the specified UserNot message. Does not implicitly {@link proto.gate.UserNot.verify|verify} messages.
-             * @function encode
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {proto.gate.IUserNot} message UserNot message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            UserNot.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.action != null && Object.hasOwnProperty.call(message, "action"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.action);
-                if (message.user != null && Object.hasOwnProperty.call(message, "user"))
-                    $root.proto.gate.User.encode(message.user, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                return writer;
-            };
-
-            /**
-             * Encodes the specified UserNot message, length delimited. Does not implicitly {@link proto.gate.UserNot.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {proto.gate.IUserNot} message UserNot message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            UserNot.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-
-            /**
-             * Decodes a UserNot message from the specified reader or buffer.
-             * @function decode
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {proto.gate.UserNot} UserNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            UserNot.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.gate.UserNot();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.action = reader.int32();
-                        break;
-                    case 2:
-                        message.user = $root.proto.gate.User.decode(reader, reader.uint32());
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Decodes a UserNot message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {proto.gate.UserNot} UserNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            UserNot.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-
-            /**
-             * Verifies a UserNot message.
-             * @function verify
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            UserNot.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.action != null && message.hasOwnProperty("action"))
-                    if (!$util.isInteger(message.action))
-                        return "action: integer expected";
-                if (message.user != null && message.hasOwnProperty("user")) {
-                    var error = $root.proto.gate.User.verify(message.user);
-                    if (error)
-                        return "user." + error;
-                }
-                return null;
-            };
-
-            /**
-             * Creates a UserNot message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {proto.gate.UserNot} UserNot
-             */
-            UserNot.fromObject = function fromObject(object) {
-                if (object instanceof $root.proto.gate.UserNot)
-                    return object;
-                var message = new $root.proto.gate.UserNot();
-                if (object.action != null)
-                    message.action = object.action | 0;
-                if (object.user != null) {
-                    if (typeof object.user !== "object")
-                        throw TypeError(".proto.gate.UserNot.user: object expected");
-                    message.user = $root.proto.gate.User.fromObject(object.user);
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a UserNot message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof proto.gate.UserNot
-             * @static
-             * @param {proto.gate.UserNot} message UserNot
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            UserNot.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    object.action = 0;
-                    object.user = null;
-                }
-                if (message.action != null && message.hasOwnProperty("action"))
-                    object.action = message.action;
-                if (message.user != null && message.hasOwnProperty("user"))
-                    object.user = $root.proto.gate.User.toObject(message.user, options);
-                return object;
-            };
-
-            /**
-             * Converts this UserNot to JSON.
-             * @function toJSON
-             * @memberof proto.gate.UserNot
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            UserNot.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return UserNot;
-        })();
-
-        gate.Members = (function() {
-
-            /**
-             * Properties of a Members.
-             * @memberof proto.gate
-             * @interface IMembers
-             * @property {Array.<string>|null} [User] Members User
-             */
-
-            /**
-             * Constructs a new Members.
-             * @memberof proto.gate
-             * @classdesc Represents a Members.
-             * @implements IMembers
-             * @constructor
-             * @param {proto.gate.IMembers=} [properties] Properties to set
-             */
-            function Members(properties) {
-                this.User = [];
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Members User.
-             * @member {Array.<string>} User
-             * @memberof proto.gate.Members
-             * @instance
-             */
-            Members.prototype.User = $util.emptyArray;
-
-            /**
-             * Creates a new Members instance using the specified properties.
-             * @function create
-             * @memberof proto.gate.Members
-             * @static
-             * @param {proto.gate.IMembers=} [properties] Properties to set
-             * @returns {proto.gate.Members} Members instance
-             */
-            Members.create = function create(properties) {
-                return new Members(properties);
-            };
-
-            /**
-             * Encodes the specified Members message. Does not implicitly {@link proto.gate.Members.verify|verify} messages.
-             * @function encode
-             * @memberof proto.gate.Members
-             * @static
-             * @param {proto.gate.IMembers} message Members message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            Members.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.User != null && message.User.length)
-                    for (var i = 0; i < message.User.length; ++i)
-                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.User[i]);
-                return writer;
-            };
-
-            /**
-             * Encodes the specified Members message, length delimited. Does not implicitly {@link proto.gate.Members.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof proto.gate.Members
-             * @static
-             * @param {proto.gate.IMembers} message Members message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            Members.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-
-            /**
-             * Decodes a Members message from the specified reader or buffer.
-             * @function decode
-             * @memberof proto.gate.Members
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {proto.gate.Members} Members
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            Members.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.gate.Members();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        if (!(message.User && message.User.length))
-                            message.User = [];
-                        message.User.push(reader.string());
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Decodes a Members message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof proto.gate.Members
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {proto.gate.Members} Members
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            Members.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-
-            /**
-             * Verifies a Members message.
-             * @function verify
-             * @memberof proto.gate.Members
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Members.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.User != null && message.hasOwnProperty("User")) {
-                    if (!Array.isArray(message.User))
-                        return "User: array expected";
-                    for (var i = 0; i < message.User.length; ++i)
-                        if (!$util.isString(message.User[i]))
-                            return "User: string[] expected";
-                }
-                return null;
-            };
-
-            /**
-             * Creates a Members message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof proto.gate.Members
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {proto.gate.Members} Members
-             */
-            Members.fromObject = function fromObject(object) {
-                if (object instanceof $root.proto.gate.Members)
-                    return object;
-                var message = new $root.proto.gate.Members();
-                if (object.User) {
-                    if (!Array.isArray(object.User))
-                        throw TypeError(".proto.gate.Members.User: array expected");
-                    message.User = [];
-                    for (var i = 0; i < object.User.length; ++i)
-                        message.User[i] = String(object.User[i]);
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a Members message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof proto.gate.Members
-             * @static
-             * @param {proto.gate.Members} message Members
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Members.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.arrays || options.defaults)
-                    object.User = [];
-                if (message.User && message.User.length) {
-                    object.User = [];
-                    for (var j = 0; j < message.User.length; ++j)
-                        object.User[j] = message.User[j];
-                }
-                return object;
-            };
-
-            /**
-             * Converts this Members to JSON.
-             * @function toJSON
-             * @memberof proto.gate.Members
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Members.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Members;
-        })();
-
-        gate.ChatReq = (function() {
-
-            /**
-             * Properties of a ChatReq.
-             * @memberof proto.gate
-             * @interface IChatReq
-             * @property {string|null} [content] ChatReq content
-             */
-
-            /**
-             * Constructs a new ChatReq.
-             * @memberof proto.gate
-             * @classdesc Represents a ChatReq.
-             * @implements IChatReq
-             * @constructor
-             * @param {proto.gate.IChatReq=} [properties] Properties to set
-             */
-            function ChatReq(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * ChatReq content.
-             * @member {string} content
-             * @memberof proto.gate.ChatReq
-             * @instance
-             */
-            ChatReq.prototype.content = "";
-
-            /**
-             * Creates a new ChatReq instance using the specified properties.
-             * @function create
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {proto.gate.IChatReq=} [properties] Properties to set
-             * @returns {proto.gate.ChatReq} ChatReq instance
-             */
-            ChatReq.create = function create(properties) {
-                return new ChatReq(properties);
-            };
-
-            /**
-             * Encodes the specified ChatReq message. Does not implicitly {@link proto.gate.ChatReq.verify|verify} messages.
-             * @function encode
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {proto.gate.IChatReq} message ChatReq message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            ChatReq.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.content != null && Object.hasOwnProperty.call(message, "content"))
-                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.content);
-                return writer;
-            };
-
-            /**
-             * Encodes the specified ChatReq message, length delimited. Does not implicitly {@link proto.gate.ChatReq.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {proto.gate.IChatReq} message ChatReq message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            ChatReq.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-
-            /**
-             * Decodes a ChatReq message from the specified reader or buffer.
-             * @function decode
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {proto.gate.ChatReq} ChatReq
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            ChatReq.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.gate.ChatReq();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.content = reader.string();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Decodes a ChatReq message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {proto.gate.ChatReq} ChatReq
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            ChatReq.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-
-            /**
-             * Verifies a ChatReq message.
-             * @function verify
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            ChatReq.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.content != null && message.hasOwnProperty("content"))
-                    if (!$util.isString(message.content))
-                        return "content: string expected";
-                return null;
-            };
-
-            /**
-             * Creates a ChatReq message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {proto.gate.ChatReq} ChatReq
-             */
-            ChatReq.fromObject = function fromObject(object) {
-                if (object instanceof $root.proto.gate.ChatReq)
-                    return object;
-                var message = new $root.proto.gate.ChatReq();
-                if (object.content != null)
-                    message.content = String(object.content);
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a ChatReq message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof proto.gate.ChatReq
-             * @static
-             * @param {proto.gate.ChatReq} message ChatReq
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            ChatReq.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults)
-                    object.content = "";
-                if (message.content != null && message.hasOwnProperty("content"))
-                    object.content = message.content;
-                return object;
-            };
-
-            /**
-             * Converts this ChatReq to JSON.
-             * @function toJSON
-             * @memberof proto.gate.ChatReq
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            ChatReq.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return ChatReq;
-        })();
-
-        gate.ChatNot = (function() {
-
-            /**
-             * Properties of a ChatNot.
-             * @memberof proto.gate
-             * @interface IChatNot
-             * @property {string|null} [uid] ChatNot uid
-             * @property {string|null} [content] ChatNot content
-             */
-
-            /**
-             * Constructs a new ChatNot.
-             * @memberof proto.gate
-             * @classdesc Represents a ChatNot.
-             * @implements IChatNot
-             * @constructor
-             * @param {proto.gate.IChatNot=} [properties] Properties to set
-             */
-            function ChatNot(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * ChatNot uid.
-             * @member {string} uid
-             * @memberof proto.gate.ChatNot
-             * @instance
-             */
-            ChatNot.prototype.uid = "";
-
-            /**
-             * ChatNot content.
-             * @member {string} content
-             * @memberof proto.gate.ChatNot
-             * @instance
-             */
-            ChatNot.prototype.content = "";
-
-            /**
-             * Creates a new ChatNot instance using the specified properties.
-             * @function create
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {proto.gate.IChatNot=} [properties] Properties to set
-             * @returns {proto.gate.ChatNot} ChatNot instance
-             */
-            ChatNot.create = function create(properties) {
-                return new ChatNot(properties);
-            };
-
-            /**
-             * Encodes the specified ChatNot message. Does not implicitly {@link proto.gate.ChatNot.verify|verify} messages.
-             * @function encode
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {proto.gate.IChatNot} message ChatNot message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            ChatNot.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
-                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.uid);
-                if (message.content != null && Object.hasOwnProperty.call(message, "content"))
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.content);
-                return writer;
-            };
-
-            /**
-             * Encodes the specified ChatNot message, length delimited. Does not implicitly {@link proto.gate.ChatNot.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {proto.gate.IChatNot} message ChatNot message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            ChatNot.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-
-            /**
-             * Decodes a ChatNot message from the specified reader or buffer.
-             * @function decode
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {proto.gate.ChatNot} ChatNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            ChatNot.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.gate.ChatNot();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.uid = reader.string();
-                        break;
-                    case 2:
-                        message.content = reader.string();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Decodes a ChatNot message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {proto.gate.ChatNot} ChatNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            ChatNot.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-
-            /**
-             * Verifies a ChatNot message.
-             * @function verify
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            ChatNot.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.uid != null && message.hasOwnProperty("uid"))
-                    if (!$util.isString(message.uid))
-                        return "uid: string expected";
-                if (message.content != null && message.hasOwnProperty("content"))
-                    if (!$util.isString(message.content))
-                        return "content: string expected";
-                return null;
-            };
-
-            /**
-             * Creates a ChatNot message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {proto.gate.ChatNot} ChatNot
-             */
-            ChatNot.fromObject = function fromObject(object) {
-                if (object instanceof $root.proto.gate.ChatNot)
-                    return object;
-                var message = new $root.proto.gate.ChatNot();
-                if (object.uid != null)
-                    message.uid = String(object.uid);
-                if (object.content != null)
-                    message.content = String(object.content);
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a ChatNot message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof proto.gate.ChatNot
-             * @static
-             * @param {proto.gate.ChatNot} message ChatNot
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            ChatNot.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    object.uid = "";
-                    object.content = "";
-                }
-                if (message.uid != null && message.hasOwnProperty("uid"))
-                    object.uid = message.uid;
-                if (message.content != null && message.hasOwnProperty("content"))
-                    object.content = message.content;
-                return object;
-            };
-
-            /**
-             * Converts this ChatNot to JSON.
-             * @function toJSON
-             * @memberof proto.gate.ChatNot
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            ChatNot.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return ChatNot;
+            return GetUserInfoRes;
         })();
 
         return gate;
@@ -1562,7 +956,7 @@ $root.proto = (function() {
                 if (message.name != null && Object.hasOwnProperty.call(message, "name"))
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
                 if (message.status != null && Object.hasOwnProperty.call(message, "status"))
-                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.status);
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.status);
                 return writer;
             };
 
@@ -1603,7 +997,7 @@ $root.proto = (function() {
                     case 2:
                         message.name = reader.string();
                         break;
-                    case 3:
+                    case 4:
                         message.status = reader.int32();
                         break;
                     default:
@@ -2277,6 +1671,7 @@ $root.proto = (function() {
              * @memberof proto.mgr
              * @interface ICreateRoomRes
              * @property {string|null} [code] CreateRoomRes code
+             * @property {string|null} [serverId] CreateRoomRes serverId
              * @property {proto.mgr.IRoom|null} [room] CreateRoomRes room
              */
 
@@ -2302,6 +1697,14 @@ $root.proto = (function() {
              * @instance
              */
             CreateRoomRes.prototype.code = "";
+
+            /**
+             * CreateRoomRes serverId.
+             * @member {string} serverId
+             * @memberof proto.mgr.CreateRoomRes
+             * @instance
+             */
+            CreateRoomRes.prototype.serverId = "";
 
             /**
              * CreateRoomRes room.
@@ -2339,6 +1742,8 @@ $root.proto = (function() {
                     writer.uint32(/* id 1, wireType 2 =*/10).string(message.code);
                 if (message.room != null && Object.hasOwnProperty.call(message, "room"))
                     $root.proto.mgr.Room.encode(message.room, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                if (message.serverId != null && Object.hasOwnProperty.call(message, "serverId"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.serverId);
                 return writer;
             };
 
@@ -2375,6 +1780,9 @@ $root.proto = (function() {
                     switch (tag >>> 3) {
                     case 1:
                         message.code = reader.string();
+                        break;
+                    case 3:
+                        message.serverId = reader.string();
                         break;
                     case 2:
                         message.room = $root.proto.mgr.Room.decode(reader, reader.uint32());
@@ -2417,6 +1825,9 @@ $root.proto = (function() {
                 if (message.code != null && message.hasOwnProperty("code"))
                     if (!$util.isString(message.code))
                         return "code: string expected";
+                if (message.serverId != null && message.hasOwnProperty("serverId"))
+                    if (!$util.isString(message.serverId))
+                        return "serverId: string expected";
                 if (message.room != null && message.hasOwnProperty("room")) {
                     var error = $root.proto.mgr.Room.verify(message.room);
                     if (error)
@@ -2439,6 +1850,8 @@ $root.proto = (function() {
                 var message = new $root.proto.mgr.CreateRoomRes();
                 if (object.code != null)
                     message.code = String(object.code);
+                if (object.serverId != null)
+                    message.serverId = String(object.serverId);
                 if (object.room != null) {
                     if (typeof object.room !== "object")
                         throw TypeError(".proto.mgr.CreateRoomRes.room: object expected");
@@ -2463,11 +1876,14 @@ $root.proto = (function() {
                 if (options.defaults) {
                     object.code = "";
                     object.room = null;
+                    object.serverId = "";
                 }
                 if (message.code != null && message.hasOwnProperty("code"))
                     object.code = message.code;
                 if (message.room != null && message.hasOwnProperty("room"))
                     object.room = $root.proto.mgr.Room.toObject(message.room, options);
+                if (message.serverId != null && message.hasOwnProperty("serverId"))
+                    object.serverId = message.serverId;
                 return object;
             };
 
@@ -2788,7 +2204,7 @@ $root.proto = (function() {
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
                 if (message.users != null && message.users.length)
                     for (var i = 0; i < message.users.length; ++i)
-                        $root.proto.room.User.encode(message.users[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                        $root.proto.room.User.encode(message.users[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
                 return writer;
             };
 
@@ -2829,7 +2245,7 @@ $root.proto = (function() {
                     case 2:
                         message.name = reader.string();
                         break;
-                    case 3:
+                    case 4:
                         if (!(message.users && message.users.length))
                             message.users = [];
                         message.users.push($root.proto.room.User.decode(reader, reader.uint32()));
@@ -4165,6 +3581,7 @@ $root.proto = (function() {
              * @interface ICreateRoomRes
              * @property {string|null} [code] CreateRoomRes code
              * @property {proto.room.IRoom|null} [room] CreateRoomRes room
+             * @property {string|null} [serverId] CreateRoomRes serverId
              */
 
             /**
@@ -4199,6 +3616,14 @@ $root.proto = (function() {
             CreateRoomRes.prototype.room = null;
 
             /**
+             * CreateRoomRes serverId.
+             * @member {string} serverId
+             * @memberof proto.room.CreateRoomRes
+             * @instance
+             */
+            CreateRoomRes.prototype.serverId = "";
+
+            /**
              * Creates a new CreateRoomRes instance using the specified properties.
              * @function create
              * @memberof proto.room.CreateRoomRes
@@ -4226,6 +3651,8 @@ $root.proto = (function() {
                     writer.uint32(/* id 1, wireType 2 =*/10).string(message.code);
                 if (message.room != null && Object.hasOwnProperty.call(message, "room"))
                     $root.proto.room.Room.encode(message.room, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                if (message.serverId != null && Object.hasOwnProperty.call(message, "serverId"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.serverId);
                 return writer;
             };
 
@@ -4265,6 +3692,9 @@ $root.proto = (function() {
                         break;
                     case 2:
                         message.room = $root.proto.room.Room.decode(reader, reader.uint32());
+                        break;
+                    case 3:
+                        message.serverId = reader.string();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -4309,6 +3739,9 @@ $root.proto = (function() {
                     if (error)
                         return "room." + error;
                 }
+                if (message.serverId != null && message.hasOwnProperty("serverId"))
+                    if (!$util.isString(message.serverId))
+                        return "serverId: string expected";
                 return null;
             };
 
@@ -4331,6 +3764,8 @@ $root.proto = (function() {
                         throw TypeError(".proto.room.CreateRoomRes.room: object expected");
                     message.room = $root.proto.room.Room.fromObject(object.room);
                 }
+                if (object.serverId != null)
+                    message.serverId = String(object.serverId);
                 return message;
             };
 
@@ -4350,11 +3785,14 @@ $root.proto = (function() {
                 if (options.defaults) {
                     object.code = "";
                     object.room = null;
+                    object.serverId = "";
                 }
                 if (message.code != null && message.hasOwnProperty("code"))
                     object.code = message.code;
                 if (message.room != null && message.hasOwnProperty("room"))
                     object.room = $root.proto.room.Room.toObject(message.room, options);
+                if (message.serverId != null && message.hasOwnProperty("serverId"))
+                    object.serverId = message.serverId;
                 return object;
             };
 

@@ -135,17 +135,16 @@ func (x *LoginRes) GetUsername() string {
 	return ""
 }
 
-type User struct {
+type GetUserInfoReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Uid      int32  `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
-	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
-func (x *User) Reset() {
-	*x = User{}
+func (x *GetUserInfoReq) Reset() {
+	*x = GetUserInfoReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_protos_gate_gate_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -153,13 +152,13 @@ func (x *User) Reset() {
 	}
 }
 
-func (x *User) String() string {
+func (x *GetUserInfoReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*User) ProtoMessage() {}
+func (*GetUserInfoReq) ProtoMessage() {}
 
-func (x *User) ProtoReflect() protoreflect.Message {
+func (x *GetUserInfoReq) ProtoReflect() protoreflect.Message {
 	mi := &file_protos_gate_gate_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -171,36 +170,30 @@ func (x *User) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use User.ProtoReflect.Descriptor instead.
-func (*User) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetUserInfoReq.ProtoReflect.Descriptor instead.
+func (*GetUserInfoReq) Descriptor() ([]byte, []int) {
 	return file_protos_gate_gate_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *User) GetUid() int32 {
+func (x *GetUserInfoReq) GetUid() string {
 	if x != nil {
 		return x.Uid
-	}
-	return 0
-}
-
-func (x *User) GetUsername() string {
-	if x != nil {
-		return x.Username
 	}
 	return ""
 }
 
-type UserNot struct {
+type GetUserInfoRes struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Action int32 `protobuf:"varint,1,opt,name=action,proto3" json:"action,omitempty"`
-	User   *User `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	Code     string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	Uid      string `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
+	Username string `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
 }
 
-func (x *UserNot) Reset() {
-	*x = UserNot{}
+func (x *GetUserInfoRes) Reset() {
+	*x = GetUserInfoRes{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_protos_gate_gate_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -208,13 +201,13 @@ func (x *UserNot) Reset() {
 	}
 }
 
-func (x *UserNot) String() string {
+func (x *GetUserInfoRes) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UserNot) ProtoMessage() {}
+func (*GetUserInfoRes) ProtoMessage() {}
 
-func (x *UserNot) ProtoReflect() protoreflect.Message {
+func (x *GetUserInfoRes) ProtoReflect() protoreflect.Message {
 	mi := &file_protos_gate_gate_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -226,170 +219,28 @@ func (x *UserNot) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UserNot.ProtoReflect.Descriptor instead.
-func (*UserNot) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetUserInfoRes.ProtoReflect.Descriptor instead.
+func (*GetUserInfoRes) Descriptor() ([]byte, []int) {
 	return file_protos_gate_gate_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *UserNot) GetAction() int32 {
+func (x *GetUserInfoRes) GetCode() string {
 	if x != nil {
-		return x.Action
-	}
-	return 0
-}
-
-func (x *UserNot) GetUser() *User {
-	if x != nil {
-		return x.User
-	}
-	return nil
-}
-
-type Members struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	User []string `protobuf:"bytes,1,rep,name=User,proto3" json:"User,omitempty"`
-}
-
-func (x *Members) Reset() {
-	*x = Members{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_gate_gate_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Members) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Members) ProtoMessage() {}
-
-func (x *Members) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_gate_gate_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Members.ProtoReflect.Descriptor instead.
-func (*Members) Descriptor() ([]byte, []int) {
-	return file_protos_gate_gate_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *Members) GetUser() []string {
-	if x != nil {
-		return x.User
-	}
-	return nil
-}
-
-type ChatReq struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Content string `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
-}
-
-func (x *ChatReq) Reset() {
-	*x = ChatReq{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_gate_gate_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ChatReq) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ChatReq) ProtoMessage() {}
-
-func (x *ChatReq) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_gate_gate_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ChatReq.ProtoReflect.Descriptor instead.
-func (*ChatReq) Descriptor() ([]byte, []int) {
-	return file_protos_gate_gate_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *ChatReq) GetContent() string {
-	if x != nil {
-		return x.Content
+		return x.Code
 	}
 	return ""
 }
 
-type ChatNot struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Uid     string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
-	Content string `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
-}
-
-func (x *ChatNot) Reset() {
-	*x = ChatNot{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_gate_gate_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ChatNot) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ChatNot) ProtoMessage() {}
-
-func (x *ChatNot) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_gate_gate_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ChatNot.ProtoReflect.Descriptor instead.
-func (*ChatNot) Descriptor() ([]byte, []int) {
-	return file_protos_gate_gate_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *ChatNot) GetUid() string {
+func (x *GetUserInfoRes) GetUid() string {
 	if x != nil {
 		return x.Uid
 	}
 	return ""
 }
 
-func (x *ChatNot) GetContent() string {
+func (x *GetUserInfoRes) GetUsername() string {
 	if x != nil {
-		return x.Content
+		return x.Username
 	}
 	return ""
 }
@@ -406,23 +257,15 @@ var file_protos_gate_gate_proto_rawDesc = []byte{
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x0a, 0x03,
 	0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x1a,
 	0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x34, 0x0a, 0x04, 0x55, 0x73,
-	0x65, 0x72, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
-	0x03, 0x75, 0x69, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65,
-	0x22, 0x47, 0x0a, 0x07, 0x55, 0x73, 0x65, 0x72, 0x4e, 0x6f, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61,
-	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x61, 0x63, 0x74,
-	0x69, 0x6f, 0x6e, 0x12, 0x24, 0x0a, 0x04, 0x75, 0x73, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x10, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x2e, 0x55,
-	0x73, 0x65, 0x72, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x22, 0x1d, 0x0a, 0x07, 0x4d, 0x65, 0x6d,
-	0x62, 0x65, 0x72, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x03,
-	0x28, 0x09, 0x52, 0x04, 0x55, 0x73, 0x65, 0x72, 0x22, 0x23, 0x0a, 0x07, 0x43, 0x68, 0x61, 0x74,
-	0x52, 0x65, 0x71, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x22, 0x35, 0x0a,
-	0x07, 0x43, 0x68, 0x61, 0x74, 0x4e, 0x6f, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f,
-	0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e,
-	0x74, 0x65, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x22, 0x0a, 0x0e, 0x47, 0x65,
+	0x74, 0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03,
+	0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x69, 0x64, 0x22, 0x52,
+	0x0a, 0x0e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73,
+	0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x63, 0x6f, 0x64, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -437,23 +280,19 @@ func file_protos_gate_gate_proto_rawDescGZIP() []byte {
 	return file_protos_gate_gate_proto_rawDescData
 }
 
-var file_protos_gate_gate_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_protos_gate_gate_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_protos_gate_gate_proto_goTypes = []interface{}{
-	(*LoginReq)(nil), // 0: proto.gate.LoginReq
-	(*LoginRes)(nil), // 1: proto.gate.LoginRes
-	(*User)(nil),     // 2: proto.gate.User
-	(*UserNot)(nil),  // 3: proto.gate.UserNot
-	(*Members)(nil),  // 4: proto.gate.Members
-	(*ChatReq)(nil),  // 5: proto.gate.ChatReq
-	(*ChatNot)(nil),  // 6: proto.gate.ChatNot
+	(*LoginReq)(nil),       // 0: proto.gate.LoginReq
+	(*LoginRes)(nil),       // 1: proto.gate.LoginRes
+	(*GetUserInfoReq)(nil), // 2: proto.gate.GetUserInfoReq
+	(*GetUserInfoRes)(nil), // 3: proto.gate.GetUserInfoRes
 }
 var file_protos_gate_gate_proto_depIdxs = []int32{
-	2, // 0: proto.gate.UserNot.user:type_name -> proto.gate.User
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // [0:0] is the sub-list for method output_type
+	0, // [0:0] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_protos_gate_gate_proto_init() }
@@ -487,7 +326,7 @@ func file_protos_gate_gate_proto_init() {
 			}
 		}
 		file_protos_gate_gate_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*User); i {
+			switch v := v.(*GetUserInfoReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -499,43 +338,7 @@ func file_protos_gate_gate_proto_init() {
 			}
 		}
 		file_protos_gate_gate_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserNot); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_protos_gate_gate_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Members); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_protos_gate_gate_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChatReq); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_protos_gate_gate_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChatNot); i {
+			switch v := v.(*GetUserInfoRes); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -553,7 +356,7 @@ func file_protos_gate_gate_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protos_gate_gate_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

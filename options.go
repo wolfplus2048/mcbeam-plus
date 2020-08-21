@@ -17,7 +17,7 @@ type Options struct {
 	ClientAddress string
 	Handler       interface{}
 	Service       micro.Service
-	Registry  	registry.Registry
+	Registry      registry.Registry
 
 	// Alternative Options
 	Context context.Context
@@ -75,6 +75,7 @@ func Registry(r registry.Registry) Option {
 		o.Registry = r
 	}
 }
+
 // Context specifies a context for the mcb.
 // Can be used to signal shutdown of the mcb.
 // Can be used for extra option values.
@@ -83,7 +84,7 @@ func Context(ctx context.Context) Option {
 		o.Context = ctx
 	}
 }
-func WithService(s micro.Service) Option {
+func MicroService(s micro.Service) Option {
 	return func(o *Options) {
 		o.Service = s
 	}

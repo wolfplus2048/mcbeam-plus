@@ -1,8 +1,9 @@
-package main
+package room
 
 import (
 	"errors"
 	"github.com/google/uuid"
+	proto_room "github.com/wolfplus2048/mcbeam-plus/example/protos/room"
 	"github.com/wolfplus2048/mcbeam-plus/session"
 	"sync"
 )
@@ -12,20 +13,23 @@ var (
 )
 
 type User struct {
-	uid     string
-	name    string
-	session *session.Session
+	Uid     string
+	Name    string
+	Session *session.Session
 }
 type Room struct {
 	sync.RWMutex
-	id    string
-	name  string
+	Id    string
+	Name  string
 	users map[string]*User
 }
 
 func New(name string) (*Room, error) {
 	id := uuid.New().String()
-	r := &Room{id: id, name: name}
+	r := &Room{Id: id,
+		Name:  name,
+		users: make(map[string]*User),
+	}
 	rooms.Store(id, r)
 	return r, nil
 }
@@ -39,10 +43,10 @@ func GetRoom(id string) *Room {
 func (r *Room) JoinRoom(user *User) error {
 	r.Lock()
 	defer r.Unlock()
-	if _, ok := r.users[user.uid]; ok {
+	if _, ok := r.users[user.Uid]; ok {
 		return errors.New("user already exists")
 	}
-	r.users[user.uid] = user
+	r.users[user.Uid] = user
 	return nil
 }
 func (r *Room) LeaveRoom(uid string) error {
@@ -58,6 +62,16 @@ func (r *Room) Chat(uid string, content string) {
 	r.RLock()
 	defer r.RUnlock()
 	for _, u := range r.users {
-		u.session.Push("chat", content)
+		u.Session.Push("chat", content)
 	}
+}
+func (r *Room) GetUsers() []*proto_room.User {
+	users := make([]*proto_room.User, 0)
+	for _, u := range r.users {
+		users = append(users, &proto_room.User{
+			Uid:      u.Uid,
+			Username: u.Name,
+		})
+	}
+	return users
 }

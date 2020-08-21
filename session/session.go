@@ -641,7 +641,7 @@ func (s *Session) bindInFront(ctx context.Context) error {
 		Id:  s.frontendSessionID,
 		Uid: s.uid,
 	}
-	err := s.entity.SendRequest(ctx, constants.PushSessionRoute, sessionData, &mcbeamproto.Response{})
+	err := s.entity.SendRequest(ctx, constants.BindRoute, sessionData, &mcbeamproto.Response{})
 	return err
 }
 

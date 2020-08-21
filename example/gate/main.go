@@ -1,25 +1,28 @@
 package main
 
 import (
+	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/registry/etcd"
+	"github.com/micro/go-plugins/store/redis/v2"
 	"github.com/wolfplus2048/mcbeam-plus"
 	"github.com/wolfplus2048/mcbeam-plus/component"
-	"strings"
+	"github.com/wolfplus2048/mcbeam-plus/example/gate/handler"
 )
 
 func main() {
+	logger.Init(logger.WithLevel(logger.DebugLevel))
 	service := mcbeam.NewService(
-		mcbeam.Name("gate"),
+		mcbeam.Name("api"),
 		mcbeam.ClientAddress(":3250"),
 		mcbeam.Registry(etcd.NewRegistry()),
+		mcbeam.MicroService(micro.NewService(micro.Store(redis.NewStore()))),
 	)
 	if err := service.Init(); err != nil {
 		logger.Fatal(err)
 	}
-	service.Register(&Handler{},
-		component.WithHandlerName("auth"),
-		component.WithNameFunc(strings.ToLower))
+	service.Register(&handler.Handler{Store: service.Options().Service.Options().Store},
+		component.WithName("auth"))
 	if err := service.Run(); err != nil {
 		logger.Fatal(err)
 	}

@@ -7,7 +7,7 @@ message User {
 message Room {
   string id = 1;
   string name = 2;
-  repeated User users = 3;
+  repeated User users = 4;
 }
 message JoinReq {
   string id = 1;
@@ -32,5 +32,7 @@ message CreateRoomReq {
 }
 message CreateRoomRes {
   string code = 1;
-    Room room = 2;
+  Room room = 2;
+  string serverId = 3;
+
 }

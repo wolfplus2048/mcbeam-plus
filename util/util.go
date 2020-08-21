@@ -24,8 +24,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/micro/go-micro/v2/client/selector"
 	e "github.com/micro/go-micro/v2/errors"
 	"github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/v2/metadata"
+	"github.com/micro/go-micro/v2/registry"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
 	"github.com/wolfplus2048/mcbeam-plus/protos"
@@ -35,6 +38,7 @@ import (
 	"os"
 	"reflect"
 	"runtime/debug"
+	"strconv"
 )
 
 // Pcall calls a method that returns an interface and an error and recovers in case of panic
@@ -169,4 +173,51 @@ func BuildRequest(ctx context.Context,
 		}
 	}
 	return req, nil
+}
+
+func BuildMcbContext(ctx context.Context,
+	rpcType mcbeamproto.RPCType,
+	route *route.Route,
+	session *session.Session,
+	msg *message.Message,
+	frontendID string) context.Context {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		md = make(metadata.Metadata)
+	}
+	md["mcb-rpc-type"] = strconv.Itoa(int(rpcType))
+	md["mcb-route"] = route.String()
+	md["mcb-msg-type"] = strconv.Itoa(int(msg.Type))
+	md["mcb-msg-replay"] = strconv.Itoa(int(msg.ID))
+	md["mcb-session-id"] = strconv.FormatInt(session.ID(), 10)
+	md["mcb-session-uid"] = session.UID()
+	md["mcb-session-fid"] = frontendID
+	md["mcb-session-data"] = string(session.GetDataEncoded()[:])
+	return metadata.NewContext(ctx, md)
+}
+
+// strategy is a hack for selection
+func Select(id string) selector.Strategy {
+	return func(services []*registry.Service) selector.Next {
+		// ignore input to this function, use services above
+		if len(id) <= 0 {
+			return selector.Random(services)
+		} else {
+			nodes := make([]*registry.Node, 0, len(services))
+			for _, service := range services {
+				nodes = append(nodes, service.Nodes...)
+			}
+			return func() (*registry.Node, error) {
+				if len(nodes) == 0 {
+					return nil, selector.ErrNoneAvailable
+				}
+				for i, s := range nodes {
+					if s.Id == id {
+						return nodes[i], nil
+					}
+				}
+				return nil, selector.ErrNoneAvailable
+			}
+		}
+	}
 }

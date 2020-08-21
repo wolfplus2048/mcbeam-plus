@@ -24,6 +24,9 @@ export default class NewClass extends cc.Component {
         starx.on("LoginRes", (data)=>{
             let res = proto.gate.LoginRes.decode(data)
             cc.log(res)
+            if(res.code.length <= 0){
+                cc.director.loadScene("lobby")
+            }
         })
     }
     login () {
@@ -31,7 +34,7 @@ export default class NewClass extends cc.Component {
             cc.log("connected")
             let req = proto.gate.LoginReq.create({username:this.username.string})
             let buff  = proto.gate.LoginReq.encode(req).finish()
-            starx.notify('gate.auth.login', buff)
+            starx.notify('api.auth.login', buff)
         })
         
     }

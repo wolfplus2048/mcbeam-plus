@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/client/selector"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/acceptor"
 	"github.com/wolfplus2048/mcbeam-plus/agent"
@@ -141,18 +143,23 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	case message.Notify:
 		mid = 0
 	}
-	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, t.opts.Service.Options().Server.Options().Id)
+	config := t.opts.Service.Options().Server.Options()
+	frontendID := config.Name + "-" + config.Id
+	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, frontendID)
 
 	req := t.opts.rpcClient.NewRequest(route.SvType, "McbApp.Call", r)
 	rsp := new(gateproto.Response)
-	err = t.opts.rpcClient.Call(ctx, req, rsp)
+	so := selector.WithStrategy(util.Select(route.SvID))
+	err = t.opts.rpcClient.Call(ctx, req, rsp, client.WithSelectOption(so))
 
 	if msg.Type != message.Notify {
 		if err != nil {
-			logger.Errorf("Failed to process remote message: %s", err.Error())
 			a.AnswerWithError(ctx, mid, err)
 		} else {
 			a.Session.ResponseMID(ctx, mid, rsp.Data)
 		}
+	}
+	if err != nil {
+		logger.Infof("Failed to process remote message: %s", err.Error())
 	}
 }

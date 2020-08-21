@@ -16,3 +16,5 @@ proto:
 	protoc --proto_path=. --go_out=. $(protos)
 	pbjs -t static-module -w commonjs -o protos/proto.js $(protos)
 	pbts -o protos/proto.d.ts protos/proto.js
+	copy protos\proto.d.ts client\assets\Script\ /y
+	copy protos\proto.js client\assets\Script\ /y

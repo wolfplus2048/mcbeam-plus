@@ -9,22 +9,11 @@ message LoginRes {
   string uid = 2;
   string username = 3;
 }
-message User {
-  int32 uid = 1;
-  string username = 2;
-}
-message UserNot {
-  int32 action = 1;
-  User user = 2;
-}
-message Members {
-  repeated string User = 1;
-}
-message ChatReq {
-  string content = 1;
-}
-message ChatNot {
+message GetUserInfoReq {
   string uid = 1;
-  string content = 2;
 }
-
+message GetUserInfoRes {
+  string code = 1;
+  string uid = 2;
+  string username = 3;
+}

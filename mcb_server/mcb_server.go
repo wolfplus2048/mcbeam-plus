@@ -1,4 +1,4 @@
-package component
+package mcb_server
 
 import (
 	"context"
@@ -7,12 +7,14 @@ import (
 	e "github.com/micro/go-micro/v2/errors"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/agent"
+	"github.com/wolfplus2048/mcbeam-plus/component"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
 	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/util"
 	"reflect"
+	"strings"
 )
 
 var (
@@ -45,20 +47,20 @@ func NewMcbServer(opts ...Option) *McbServer {
 	}
 	return s
 }
-func (m *McbServer) Handle(handler interface{}, opt ...HandlerOption) error {
+func (m *McbServer) Handle(handler interface{}, opt ...component.HandlerOption) error {
 	typ := reflect.TypeOf(handler)
 	receiver := reflect.ValueOf(handler)
 	typeName := reflect.Indirect(receiver).Type().Name()
-	opts := HandlerOptions{}
+	opts := component.HandlerOptions{}
 	for _, o := range opt {
 		o(&opts)
 	}
-	name := opts.name
+	if opts.NameFunc == nil {
+		opts.NameFunc = strings.ToLower
+	}
+	name := opts.Name
 	if name == "" {
-		name = typeName
-		if opts.nameFunc != nil {
-			name = opts.nameFunc(name)
-		}
+		name = opts.NameFunc(typeName)
 	}
 
 	if typeName == "" {
@@ -67,12 +69,12 @@ func (m *McbServer) Handle(handler interface{}, opt ...HandlerOption) error {
 	if !isExported(typeName) {
 		return fmt.Errorf(" %s is not exported", typeName)
 	}
-	handlers := suitableHandlerMethods(typ, opts.nameFunc)
+	handlers := suitableHandlerMethods(typ, opts.NameFunc)
 
 	if len(handlers) == 0 {
 		str := ""
 		// To help the user, see if a pointer receiver would work.
-		method := suitableHandlerMethods(reflect.PtrTo(typ), opts.nameFunc)
+		method := suitableHandlerMethods(reflect.PtrTo(typ), opts.NameFunc)
 		if len(method) != 0 {
 			str = "type " + typeName + " has no exported methods of component type (hint: pass a pointer to value of that type)"
 		} else {
@@ -107,14 +109,52 @@ func (m *McbServer) Call(ctx context.Context, req *mcbeamproto.Request, res *mcb
 		return e.BadRequest(m.opts.name, "invalid rpc type:%s", req.Type)
 	}
 }
+
 func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
+	handler, ok := m.handlers[rt.Short()]
+	if !ok {
+		return e.NotFound(m.opts.name, "not find method:%s", rt.Method)
+	}
+	msgType, err := getMsgType(req.GetMsg().GetType())
+	if err != nil {
+		return e.BadRequest(m.opts.name, "invalid rpc type:%s", req.Type)
+	}
+
+	exit, err := handler.ValidateMessageType(msgType)
+	if exit && err != nil {
+		return e.BadRequest(m.opts.name, "invalid rpc type:%s", req.Type)
+	} else if err != nil {
+		logger.Warnf("invalid message type, error: %s", err.Error())
+	}
+	args := []reflect.Value{handler.Receiver, reflect.ValueOf(ctx)}
+	arg, err := unmarshalHandlerArg(handler, m.opts.serializer, req.GetMsg().GetData())
+	if err != nil {
+		return e.BadRequest(m.opts.name, "invalid arg:%s", err.Error())
+	}
+	if arg != nil {
+		args = append(args, reflect.ValueOf(arg))
+	}
+	if handler.IsRawArg && handler.Method.Type.NumIn() == 4 {
+		args = append(args, reflect.ValueOf(rt.Method))
+	}
+	resp, err := util.Pcall(handler.Method, args)
+
+	if msgType == message.Notify {
+		resp = []byte("ack")
+	}
+
+	if err != nil {
+		return e.BadRequest(m.opts.name, err.Error())
+	}
+	data, _ := serializeReturn(m.opts.serializer, resp)
+	res.Data = data
 	return nil
 }
 func (m *McbServer) handleRPCUser(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
 
 	handler, ok := m.handlers[rt.Short()]
 	if !ok {
-		return e.NotFound(m.opts.name, "not find method:%s", rt.Method)
+		return e.NotFound(m.opts.name, "not find method:%s", rt.Short())
 	}
 	msgType, err := getMsgType(req.GetMsg().GetType())
 	if err != nil {

@@ -1,4 +1,4 @@
-package gate_server
+package sys_server
 
 import (
 	"context"

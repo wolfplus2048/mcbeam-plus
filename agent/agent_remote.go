@@ -22,7 +22,9 @@ package agent
 
 import (
 	"context"
+	"fmt"
 	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/client/selector"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
@@ -32,16 +34,18 @@ import (
 	"github.com/wolfplus2048/mcbeam-plus/session"
 	"github.com/wolfplus2048/mcbeam-plus/util"
 	"net"
+	"strings"
 )
 
 // Remote corresponding to another server
 type Remote struct {
-	Session    *session.Session     // session
-	chDie      chan struct{}        // wait for close
-	frontendID string               // the frontend that sent the request
-	reply      string               // nats reply topic
-	rpcClient  client.Client        // rpc client
-	serializer serialize.Serializer // message serializer
+	Session      *session.Session // session
+	chDie        chan struct{}    // wait for close
+	frontendID   string           // the frontend that sent the request
+	frontendName string
+	reply        string               // nats reply topic
+	rpcClient    client.Client        // rpc client
+	serializer   serialize.Serializer // message serializer
 
 }
 
@@ -70,8 +74,14 @@ func NewRemote(
 		return nil, err
 	}
 	a.Session = s
-
+	names := strings.Split(frontendID, "-")
+	if len(names) > 1 {
+		a.frontendName = names[0]
+	}
 	return a, nil
+}
+func (a *Remote) gateRoute(routeStr string) string {
+	return fmt.Sprintf("%s.%s.%s", a.frontendID, a.frontendName, routeStr)
 }
 
 // Kick kicks the user
@@ -94,7 +104,6 @@ func (a *Remote) Push(route string, v interface{}) error {
 		logger.Debugf("Type=Push, ID=%d, UID=%d, Route=%s, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), route, len(d))
 	default:
-
 		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
 			a.Session.ID(), a.Session.UID(), route, v)
 	}
@@ -143,7 +152,8 @@ func (a *Remote) SendRequest(ctx context.Context, routeStr string, arg interface
 		logger.Errorf("Failed to decode route: %s", err.Error())
 		return err
 	}
-	req := a.rpcClient.NewRequest(route.SvType, route.Short(), arg)
-	err = a.rpcClient.Call(ctx, req, reply)
+	so := selector.WithStrategy(util.Select(a.frontendID))
+	req := a.rpcClient.NewRequest(a.frontendName, route.Short(), arg)
+	err = a.rpcClient.Call(ctx, req, reply, client.WithSelectOption(so))
 	return err
 }

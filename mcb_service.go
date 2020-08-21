@@ -4,8 +4,9 @@ import (
 	"github.com/micro/go-micro/v2"
 	"github.com/wolfplus2048/mcbeam-plus/api"
 	"github.com/wolfplus2048/mcbeam-plus/component"
-	"github.com/wolfplus2048/mcbeam-plus/gate_server"
+	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
 	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/sys_server"
 	"sync"
 )
 
@@ -13,23 +14,27 @@ type mcbService struct {
 	opts Options
 	sync.RWMutex
 	tcpServer api.Server
-	remoteSrv *component.McbServer
+	remoteSrv *mcb_server.McbServer
 	started   bool
 	exit      chan bool
+	handlers  []component.Component
+	modules   []Module
 }
 
 func newMcbService(opt ...Option) Service {
 	options := NewOptions(opt...)
 	t := &mcbService{
-		opts:    options,
-		started: false,
-		exit:    make(chan bool),
+		opts:     options,
+		started:  false,
+		exit:     make(chan bool),
+		handlers: make([]component.Component, 0),
+		modules:  make([]Module, 0),
 	}
 	t.tcpServer = api.NewTcpServer(t.exit)
-	t.remoteSrv = component.NewMcbServer(
-		component.WithName(t.opts.Name),
-		component.Serializer(t.opts.Serializer),
-		component.RpcClient(t.opts.Service.Client()),
+	t.remoteSrv = mcb_server.NewMcbServer(
+		mcb_server.WithName(t.opts.Name),
+		mcb_server.Serializer(t.opts.Serializer),
+		mcb_server.RpcClient(t.opts.Service.Client()),
 	)
 
 	return t
@@ -37,12 +42,12 @@ func newMcbService(opt ...Option) Service {
 
 func (t *mcbService) Register(handler component.Component, opts ...component.HandlerOption) {
 	t.remoteSrv.Handle(handler, opts...)
+	t.handlers = append(t.handlers, handler)
 }
 func (t *mcbService) Module(module Module) {
-	panic("implement me")
+	t.modules = append(t.modules, module)
 }
 func (t *mcbService) Run() error {
-
 	if err := t.start(); err != nil {
 		return err
 	}
@@ -89,10 +94,9 @@ func (t *mcbService) Init(opts ...Option) error {
 	t.opts.Service.Init(serviceOpts...)
 
 	if len(t.opts.Acceptors) > 0 {
-		mcbeamproto.RegisterMcbGateHandler(t.opts.Service.Server(), &gate_server.Server{})
+		mcbeamproto.RegisterMcbGateHandler(t.opts.Service.Server(), &sys_server.Server{})
 	}
 	mcbeamproto.RegisterMcbAppHandler(t.opts.Service.Server(), t.remoteSrv)
-
 	return nil
 }
 
@@ -106,6 +110,23 @@ func (t *mcbService) start() error {
 	if t.started {
 		return nil
 	}
+	for _, v := range t.handlers {
+		v.Init()
+	}
+	for _, v := range t.handlers {
+		v.AfterInit()
+	}
+
+	for _, v := range t.modules {
+		err := v.Init()
+		if err != nil {
+			return err
+		}
+	}
+	for _, v := range t.modules {
+		v.AfterInit()
+	}
+
 	t.tcpServer.Start()
 	t.started = true
 
@@ -122,6 +143,23 @@ func (t *mcbService) stop() error {
 
 	close(t.exit)
 	t.started = false
+
+	for _, v := range t.handlers {
+		v.BeforeShutdown()
+	}
+	for _, v := range t.handlers {
+		v.Shutdown()
+	}
+
+	for _, v := range t.modules {
+		v.BeforeShutdown()
+	}
+	for _, v := range t.modules {
+		err := v.Shutdown()
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }

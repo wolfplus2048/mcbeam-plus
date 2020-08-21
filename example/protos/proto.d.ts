@@ -197,469 +197,193 @@ export namespace proto {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a User. */
-        interface IUser {
+        /** Properties of a GetUserInfoReq. */
+        interface IGetUserInfoReq {
 
-            /** User uid */
-            uid?: (number|null);
+            /** GetUserInfoReq uid */
+            uid?: (string|null);
+        }
 
-            /** User username */
+        /** Represents a GetUserInfoReq. */
+        class GetUserInfoReq implements IGetUserInfoReq {
+
+            /**
+             * Constructs a new GetUserInfoReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: proto.gate.IGetUserInfoReq);
+
+            /** GetUserInfoReq uid. */
+            public uid: string;
+
+            /**
+             * Creates a new GetUserInfoReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GetUserInfoReq instance
+             */
+            public static create(properties?: proto.gate.IGetUserInfoReq): proto.gate.GetUserInfoReq;
+
+            /**
+             * Encodes the specified GetUserInfoReq message. Does not implicitly {@link proto.gate.GetUserInfoReq.verify|verify} messages.
+             * @param message GetUserInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: proto.gate.IGetUserInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GetUserInfoReq message, length delimited. Does not implicitly {@link proto.gate.GetUserInfoReq.verify|verify} messages.
+             * @param message GetUserInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: proto.gate.IGetUserInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GetUserInfoReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GetUserInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.gate.GetUserInfoReq;
+
+            /**
+             * Decodes a GetUserInfoReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GetUserInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.gate.GetUserInfoReq;
+
+            /**
+             * Verifies a GetUserInfoReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GetUserInfoReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GetUserInfoReq
+             */
+            public static fromObject(object: { [k: string]: any }): proto.gate.GetUserInfoReq;
+
+            /**
+             * Creates a plain object from a GetUserInfoReq message. Also converts values to other types if specified.
+             * @param message GetUserInfoReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: proto.gate.GetUserInfoReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GetUserInfoReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a GetUserInfoRes. */
+        interface IGetUserInfoRes {
+
+            /** GetUserInfoRes code */
+            code?: (string|null);
+
+            /** GetUserInfoRes uid */
+            uid?: (string|null);
+
+            /** GetUserInfoRes username */
             username?: (string|null);
         }
 
-        /** Represents a User. */
-        class User implements IUser {
+        /** Represents a GetUserInfoRes. */
+        class GetUserInfoRes implements IGetUserInfoRes {
 
             /**
-             * Constructs a new User.
+             * Constructs a new GetUserInfoRes.
              * @param [properties] Properties to set
              */
-            constructor(properties?: proto.gate.IUser);
+            constructor(properties?: proto.gate.IGetUserInfoRes);
 
-            /** User uid. */
-            public uid: number;
+            /** GetUserInfoRes code. */
+            public code: string;
 
-            /** User username. */
+            /** GetUserInfoRes uid. */
+            public uid: string;
+
+            /** GetUserInfoRes username. */
             public username: string;
 
             /**
-             * Creates a new User instance using the specified properties.
+             * Creates a new GetUserInfoRes instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns User instance
+             * @returns GetUserInfoRes instance
              */
-            public static create(properties?: proto.gate.IUser): proto.gate.User;
+            public static create(properties?: proto.gate.IGetUserInfoRes): proto.gate.GetUserInfoRes;
 
             /**
-             * Encodes the specified User message. Does not implicitly {@link proto.gate.User.verify|verify} messages.
-             * @param message User message or plain object to encode
+             * Encodes the specified GetUserInfoRes message. Does not implicitly {@link proto.gate.GetUserInfoRes.verify|verify} messages.
+             * @param message GetUserInfoRes message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: proto.gate.IUser, writer?: $protobuf.Writer): $protobuf.Writer;
+            public static encode(message: proto.gate.IGetUserInfoRes, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified User message, length delimited. Does not implicitly {@link proto.gate.User.verify|verify} messages.
-             * @param message User message or plain object to encode
+             * Encodes the specified GetUserInfoRes message, length delimited. Does not implicitly {@link proto.gate.GetUserInfoRes.verify|verify} messages.
+             * @param message GetUserInfoRes message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: proto.gate.IUser, writer?: $protobuf.Writer): $protobuf.Writer;
+            public static encodeDelimited(message: proto.gate.IGetUserInfoRes, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a User message from the specified reader or buffer.
+             * Decodes a GetUserInfoRes message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns User
+             * @returns GetUserInfoRes
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.gate.User;
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.gate.GetUserInfoRes;
 
             /**
-             * Decodes a User message from the specified reader or buffer, length delimited.
+             * Decodes a GetUserInfoRes message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns User
+             * @returns GetUserInfoRes
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.gate.User;
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.gate.GetUserInfoRes;
 
             /**
-             * Verifies a User message.
+             * Verifies a GetUserInfoRes message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a User message from a plain object. Also converts values to their respective internal types.
+             * Creates a GetUserInfoRes message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns User
+             * @returns GetUserInfoRes
              */
-            public static fromObject(object: { [k: string]: any }): proto.gate.User;
+            public static fromObject(object: { [k: string]: any }): proto.gate.GetUserInfoRes;
 
             /**
-             * Creates a plain object from a User message. Also converts values to other types if specified.
-             * @param message User
+             * Creates a plain object from a GetUserInfoRes message. Also converts values to other types if specified.
+             * @param message GetUserInfoRes
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: proto.gate.User, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: proto.gate.GetUserInfoRes, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this User to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a UserNot. */
-        interface IUserNot {
-
-            /** UserNot action */
-            action?: (number|null);
-
-            /** UserNot user */
-            user?: (proto.gate.IUser|null);
-        }
-
-        /** Represents a UserNot. */
-        class UserNot implements IUserNot {
-
-            /**
-             * Constructs a new UserNot.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: proto.gate.IUserNot);
-
-            /** UserNot action. */
-            public action: number;
-
-            /** UserNot user. */
-            public user?: (proto.gate.IUser|null);
-
-            /**
-             * Creates a new UserNot instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns UserNot instance
-             */
-            public static create(properties?: proto.gate.IUserNot): proto.gate.UserNot;
-
-            /**
-             * Encodes the specified UserNot message. Does not implicitly {@link proto.gate.UserNot.verify|verify} messages.
-             * @param message UserNot message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: proto.gate.IUserNot, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified UserNot message, length delimited. Does not implicitly {@link proto.gate.UserNot.verify|verify} messages.
-             * @param message UserNot message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: proto.gate.IUserNot, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a UserNot message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns UserNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.gate.UserNot;
-
-            /**
-             * Decodes a UserNot message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns UserNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.gate.UserNot;
-
-            /**
-             * Verifies a UserNot message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a UserNot message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns UserNot
-             */
-            public static fromObject(object: { [k: string]: any }): proto.gate.UserNot;
-
-            /**
-             * Creates a plain object from a UserNot message. Also converts values to other types if specified.
-             * @param message UserNot
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: proto.gate.UserNot, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this UserNot to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a Members. */
-        interface IMembers {
-
-            /** Members User */
-            User?: (string[]|null);
-        }
-
-        /** Represents a Members. */
-        class Members implements IMembers {
-
-            /**
-             * Constructs a new Members.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: proto.gate.IMembers);
-
-            /** Members User. */
-            public User: string[];
-
-            /**
-             * Creates a new Members instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns Members instance
-             */
-            public static create(properties?: proto.gate.IMembers): proto.gate.Members;
-
-            /**
-             * Encodes the specified Members message. Does not implicitly {@link proto.gate.Members.verify|verify} messages.
-             * @param message Members message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: proto.gate.IMembers, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified Members message, length delimited. Does not implicitly {@link proto.gate.Members.verify|verify} messages.
-             * @param message Members message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: proto.gate.IMembers, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a Members message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns Members
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.gate.Members;
-
-            /**
-             * Decodes a Members message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns Members
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.gate.Members;
-
-            /**
-             * Verifies a Members message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Members message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Members
-             */
-            public static fromObject(object: { [k: string]: any }): proto.gate.Members;
-
-            /**
-             * Creates a plain object from a Members message. Also converts values to other types if specified.
-             * @param message Members
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: proto.gate.Members, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Members to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a ChatReq. */
-        interface IChatReq {
-
-            /** ChatReq content */
-            content?: (string|null);
-        }
-
-        /** Represents a ChatReq. */
-        class ChatReq implements IChatReq {
-
-            /**
-             * Constructs a new ChatReq.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: proto.gate.IChatReq);
-
-            /** ChatReq content. */
-            public content: string;
-
-            /**
-             * Creates a new ChatReq instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns ChatReq instance
-             */
-            public static create(properties?: proto.gate.IChatReq): proto.gate.ChatReq;
-
-            /**
-             * Encodes the specified ChatReq message. Does not implicitly {@link proto.gate.ChatReq.verify|verify} messages.
-             * @param message ChatReq message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: proto.gate.IChatReq, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified ChatReq message, length delimited. Does not implicitly {@link proto.gate.ChatReq.verify|verify} messages.
-             * @param message ChatReq message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: proto.gate.IChatReq, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a ChatReq message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns ChatReq
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.gate.ChatReq;
-
-            /**
-             * Decodes a ChatReq message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns ChatReq
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.gate.ChatReq;
-
-            /**
-             * Verifies a ChatReq message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a ChatReq message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ChatReq
-             */
-            public static fromObject(object: { [k: string]: any }): proto.gate.ChatReq;
-
-            /**
-             * Creates a plain object from a ChatReq message. Also converts values to other types if specified.
-             * @param message ChatReq
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: proto.gate.ChatReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ChatReq to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a ChatNot. */
-        interface IChatNot {
-
-            /** ChatNot uid */
-            uid?: (string|null);
-
-            /** ChatNot content */
-            content?: (string|null);
-        }
-
-        /** Represents a ChatNot. */
-        class ChatNot implements IChatNot {
-
-            /**
-             * Constructs a new ChatNot.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: proto.gate.IChatNot);
-
-            /** ChatNot uid. */
-            public uid: string;
-
-            /** ChatNot content. */
-            public content: string;
-
-            /**
-             * Creates a new ChatNot instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns ChatNot instance
-             */
-            public static create(properties?: proto.gate.IChatNot): proto.gate.ChatNot;
-
-            /**
-             * Encodes the specified ChatNot message. Does not implicitly {@link proto.gate.ChatNot.verify|verify} messages.
-             * @param message ChatNot message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: proto.gate.IChatNot, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified ChatNot message, length delimited. Does not implicitly {@link proto.gate.ChatNot.verify|verify} messages.
-             * @param message ChatNot message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: proto.gate.IChatNot, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a ChatNot message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns ChatNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): proto.gate.ChatNot;
-
-            /**
-             * Decodes a ChatNot message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns ChatNot
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): proto.gate.ChatNot;
-
-            /**
-             * Verifies a ChatNot message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a ChatNot message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ChatNot
-             */
-            public static fromObject(object: { [k: string]: any }): proto.gate.ChatNot;
-
-            /**
-             * Creates a plain object from a ChatNot message. Also converts values to other types if specified.
-             * @param message ChatNot
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: proto.gate.ChatNot, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ChatNot to JSON.
+             * Converts this GetUserInfoRes to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -1041,6 +765,9 @@ export namespace proto {
             /** CreateRoomRes code */
             code?: (string|null);
 
+            /** CreateRoomRes serverId */
+            serverId?: (string|null);
+
             /** CreateRoomRes room */
             room?: (proto.mgr.IRoom|null);
         }
@@ -1056,6 +783,9 @@ export namespace proto {
 
             /** CreateRoomRes code. */
             public code: string;
+
+            /** CreateRoomRes serverId. */
+            public serverId: string;
 
             /** CreateRoomRes room. */
             public room?: (proto.mgr.IRoom|null);
@@ -1899,6 +1629,9 @@ export namespace proto {
 
             /** CreateRoomRes room */
             room?: (proto.room.IRoom|null);
+
+            /** CreateRoomRes serverId */
+            serverId?: (string|null);
         }
 
         /** Represents a CreateRoomRes. */
@@ -1915,6 +1648,9 @@ export namespace proto {
 
             /** CreateRoomRes room. */
             public room?: (proto.room.IRoom|null);
+
+            /** CreateRoomRes serverId. */
+            public serverId: string;
 
             /**
              * Creates a new CreateRoomRes instance using the specified properties.
