@@ -1,4 +1,4 @@
-// Copyright (c) nano Author and TFG Co. All Rights Reserved.
+// Copyright (c) nano Author and wolfplus. All Rights Reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,5 +20,5 @@
 
 package constants
 
-// VERSION returns current corona version
+// VERSION returns current mcbeam-plus version
 var VERSION = "0.1.0"

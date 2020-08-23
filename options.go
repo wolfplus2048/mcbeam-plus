@@ -1,15 +1,9 @@
 package mcbeam
 
 import (
-	"context"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/registry"
-	"github.com/wolfplus2048/mcbeam-plus/acceptor"
-	"github.com/wolfplus2048/mcbeam-plus/conn/codec"
-	"github.com/wolfplus2048/mcbeam-plus/conn/message"
-	"github.com/wolfplus2048/mcbeam-plus/serialize"
-	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
-	"time"
+	"github.com/wolfplus2048/mcbeam-plus/gateway"
 )
 
 type Options struct {
@@ -18,35 +12,14 @@ type Options struct {
 	Handler       interface{}
 	Service       micro.Service
 	Registry      registry.Registry
-
-	// Alternative Options
-	Context context.Context
-
-	PacketDecoder      codec.PacketDecoder
-	PacketEncoder      codec.PacketEncoder
-	MessageEncoder     message.Encoder
-	Serializer         serialize.Serializer
-	HeartbeatTime      time.Duration
-	MessagesBufferSize int
-	TSLCertificate     string
-	TSLKey             string
-	WSPath             string
-	Acceptors          []acceptor.Acceptor
+	Gateway          gateway.Gateway
+	Metadata map[string]string
 }
 type Option func(o *Options)
 
-func NewOptions(opt ...Option) Options {
+func newOptions(opt ...Option) Options {
 	opts := Options{
-		Context:            context.TODO(),
-		PacketDecoder:      codec.NewPomeloPacketDecoder(),
-		PacketEncoder:      codec.NewPomeloPacketEncoder(),
-		MessageEncoder:     message.NewMessagesEncoder(false),
-		Serializer:         protobuf.NewSerializer(),
-		HeartbeatTime:      DefaultHeartbeatTime,
-		MessagesBufferSize: DefaultMessagesBufferSize,
-		WSPath:             "/ws",
 		Service:            micro.NewService(),
-		ClientAddress:      DefaultClientAddress,
 	}
 	for _, o := range opt {
 		o(&opts)
@@ -59,15 +32,14 @@ func Name(name string) Option {
 		o.Name = name
 	}
 }
-func Acceptor(acc acceptor.Acceptor) Option {
+func Gateway(g gateway.Gateway) Option {
 	return func(o *Options) {
-		o.Acceptors = append(o.Acceptors, acc)
+		o.Gateway = g
 	}
 }
 func ClientAddress(c string) Option {
 	return func(o *Options) {
 		o.ClientAddress = c
-		o.Acceptors = append(o.Acceptors, acceptor.NewWSAcceptor(acceptor.Address(o.ClientAddress)))
 	}
 }
 func Registry(r registry.Registry) Option {
@@ -76,16 +48,14 @@ func Registry(r registry.Registry) Option {
 	}
 }
 
-// Context specifies a context for the mcb.
-// Can be used to signal shutdown of the mcb.
-// Can be used for extra option values.
-func Context(ctx context.Context) Option {
-	return func(o *Options) {
-		o.Context = ctx
-	}
-}
 func MicroService(s micro.Service) Option {
 	return func(o *Options) {
 		o.Service = s
+	}
+}
+// Metadata associated with the service
+func Metadata(md map[string]string) Option {
+	return func(o *Options) {
+		o.Metadata = md
 	}
 }

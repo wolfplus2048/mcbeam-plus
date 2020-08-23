@@ -7,7 +7,7 @@
    *
    * @param {Object} obj
    * @return {Object}
-   * @api private
+   * @gateway private
    */
 
   function mixin(obj) {
@@ -23,7 +23,7 @@
    * @param {String} event
    * @param {Function} fn
    * @return {Emitter}
-   * @api public
+   * @gateway public
    */
 
   Emitter.prototype.on =
@@ -41,7 +41,7 @@
    * @param {String} event
    * @param {Function} fn
    * @return {Emitter}
-   * @api public
+   * @gateway public
    */
 
   Emitter.prototype.once = function(event, fn){
@@ -65,7 +65,7 @@
    * @param {String} event
    * @param {Function} fn
    * @return {Emitter}
-   * @api public
+   * @gateway public
    */
 
   Emitter.prototype.off =
@@ -130,7 +130,7 @@
    *
    * @param {String} event
    * @return {Array}
-   * @api public
+   * @gateway public
    */
 
   Emitter.prototype.listeners = function(event){
@@ -143,7 +143,7 @@
    *
    * @param {String} event
    * @return {Boolean}
-   * @api public
+   * @gateway public
    */
 
   Emitter.prototype.hasListeners = function(event){

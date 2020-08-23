@@ -1,6 +1,6 @@
-package api
+package gateway
 
-type Server interface {
+type Gateway interface {
 	Init(opts ...Option) error
 	Options () Options
 	Start() error

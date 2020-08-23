@@ -1,46 +1,48 @@
-package api
+package gateway
 
 import (
+	"github.com/wolfplus2048/mcbeam-plus/acceptor"
+	"github.com/wolfplus2048/mcbeam-plus/session"
 	"sync"
 	"time"
 )
 
-type TcpServer struct {
+type tcpGateway struct {
 	opts Options
 	sync.RWMutex
 
 	handler *tcpHandler
 	started bool
-	exit    chan bool
 }
 
-func NewTcpServer(exit chan bool, opt ...Option) Server {
+func NewTcpGateway(opt ...Option) Gateway {
 	opts := newOptions(opt...)
-	t := &TcpServer{
+	t := &tcpGateway{
 		opts:    opts,
 		started: false,
-		exit:    exit,
 	}
 	return t
 }
 
-func (t *TcpServer) Init(opt ...Option) error {
+func (t *tcpGateway) Init(opt ...Option) error {
 	t.Lock()
 	defer t.Unlock()
 	for _, o := range opt {
 		o(&t.opts)
 	}
-
-	t.handler = newTcpHandler(t.exit, t.opts)
+	if len(t.opts.ClientAddress) > 0 {
+		t.opts.Acceptors = append(t.opts.Acceptors, acceptor.NewWSAcceptor(acceptor.Address(t.opts.ClientAddress)))
+	}
+	t.handler = newTcpHandler(t.opts)
 
 	return nil
 }
 
-func (t *TcpServer) Options() Options {
+func (t *tcpGateway) Options() Options {
 	return t.opts
 }
 
-func (t *TcpServer) Start() error {
+func (t *tcpGateway) Start() error {
 	t.Lock()
 	defer t.Unlock()
 	if t.started {
@@ -52,23 +54,27 @@ func (t *TcpServer) Start() error {
 	return nil
 }
 
-func (t *TcpServer) Stop() error {
+func (t *tcpGateway) Stop() error {
 	t.Lock()
 	defer t.Unlock()
 
 	if !t.started {
 		return nil
 	}
+	for _, acc := range t.opts.Acceptors {
+		acc.Stop()
+	}
+	session.CloseAll()
 
 	t.started = false
 
 	return nil
 }
-func (t *TcpServer) String() string {
-	return "tcpServer"
+func (t *tcpGateway) String() string {
+	return "tcpGateway"
 }
 // Enable current tcp accept connection
-func (t *TcpServer) listenAndServe() {
+func (t *tcpGateway) listenAndServe() {
 	for _, acc := range t.opts.Acceptors {
 		go func() {
 			for conn := range acc.GetConnChan() {
@@ -78,10 +84,6 @@ func (t *TcpServer) listenAndServe() {
 
 		go func() {
 			acc.ListenAndServe()
-		}()
-		go func() {
-			<-t.exit
-			acc.Stop()
 		}()
 	}
 }

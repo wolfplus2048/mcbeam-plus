@@ -1,5 +1,5 @@
 .PHONY: proto
-#dirs:=gate mgr room
+#dirs:=gateway mgr room
 #proto:
 #	for d in $(dirs); do \
 #  		for f in protos/$$d/*.proto; do \

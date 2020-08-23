@@ -2431,8 +2431,8 @@ declare namespace cc {
 	}	
 	/** !#en
 	Tween provide a simple and flexible way to create action.
-	Tween's api is more flexible than cc.Action:
-	 - Support creating an action sequence in chained api,
+	Tween's gateway is more flexible than cc.Action:
+	 - Support creating an action sequence in chained gateway,
 	 - Support animate any objects' any properties, not limited to node's properties.
 	   By contrast, cc.Action needs to create a new action class to support new node property.
 	 - Support working with cc.Action,

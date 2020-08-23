@@ -2,10 +2,11 @@ package mcbeam
 
 import (
 	"github.com/micro/go-micro/v2"
-	"github.com/wolfplus2048/mcbeam-plus/api"
+	"github.com/wolfplus2048/mcbeam-plus/gateway"
 	"github.com/wolfplus2048/mcbeam-plus/component"
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
 	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
 	"github.com/wolfplus2048/mcbeam-plus/sys_server"
 	"sync"
 )
@@ -13,27 +14,23 @@ import (
 type mcbService struct {
 	opts Options
 	sync.RWMutex
-	tcpServer api.Server
 	remoteSrv *mcb_server.McbServer
 	started   bool
-	exit      chan bool
 	handlers  []component.Component
 	modules   []Module
 }
 
 func newMcbService(opt ...Option) Service {
-	options := NewOptions(opt...)
+	options := newOptions(opt...)
 	t := &mcbService{
 		opts:     options,
 		started:  false,
-		exit:     make(chan bool),
 		handlers: make([]component.Component, 0),
 		modules:  make([]Module, 0),
 	}
-	t.tcpServer = api.NewTcpServer(t.exit)
 	t.remoteSrv = mcb_server.NewMcbServer(
 		mcb_server.WithName(t.opts.Name),
-		mcb_server.Serializer(t.opts.Serializer),
+		mcb_server.Serializer(protobuf.NewSerializer()),
 		mcb_server.RpcClient(t.opts.Service.Client()),
 	)
 
@@ -65,24 +62,6 @@ func (t *mcbService) Init(opts ...Option) error {
 	for _, o := range opts {
 		o(&t.opts)
 	}
-	var serverOpts []api.Option
-	if len(t.opts.WSPath) > 0 {
-		serverOpts = append(serverOpts, api.WSPath(t.opts.WSPath))
-	}
-	if len(t.opts.ClientAddress) > 0 {
-		serverOpts = append(serverOpts, api.ClientAddress(t.opts.ClientAddress))
-	}
-	if len(t.opts.Acceptors) > 0 {
-		for _, a := range t.opts.Acceptors {
-			serverOpts = append(serverOpts, api.Acceptor(a))
-		}
-	}
-	if t.opts.Service != nil {
-		serverOpts = append(serverOpts, api.Service(t.opts.Service))
-	}
-	serverOpts = append(serverOpts, api.Client(t.opts.Service.Client()))
-
-	t.tcpServer.Init(serverOpts...)
 
 	var serviceOpts []micro.Option
 	if len(t.opts.Name) > 0 {
@@ -91,11 +70,27 @@ func (t *mcbService) Init(opts ...Option) error {
 	if t.opts.Registry != nil {
 		serviceOpts = append(serviceOpts, micro.Registry(t.opts.Registry))
 	}
+	if t.opts.Metadata != nil {
+		serviceOpts = append(serviceOpts, micro.Metadata(t.opts.Metadata))
+	}
+
 	t.opts.Service.Init(serviceOpts...)
 
-	if len(t.opts.Acceptors) > 0 {
+	var gateOpts []gateway.Option
+	if len(t.opts.ClientAddress) > 0 {
+		gateOpts = append(gateOpts, gateway.ClientAddress(t.opts.ClientAddress))
+		if t.opts.Gateway == nil {
+			t.opts.Gateway = gateway.NewTcpGateway()
+		}
+	}
+
+	if t.opts.Gateway != nil {
+		gateOpts = append(gateOpts, gateway.Service(t.opts.Service))
+		t.opts.Gateway.Init(gateOpts...)
+
 		mcbeamproto.RegisterMcbGateHandler(t.opts.Service.Server(), &sys_server.Server{})
 	}
+
 	mcbeamproto.RegisterMcbAppHandler(t.opts.Service.Server(), t.remoteSrv)
 	return nil
 }
@@ -126,8 +121,10 @@ func (t *mcbService) start() error {
 	for _, v := range t.modules {
 		v.AfterInit()
 	}
+	if t.opts.Gateway != nil {
+		t.opts.Gateway.Start()
+	}
 
-	t.tcpServer.Start()
 	t.started = true
 
 	return nil
@@ -141,18 +138,20 @@ func (t *mcbService) stop() error {
 		return nil
 	}
 
-	close(t.exit)
+	for _, v := range t.handlers {
+		v.BeforeShutdown()
+	}
+	for _, v := range t.modules {
+		v.BeforeShutdown()
+	}
+
+	if t.opts.Gateway != nil {
+		t.opts.Gateway.Stop()
+	}
 	t.started = false
 
 	for _, v := range t.handlers {
-		v.BeforeShutdown()
-	}
-	for _, v := range t.handlers {
 		v.Shutdown()
-	}
-
-	for _, v := range t.modules {
-		v.BeforeShutdown()
 	}
 	for _, v := range t.modules {
 		err := v.Shutdown()

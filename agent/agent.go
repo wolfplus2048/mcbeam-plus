@@ -1,4 +1,4 @@
-// Copyright (c) nano Author and TFG Co. All Rights Reserved.
+// Copyright (c) nano Author and wolfplus. All Rights Reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,6 @@ type (
 	// Agent corresponds to a user and is used for storing raw Conn information
 	Agent struct {
 		Session            *session.Session    // session
-		appDieChan         chan bool           // app die channel
 		chDie              chan struct{}       // wait for close
 		chSend             chan pendingMessage // push message queue
 		chStopHeartbeat    chan struct{}       // stop heartbeats
@@ -93,7 +92,6 @@ func NewAgent(
 	serializer serialize.Serializer,
 	heartbeatTime time.Duration,
 	messagesBufferSize int,
-	dieChan chan bool,
 	messageEncoder message.Encoder,
 ) *Agent {
 	// initialize heartbeat and handshake data on first user connection
@@ -104,7 +102,6 @@ func NewAgent(
 	})
 
 	a := &Agent{
-		appDieChan:         dieChan,
 		chDie:              make(chan struct{}),
 		chSend:             make(chan pendingMessage, messagesBufferSize),
 		chStopHeartbeat:    make(chan struct{}),
@@ -144,10 +141,10 @@ func (a *Agent) Push(route string, v interface{}) error {
 
 	switch d := v.(type) {
 	case []byte:
-		log.Debugf("Type=Push, ID=%d, UID=%d, Route=%s, Data=%dbytes",
+		log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), route, len(d))
 	default:
-		log.Debugf("Type=Push, ID=%d, UID=%d, Route=%s, Data=%+v",
+		log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
 			a.Session.ID(), a.Session.UID(), route, v)
 	}
 	return a.send(pendingMessage{typ: message.Push, route: route, payload: v})
@@ -176,10 +173,10 @@ func (a *Agent) ResponseMID(ctx context.Context, mid uint, v interface{}, isErro
 
 	switch d := v.(type) {
 	case []byte:
-		log.Debugf("Type=Response, ID=%d, UID=%d, MID=%d, Data=%dbytes",
+		log.Debugf("Type=Response, ID=%d, UID=%s, MID=%d, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), mid, len(d))
 	default:
-		log.Infof("Type=Response, ID=%d, UID=%d, MID=%d, Data=%+v",
+		log.Infof("Type=Response, ID=%d, UID=%s, MID=%d, Data=%+v",
 			a.Session.ID(), a.Session.UID(), mid, v)
 	}
 
@@ -256,7 +253,7 @@ func (a *Agent) SetStatus(state int32) {
 func (a *Agent) Handle() {
 	defer func() {
 		a.Close()
-		log.Debugf("Session handle goroutine exit, SessionID=%d, UID=%d", a.Session.ID(), a.Session.UID())
+		log.Debugf("Session handle goroutine exit, SessionID=%d, UID=%s", a.Session.ID(), a.Session.UID())
 	}()
 
 	go a.write()

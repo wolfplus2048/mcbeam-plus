@@ -3,33 +3,41 @@ package main
 import (
 	"context"
 	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/broker/nats"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/registry/etcd"
 	"github.com/micro/go-micro/v2/store"
 	"github.com/micro/go-plugins/store/redis/v2"
 	"github.com/wolfplus2048/mcbeam-plus"
+	proto_gate "github.com/wolfplus2048/mcbeam-plus/example/protos/gate"
 	proto_room "github.com/wolfplus2048/mcbeam-plus/example/protos/room"
 	"github.com/wolfplus2048/mcbeam-plus/example/room_srv/room"
 )
-
+type Sub struct {
+}
+func (s *Sub)Handler(ctx context.Context, arg *proto_gate.LoginReq) error {
+	logger.Debugf("uid %s closed", arg.Username)
+	return nil
+}
 type Handler struct {
 	service micro.Service
 }
 
 func (h *Handler) Init() {
-	panic("implement me")
 }
 
 func (h *Handler) AfterInit() {
-	panic("implement me")
 }
 
 func (h *Handler) BeforeShutdown() {
-	panic("implement me")
 }
 
 func (h *Handler) Shutdown() {
-	panic("implement me")
+}
+func (h *Handler) onClose(uid string)  {
+	logger.Debugf("onClose:%s", uid)
+	s := h.service.Server()
+	s.Subscribe(s.NewSubscriber("session.onclose", new(Sub)))
 }
 func (h *Handler) CreateRoom(ctx context.Context, req *proto_room.CreateRoomReq) (*proto_room.CreateRoomRes, error) {
 	logger.Debugf("crateRoom %s", req.Name)
@@ -82,18 +90,29 @@ func (h *Handler) JoinRoom(ctx context.Context, req *proto_room.JoinReq) {
 			Users: r.GetUsers(),
 		},
 	})
+	h.service.Server().Subscribe(h.service.Server().NewSubscriber("session.onclose", func(ctx context.Context, arg *proto_gate.LoginReq) error{
+		logger.Debugf("func uid %s closed", arg.Username)
+		return nil
+	}))
 }
 func main() {
 	logger.Init(logger.WithLevel(logger.DebugLevel))
 	service := mcbeam.NewService(
 		mcbeam.Name("room"),
 		mcbeam.Registry(etcd.NewRegistry()),
-		mcbeam.MicroService(micro.NewService(micro.Store(redis.NewStore()))),
+		mcbeam.MicroService(
+			micro.NewService(
+				micro.Store(redis.NewStore()),
+				micro.Broker(nats.NewBroker()),
+			),
+			),
 	)
 	if err := service.Init(); err != nil {
 		logger.Fatal(err)
 	}
 	service.Register(&Handler{service: service.Options().Service})
+	s := service.Options().Service.Server()
+	s.Subscribe(s.NewSubscriber("topic", new(Sub)))
 	if err := service.Run(); err != nil {
 		logger.Fatal(err)
 	}

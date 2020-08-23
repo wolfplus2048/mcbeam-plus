@@ -34,7 +34,7 @@ export default class NewClass extends cc.Component {
             cc.log("connected")
             let req = proto.gate.LoginReq.create({username:this.username.string})
             let buff  = proto.gate.LoginReq.encode(req).finish()
-            starx.notify('api.auth.login', buff)
+            starx.notify('gateway.auth.login', buff)
         })
         
     }

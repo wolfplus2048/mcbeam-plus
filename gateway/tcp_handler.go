@@ -1,4 +1,4 @@
-package api
+package gateway
 
 import (
 	"context"
@@ -20,14 +20,10 @@ import (
 
 type tcpHandler struct {
 	opts Options
-	exit chan bool
 }
 
-func newTcpHandler(exit chan bool,
-	opts Options,
-) *tcpHandler {
+func newTcpHandler(opts Options) *tcpHandler {
 	return &tcpHandler{
-		exit: exit,
 		opts: opts,
 	}
 }
@@ -35,7 +31,7 @@ func newTcpHandler(exit chan bool,
 // Handle handles messages from a conn
 func (t *tcpHandler) Handle(conn acceptor.PlayerConn) {
 	// create a client agent and startup write goroutine
-	a := agent.NewAgent(conn, t.opts.PacketDecoder, t.opts.PacketEncoder, t.opts.Serializer, t.opts.HeartbeatTime, t.opts.MessagesBufferSize, t.exit, t.opts.MessageEncoder)
+	a := agent.NewAgent(conn, t.opts.PacketDecoder, t.opts.PacketEncoder, t.opts.Serializer, t.opts.HeartbeatTime, t.opts.MessagesBufferSize, t.opts.MessageEncoder)
 
 	// startup agent goroutine
 	go a.Handle()
@@ -45,7 +41,7 @@ func (t *tcpHandler) Handle(conn acceptor.PlayerConn) {
 	// guarantee agent related resource is destroyed
 	defer func() {
 		a.Session.Close()
-		logger.Debugf("Session read goroutine exit, SessionID=%d, UID=%d", a.Session.ID(), a.Session.UID())
+		logger.Debugf("Session read goroutine exit, SessionID=%d, UID=%s", a.Session.ID(), a.Session.UID())
 	}()
 
 	for {
@@ -143,14 +139,14 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	case message.Notify:
 		mid = 0
 	}
-	config := t.opts.Service.Options().Server.Options()
+	config := t.opts.Service.Server().Options()
 	frontendID := config.Name + "-" + config.Id
 	r, _ := util.BuildRequest(ctx, gateproto.RPCType_User, route, a.Session, msg, frontendID)
-
-	req := t.opts.rpcClient.NewRequest(route.SvType, "McbApp.Call", r)
+	c := t.opts.Service.Client()
+	req := c.NewRequest(route.SvType, "McbApp.Call", r)
 	rsp := new(gateproto.Response)
 	so := selector.WithStrategy(util.Select(route.SvID))
-	err = t.opts.rpcClient.Call(ctx, req, rsp, client.WithSelectOption(so))
+	err = c.Call(ctx, req, rsp, client.WithSelectOption(so))
 
 	if msg.Type != message.Notify {
 		if err != nil {

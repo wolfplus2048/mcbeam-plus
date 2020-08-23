@@ -21,7 +21,7 @@ $root.proto = (function() {
     proto.gate = (function() {
 
         /**
-         * Namespace gate.
+         * Namespace gateway.
          * @memberof proto
          * @namespace
          */
@@ -31,14 +31,14 @@ $root.proto = (function() {
 
             /**
              * Properties of a LoginReq.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @interface ILoginReq
              * @property {string|null} [username] LoginReq username
              */
 
             /**
              * Constructs a new LoginReq.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @classdesc Represents a LoginReq.
              * @implements ILoginReq
              * @constructor
@@ -54,7 +54,7 @@ $root.proto = (function() {
             /**
              * LoginReq username.
              * @member {string} username
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @instance
              */
             LoginReq.prototype.username = "";
@@ -62,7 +62,7 @@ $root.proto = (function() {
             /**
              * Creates a new LoginReq instance using the specified properties.
              * @function create
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {proto.gate.ILoginReq=} [properties] Properties to set
              * @returns {proto.gate.LoginReq} LoginReq instance
@@ -74,7 +74,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified LoginReq message. Does not implicitly {@link proto.gate.LoginReq.verify|verify} messages.
              * @function encode
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {proto.gate.ILoginReq} message LoginReq message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -91,7 +91,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified LoginReq message, length delimited. Does not implicitly {@link proto.gate.LoginReq.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {proto.gate.ILoginReq} message LoginReq message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -104,7 +104,7 @@ $root.proto = (function() {
             /**
              * Decodes a LoginReq message from the specified reader or buffer.
              * @function decode
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
@@ -133,7 +133,7 @@ $root.proto = (function() {
             /**
              * Decodes a LoginReq message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @returns {proto.gate.LoginReq} LoginReq
@@ -149,7 +149,7 @@ $root.proto = (function() {
             /**
              * Verifies a LoginReq message.
              * @function verify
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -166,7 +166,7 @@ $root.proto = (function() {
             /**
              * Creates a LoginReq message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {Object.<string,*>} object Plain object
              * @returns {proto.gate.LoginReq} LoginReq
@@ -183,7 +183,7 @@ $root.proto = (function() {
             /**
              * Creates a plain object from a LoginReq message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @static
              * @param {proto.gate.LoginReq} message LoginReq
              * @param {$protobuf.IConversionOptions} [options] Conversion options
@@ -203,7 +203,7 @@ $root.proto = (function() {
             /**
              * Converts this LoginReq to JSON.
              * @function toJSON
-             * @memberof proto.gate.LoginReq
+             * @memberof proto.gateway.LoginReq
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
@@ -218,7 +218,7 @@ $root.proto = (function() {
 
             /**
              * Properties of a LoginRes.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @interface ILoginRes
              * @property {string|null} [code] LoginRes code
              * @property {string|null} [uid] LoginRes uid
@@ -227,7 +227,7 @@ $root.proto = (function() {
 
             /**
              * Constructs a new LoginRes.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @classdesc Represents a LoginRes.
              * @implements ILoginRes
              * @constructor
@@ -243,7 +243,7 @@ $root.proto = (function() {
             /**
              * LoginRes code.
              * @member {string} code
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @instance
              */
             LoginRes.prototype.code = "";
@@ -251,7 +251,7 @@ $root.proto = (function() {
             /**
              * LoginRes uid.
              * @member {string} uid
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @instance
              */
             LoginRes.prototype.uid = "";
@@ -259,7 +259,7 @@ $root.proto = (function() {
             /**
              * LoginRes username.
              * @member {string} username
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @instance
              */
             LoginRes.prototype.username = "";
@@ -267,7 +267,7 @@ $root.proto = (function() {
             /**
              * Creates a new LoginRes instance using the specified properties.
              * @function create
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {proto.gate.ILoginRes=} [properties] Properties to set
              * @returns {proto.gate.LoginRes} LoginRes instance
@@ -279,7 +279,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified LoginRes message. Does not implicitly {@link proto.gate.LoginRes.verify|verify} messages.
              * @function encode
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {proto.gate.ILoginRes} message LoginRes message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -300,7 +300,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified LoginRes message, length delimited. Does not implicitly {@link proto.gate.LoginRes.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {proto.gate.ILoginRes} message LoginRes message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -313,7 +313,7 @@ $root.proto = (function() {
             /**
              * Decodes a LoginRes message from the specified reader or buffer.
              * @function decode
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
@@ -348,7 +348,7 @@ $root.proto = (function() {
             /**
              * Decodes a LoginRes message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @returns {proto.gate.LoginRes} LoginRes
@@ -364,7 +364,7 @@ $root.proto = (function() {
             /**
              * Verifies a LoginRes message.
              * @function verify
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -387,7 +387,7 @@ $root.proto = (function() {
             /**
              * Creates a LoginRes message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {Object.<string,*>} object Plain object
              * @returns {proto.gate.LoginRes} LoginRes
@@ -408,7 +408,7 @@ $root.proto = (function() {
             /**
              * Creates a plain object from a LoginRes message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @static
              * @param {proto.gate.LoginRes} message LoginRes
              * @param {$protobuf.IConversionOptions} [options] Conversion options
@@ -435,7 +435,7 @@ $root.proto = (function() {
             /**
              * Converts this LoginRes to JSON.
              * @function toJSON
-             * @memberof proto.gate.LoginRes
+             * @memberof proto.gateway.LoginRes
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
@@ -450,14 +450,14 @@ $root.proto = (function() {
 
             /**
              * Properties of a GetUserInfoReq.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @interface IGetUserInfoReq
              * @property {string|null} [uid] GetUserInfoReq uid
              */
 
             /**
              * Constructs a new GetUserInfoReq.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @classdesc Represents a GetUserInfoReq.
              * @implements IGetUserInfoReq
              * @constructor
@@ -473,7 +473,7 @@ $root.proto = (function() {
             /**
              * GetUserInfoReq uid.
              * @member {string} uid
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @instance
              */
             GetUserInfoReq.prototype.uid = "";
@@ -481,7 +481,7 @@ $root.proto = (function() {
             /**
              * Creates a new GetUserInfoReq instance using the specified properties.
              * @function create
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {proto.gate.IGetUserInfoReq=} [properties] Properties to set
              * @returns {proto.gate.GetUserInfoReq} GetUserInfoReq instance
@@ -493,7 +493,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified GetUserInfoReq message. Does not implicitly {@link proto.gate.GetUserInfoReq.verify|verify} messages.
              * @function encode
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {proto.gate.IGetUserInfoReq} message GetUserInfoReq message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -510,7 +510,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified GetUserInfoReq message, length delimited. Does not implicitly {@link proto.gate.GetUserInfoReq.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {proto.gate.IGetUserInfoReq} message GetUserInfoReq message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -523,7 +523,7 @@ $root.proto = (function() {
             /**
              * Decodes a GetUserInfoReq message from the specified reader or buffer.
              * @function decode
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
@@ -552,7 +552,7 @@ $root.proto = (function() {
             /**
              * Decodes a GetUserInfoReq message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @returns {proto.gate.GetUserInfoReq} GetUserInfoReq
@@ -568,7 +568,7 @@ $root.proto = (function() {
             /**
              * Verifies a GetUserInfoReq message.
              * @function verify
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -585,7 +585,7 @@ $root.proto = (function() {
             /**
              * Creates a GetUserInfoReq message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {Object.<string,*>} object Plain object
              * @returns {proto.gate.GetUserInfoReq} GetUserInfoReq
@@ -602,7 +602,7 @@ $root.proto = (function() {
             /**
              * Creates a plain object from a GetUserInfoReq message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @static
              * @param {proto.gate.GetUserInfoReq} message GetUserInfoReq
              * @param {$protobuf.IConversionOptions} [options] Conversion options
@@ -622,7 +622,7 @@ $root.proto = (function() {
             /**
              * Converts this GetUserInfoReq to JSON.
              * @function toJSON
-             * @memberof proto.gate.GetUserInfoReq
+             * @memberof proto.gateway.GetUserInfoReq
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
@@ -637,7 +637,7 @@ $root.proto = (function() {
 
             /**
              * Properties of a GetUserInfoRes.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @interface IGetUserInfoRes
              * @property {string|null} [code] GetUserInfoRes code
              * @property {string|null} [uid] GetUserInfoRes uid
@@ -646,7 +646,7 @@ $root.proto = (function() {
 
             /**
              * Constructs a new GetUserInfoRes.
-             * @memberof proto.gate
+             * @memberof proto.gateway
              * @classdesc Represents a GetUserInfoRes.
              * @implements IGetUserInfoRes
              * @constructor
@@ -662,7 +662,7 @@ $root.proto = (function() {
             /**
              * GetUserInfoRes code.
              * @member {string} code
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @instance
              */
             GetUserInfoRes.prototype.code = "";
@@ -670,7 +670,7 @@ $root.proto = (function() {
             /**
              * GetUserInfoRes uid.
              * @member {string} uid
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @instance
              */
             GetUserInfoRes.prototype.uid = "";
@@ -678,7 +678,7 @@ $root.proto = (function() {
             /**
              * GetUserInfoRes username.
              * @member {string} username
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @instance
              */
             GetUserInfoRes.prototype.username = "";
@@ -686,7 +686,7 @@ $root.proto = (function() {
             /**
              * Creates a new GetUserInfoRes instance using the specified properties.
              * @function create
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {proto.gate.IGetUserInfoRes=} [properties] Properties to set
              * @returns {proto.gate.GetUserInfoRes} GetUserInfoRes instance
@@ -698,7 +698,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified GetUserInfoRes message. Does not implicitly {@link proto.gate.GetUserInfoRes.verify|verify} messages.
              * @function encode
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {proto.gate.IGetUserInfoRes} message GetUserInfoRes message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -719,7 +719,7 @@ $root.proto = (function() {
             /**
              * Encodes the specified GetUserInfoRes message, length delimited. Does not implicitly {@link proto.gate.GetUserInfoRes.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {proto.gate.IGetUserInfoRes} message GetUserInfoRes message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
@@ -732,7 +732,7 @@ $root.proto = (function() {
             /**
              * Decodes a GetUserInfoRes message from the specified reader or buffer.
              * @function decode
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
@@ -767,7 +767,7 @@ $root.proto = (function() {
             /**
              * Decodes a GetUserInfoRes message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @returns {proto.gate.GetUserInfoRes} GetUserInfoRes
@@ -783,7 +783,7 @@ $root.proto = (function() {
             /**
              * Verifies a GetUserInfoRes message.
              * @function verify
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -806,7 +806,7 @@ $root.proto = (function() {
             /**
              * Creates a GetUserInfoRes message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {Object.<string,*>} object Plain object
              * @returns {proto.gate.GetUserInfoRes} GetUserInfoRes
@@ -827,7 +827,7 @@ $root.proto = (function() {
             /**
              * Creates a plain object from a GetUserInfoRes message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @static
              * @param {proto.gate.GetUserInfoRes} message GetUserInfoRes
              * @param {$protobuf.IConversionOptions} [options] Conversion options
@@ -854,7 +854,7 @@ $root.proto = (function() {
             /**
              * Converts this GetUserInfoRes to JSON.
              * @function toJSON
-             * @memberof proto.gate.GetUserInfoRes
+             * @memberof proto.gateway.GetUserInfoRes
              * @instance
              * @returns {Object.<string,*>} JSON object
              */

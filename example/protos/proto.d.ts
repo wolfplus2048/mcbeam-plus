@@ -2,7 +2,7 @@ import * as $protobuf from "protobufjs";
 /** Namespace proto. */
 export namespace proto {
 
-    /** Namespace gate. */
+    /** Namespace gateway. */
     namespace gate {
 
         /** Properties of a LoginReq. */

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.24.0
 // 	protoc        v3.12.1
-// source: protos/gate/gate.proto
+// source: protos/gateway/gateway.proto
 
 package proto_gate
 
@@ -282,10 +282,10 @@ func file_protos_gate_gate_proto_rawDescGZIP() []byte {
 
 var file_protos_gate_gate_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_protos_gate_gate_proto_goTypes = []interface{}{
-	(*LoginReq)(nil),       // 0: proto.gate.LoginReq
-	(*LoginRes)(nil),       // 1: proto.gate.LoginRes
-	(*GetUserInfoReq)(nil), // 2: proto.gate.GetUserInfoReq
-	(*GetUserInfoRes)(nil), // 3: proto.gate.GetUserInfoRes
+	(*LoginReq)(nil),       // 0: proto.gateway.LoginReq
+	(*LoginRes)(nil),       // 1: proto.gateway.LoginRes
+	(*GetUserInfoReq)(nil), // 2: proto.gateway.GetUserInfoReq
+	(*GetUserInfoRes)(nil), // 3: proto.gateway.GetUserInfoRes
 }
 var file_protos_gate_gate_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
