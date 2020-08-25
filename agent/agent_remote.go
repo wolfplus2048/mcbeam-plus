@@ -101,10 +101,10 @@ func (a *Remote) Push(route string, v interface{}) error {
 
 	switch d := v.(type) {
 	case []byte:
-		logger.Debugf("Type=Push, ID=%d, UID=%d, Route=%s, Data=%dbytes",
+		logger.Debugf("Type=Push, id=%d, UID=%d, Route=%s, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), route, len(d))
 	default:
-		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
+		logger.Debugf("Type=Push, id=%d, UID=%s, Route=%s, Data=%+v",
 			a.Session.ID(), a.Session.UID(), route, v)
 	}
 

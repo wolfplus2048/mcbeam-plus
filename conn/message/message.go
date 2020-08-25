@@ -86,7 +86,7 @@ func New(err ...bool) *Message {
 
 // String, implementation of fmt.Stringer interface
 func (m *Message) String() string {
-	return fmt.Sprintf("Type: %s, ID: %d, Route: %s, Compressed: %t, Error: %t, Data: %v, BodyLength: %d",
+	return fmt.Sprintf("Type: %s, id: %d, Route: %s, Compressed: %t, Error: %t, Data: %v, BodyLength: %d",
 		types[m.Type],
 		m.ID,
 		m.Route,

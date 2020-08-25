@@ -141,10 +141,10 @@ func (a *Agent) Push(route string, v interface{}) error {
 
 	switch d := v.(type) {
 	case []byte:
-		log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%dbytes",
+		log.Debugf("Type=Push, id=%d, UID=%s, Route=%s, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), route, len(d))
 	default:
-		log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
+		log.Debugf("Type=Push, id=%d, UID=%s, Route=%s, Data=%+v",
 			a.Session.ID(), a.Session.UID(), route, v)
 	}
 	return a.send(pendingMessage{typ: message.Push, route: route, payload: v})
@@ -173,10 +173,10 @@ func (a *Agent) ResponseMID(ctx context.Context, mid uint, v interface{}, isErro
 
 	switch d := v.(type) {
 	case []byte:
-		log.Debugf("Type=Response, ID=%d, UID=%s, MID=%d, Data=%dbytes",
+		log.Debugf("Type=Response, id=%d, UID=%s, MID=%d, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), mid, len(d))
 	default:
-		log.Infof("Type=Response, ID=%d, UID=%s, MID=%d, Data=%+v",
+		log.Infof("Type=Response, id=%d, UID=%s, MID=%d, Data=%+v",
 			a.Session.ID(), a.Session.UID(), mid, v)
 	}
 
@@ -193,7 +193,7 @@ func (a *Agent) Close() error {
 	}
 	a.SetStatus(constants.StatusClosed)
 
-	log.Debugf("Session closed, ID=%d, UID=%s, IP=%s",
+	log.Debugf("Session closed, id=%d, UID=%s, IP=%s",
 		a.Session.ID(), a.Session.UID(), a.conn.RemoteAddr())
 
 	// prevent closing closed channel

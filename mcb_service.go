@@ -2,8 +2,8 @@ package mcbeam
 
 import (
 	"github.com/micro/go-micro/v2"
-	"github.com/wolfplus2048/mcbeam-plus/gateway"
 	"github.com/wolfplus2048/mcbeam-plus/component"
+	"github.com/wolfplus2048/mcbeam-plus/gateway"
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
 	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
@@ -108,9 +108,6 @@ func (t *mcbService) start() error {
 	for _, v := range t.handlers {
 		v.Init()
 	}
-	for _, v := range t.handlers {
-		v.AfterInit()
-	}
 
 	for _, v := range t.modules {
 		err := v.Init()
@@ -118,15 +115,22 @@ func (t *mcbService) start() error {
 			return err
 		}
 	}
-	for _, v := range t.modules {
-		v.AfterInit()
-	}
+
 	if t.opts.Gateway != nil {
 		t.opts.Gateway.Start()
 	}
-
+	if t.opts.Scheduler != nil {
+		t.opts.Scheduler.Start()
+	}
 	t.started = true
 
+	for _, v := range t.modules {
+		v.AfterInit()
+	}
+
+	for _, v := range t.handlers {
+		v.AfterInit()
+	}
 	return nil
 }
 
@@ -148,16 +152,20 @@ func (t *mcbService) stop() error {
 	if t.opts.Gateway != nil {
 		t.opts.Gateway.Stop()
 	}
+	if t.opts.Scheduler != nil {
+		t.opts.Scheduler.Stop()
+	}
 	t.started = false
 
-	for _, v := range t.handlers {
-		v.Shutdown()
-	}
 	for _, v := range t.modules {
 		err := v.Shutdown()
 		if err != nil {
 			return err
 		}
+	}
+
+	for _, v := range t.handlers {
+		v.Shutdown()
 	}
 
 	return nil
