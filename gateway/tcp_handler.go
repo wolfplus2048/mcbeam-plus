@@ -137,7 +137,7 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	case message.Request:
 		mid = msg.ID
 	case message.Notify:
-		mid = 0
+		mid = msg.ID
 	}
 	config := t.opts.Service.Server().Options()
 	frontendID := config.Name + "-" + config.Id
@@ -148,6 +148,9 @@ func (t *tcpHandler) processMessage(a *agent.Agent, msg *message.Message) {
 	so := selector.WithStrategy(util.Select(route.SvID))
 	err = c.Call(ctx, req, rsp, client.WithSelectOption(so))
 
+	if msg.Type == message.Notify && err != nil {
+		a.AnswerSysError(ctx, err)
+	}
 	if msg.Type != message.Notify {
 		if err != nil {
 			a.AnswerWithError(ctx, mid, err)

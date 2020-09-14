@@ -25,6 +25,7 @@ import (
 	gojson "encoding/json"
 	e "errors"
 	"fmt"
+	"github.com/micro/go-micro/v2/errors"
 	log "github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/conn/codec"
 	"github.com/wolfplus2048/mcbeam-plus/conn/message"
@@ -407,6 +408,11 @@ func (a *Agent) write() {
 // SendRequest sends a request to a tcp
 func (a *Agent) SendRequest(ctx context.Context, route string, arg interface{}, reply interface{}) error {
 	return e.New("not implemented")
+}
+func (a *Agent) AnswerSysError(ctx context.Context, err error) error {
+	es := errors.Parse(err.Error())
+	return a.send(pendingMessage{typ: message.Push, route: "SysError", payload: es})
+
 }
 
 // AnswerWithError answers with an error
