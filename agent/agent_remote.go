@@ -26,8 +26,8 @@ import (
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/client/selector"
 	"github.com/micro/go-micro/v2/logger"
-	"github.com/wolfplus2048/mcbeam-plus/conn/message"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
+	"github.com/wolfplus2048/mcbeam-plus/message"
 	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
@@ -47,6 +47,15 @@ type Remote struct {
 	rpcClient    client.Client        // rpc client
 	serializer   serialize.Serializer // message serializer
 
+}
+
+type pendingMessage struct {
+	ctx     context.Context
+	typ     message.Type // message type
+	route   string       // message route (push)
+	mid     uint         // response message id (response)
+	payload interface{}  // payload
+	err     bool         // if its an error message
 }
 
 // NewRemote create new Remote instance

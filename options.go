@@ -9,13 +9,11 @@ import (
 
 type Options struct {
 	Name          string
-	ClientAddress string
 	Handler       interface{}
 	Service       micro.Service
-	Registry      registry.Registry
 	Gateway       gateway.Gateway
+	Registry registry.Registry
 	Scheduler     scheduler.Scheduler
-	Metadata      map[string]string
 }
 type Option func(o *Options)
 
@@ -35,6 +33,11 @@ func Name(name string) Option {
 		o.Name = name
 	}
 }
+func Registry(r registry.Registry) Option {
+	return func(o *Options) {
+		o.Registry = r
+	}
+}
 func Gateway(g gateway.Gateway) Option {
 	return func(o *Options) {
 		o.Gateway = g
@@ -45,26 +48,10 @@ func Scheduler(s scheduler.Scheduler) Option {
 		o.Scheduler = s
 	}
 }
-func ClientAddress(c string) Option {
-	return func(o *Options) {
-		o.ClientAddress = c
-	}
-}
-func Registry(r registry.Registry) Option {
-	return func(o *Options) {
-		o.Registry = r
-	}
-}
+
 
 func MicroService(s micro.Service) Option {
 	return func(o *Options) {
 		o.Service = s
-	}
-}
-
-// Metadata associated with the service
-func Metadata(md map[string]string) Option {
-	return func(o *Options) {
-		o.Metadata = md
 	}
 }

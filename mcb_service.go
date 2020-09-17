@@ -62,27 +62,24 @@ func (t *mcbService) Init(opts ...Option) error {
 	for _, o := range opts {
 		o(&t.opts)
 	}
-
-	var serviceOpts []micro.Option
+	var srvOpt []micro.Option
 	if len(t.opts.Name) > 0 {
-		serviceOpts = append(serviceOpts, micro.Name(t.opts.Name))
+		srvOpt = append(srvOpt, micro.Name(t.opts.Name))
 	}
 	if t.opts.Registry != nil {
-		serviceOpts = append(serviceOpts, micro.Registry(t.opts.Registry))
+		srvOpt = append(srvOpt, micro.Registry(t.opts.Registry))
 	}
-	if t.opts.Metadata != nil {
-		serviceOpts = append(serviceOpts, micro.Metadata(t.opts.Metadata))
+	if t.opts.Service != nil && t.opts.Gateway == nil{ //gateway mod to process cmd
+		t.opts.Service.Init(srvOpt...)
 	}
-
-	t.opts.Service.Init(serviceOpts...)
 
 	var gateOpts []gateway.Option
-	if len(t.opts.ClientAddress) > 0 {
-		gateOpts = append(gateOpts, gateway.ClientAddress(t.opts.ClientAddress))
-		if t.opts.Gateway == nil {
-			t.opts.Gateway = gateway.NewTcpGateway()
-		}
-	}
+	//if len(t.opts.ClientAddress) > 0 {
+	//	gateOpts = append(gateOpts, gateway.ClientAddress(t.opts.ClientAddress))
+	//	if t.opts.Gateway == nil {
+	//		t.opts.Gateway = gateway.NewTcpGateway()
+	//	}
+	//}
 
 	if t.opts.Gateway != nil {
 		gateOpts = append(gateOpts, gateway.Service(t.opts.Service))

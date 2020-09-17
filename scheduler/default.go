@@ -17,7 +17,7 @@ type Timer struct {
 	closed   int32 // is timer closed
 }
 
-type DefaultScheduler struct {
+type scheduler struct {
 	opts           Options
 	incrementID    int64      // auto increment id
 	timers         sync.Map   // all Timers
@@ -28,7 +28,7 @@ type DefaultScheduler struct {
 
 func newScheduler(opt ...Option) Scheduler {
 	options := newOptions(opt...)
-	return &DefaultScheduler{
+	return &scheduler{
 		opts:           options,
 		incrementID:    0,
 		timers:         sync.Map{},
@@ -37,7 +37,7 @@ func newScheduler(opt ...Option) Scheduler {
 		exit:           make(chan struct{}),
 	}
 }
-func (d *DefaultScheduler) Init(opt ...Option) error {
+func (d *scheduler) Init(opt ...Option) error {
 	for _, o := range opt {
 		o(&d.opts)
 	}
@@ -47,11 +47,11 @@ func (d *DefaultScheduler) Init(opt ...Option) error {
 
 }
 
-func (d *DefaultScheduler) Options() Options {
+func (d *scheduler) Options() Options {
 	return d.opts
 }
 
-func (d *DefaultScheduler) Start() error {
+func (d *scheduler) Start() error {
 	go func() {
 		ticker := time.NewTicker(d.opts.Precision)
 		for {
@@ -71,12 +71,12 @@ func (d *DefaultScheduler) Start() error {
 	return nil
 }
 
-func (d *DefaultScheduler) Stop() error {
+func (d *scheduler) Stop() error {
 	close(d.exit)
 	return nil
 }
 
-func (d *DefaultScheduler) NewTimer(interval time.Duration, fn Func, opt ...TimerOption) int64 {
+func (d *scheduler) NewTimer(interval time.Duration, fn Func, opt ...TimerOption) int64 {
 	id := atomic.AddInt64(&d.incrementID, 1)
 	t := &Timer{
 		opts: TimerOptions{
@@ -97,7 +97,7 @@ func (d *DefaultScheduler) NewTimer(interval time.Duration, fn Func, opt ...Time
 
 	return t.id
 }
-func (d *DefaultScheduler) RemoveTimer(id int64) error {
+func (d *scheduler) RemoveTimer(id int64) error {
 	v, ok := d.timers.Load(id)
 	if !ok {
 		return constants.ErrTimerNotFound
@@ -105,7 +105,7 @@ func (d *DefaultScheduler) RemoveTimer(id int64) error {
 	t := v.(*Timer)
 	return d.stopTimer(t)
 }
-func (d *DefaultScheduler) stopTimer(t *Timer) error {
+func (d *scheduler) stopTimer(t *Timer) error {
 	if atomic.LoadInt32(&t.closed) > 0 {
 		return constants.ErrCloseClosedTimer
 	}
@@ -119,8 +119,8 @@ func (d *DefaultScheduler) stopTimer(t *Timer) error {
 	}
 	return nil
 }
-func (d *DefaultScheduler) String() string {
-	panic("DefaultScheduler")
+func (d *scheduler) String() string {
+	panic("scheduler")
 }
 
 // execute job function with protection
@@ -136,7 +136,7 @@ func pexec(id int64, fn Func) {
 
 // Cron executes scheduled tasks
 // TODO: if closing Timers'count in single cron call more than timerBacklog will case problem.
-func (d *DefaultScheduler) Cron() {
+func (d *scheduler) Cron() {
 	now := time.Now()
 	unn := now.UnixNano()
 	d.timers.Range(func(idInterface, tInterface interface{}) bool {

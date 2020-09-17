@@ -46,6 +46,7 @@ type NetworkEntity interface {
 	SendRequest(ctx context.Context, route string, arg interface{}, reply interface{}) error
 }
 
+
 var (
 	sessionBindCallbacks = make([]func(ctx context.Context, s *Session) error, 0)
 	afterBindCallbacks   = make([]func(ctx context.Context, s *Session) error, 0)
