@@ -28,7 +28,7 @@ import (
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
 	"github.com/wolfplus2048/mcbeam-plus/message"
-	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/serialize"
 	"github.com/wolfplus2048/mcbeam-plus/session"
@@ -60,7 +60,7 @@ type pendingMessage struct {
 
 // NewRemote create new Remote instance
 func NewRemote(
-	sess *mcbeamproto.Session,
+	sess *proto_mcbeam.Session,
 	reply string,
 	rpcClient client.Client,
 	frontendID string,
@@ -98,9 +98,9 @@ func (a *Remote) Kick(ctx context.Context) error {
 	if a.Session.UID() == "" {
 		return constants.ErrNoUIDBind
 	}
-	rsp := &mcbeamproto.KickAnswer{}
+	rsp := &proto_mcbeam.KickAnswer{}
 	err := a.SendRequest(ctx, constants.KickRoute,
-		&mcbeamproto.KickMsg{UserId: a.Session.UID()},
+		&proto_mcbeam.KickMsg{UserId: a.Session.UID()},
 		rsp)
 	return err
 }
@@ -144,13 +144,13 @@ func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
 	if err != nil {
 		return err
 	}
-	push := &mcbeamproto.PushMsg{
+	push := &proto_mcbeam.PushMsg{
 		Route: m.route,
 		Uid:   a.Session.UID(),
 		Data:  payload,
 	}
 
-	err = a.SendRequest(context.Background(), constants.PushRoute, push, &mcbeamproto.Response{})
+	err = a.SendRequest(context.Background(), constants.PushRoute, push, &proto_mcbeam.Response{})
 	return err
 }
 

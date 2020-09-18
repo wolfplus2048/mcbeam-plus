@@ -1,4 +1,4 @@
-package mcbeamproto
+package proto_mcbeam
 
 type Message struct {
 	data []byte

@@ -141,13 +141,13 @@ func GetErrorPayload(serializer serialize.Serializer, err error) ([]byte, error)
 //}
 
 func BuildRequest(ctx context.Context,
-	rpcType mcbeamproto.RPCType,
+	rpcType proto_mcbeam.RPCType,
 	route *route.Route,
 	session *session.Session,
 	msg *message.Message,
-	frontendID string) (*mcbeamproto.Request, error) {
-	req := &mcbeamproto.Request{
-		Msg: &mcbeamproto.Msg{
+	frontendID string) (*proto_mcbeam.Request, error) {
+	req := &proto_mcbeam.Request{
+		Msg: &proto_mcbeam.Msg{
 			Route: route.String(),
 			Data:  msg.Data,
 		},
@@ -156,17 +156,17 @@ func BuildRequest(ctx context.Context,
 	req.FrontendID = frontendID
 	switch msg.Type {
 	case message.Request:
-		req.Msg.Type = mcbeamproto.MsgType_MsgRequest
+		req.Msg.Type = proto_mcbeam.MsgType_MsgRequest
 	case message.Notify:
-		req.Msg.Type = mcbeamproto.MsgType_MsgNotify
+		req.Msg.Type = proto_mcbeam.MsgType_MsgNotify
 	}
-	if rpcType == mcbeamproto.RPCType_User {
+	if rpcType == proto_mcbeam.RPCType_User {
 		mid := uint(0)
 		if msg.Type == message.Request {
 			mid = msg.ID
 		}
 		req.Msg.Id = uint64(mid)
-		req.Session = &mcbeamproto.Session{
+		req.Session = &proto_mcbeam.Session{
 			Id:   session.ID(),
 			Uid:  session.UID(),
 			Data: session.GetDataEncoded(),
@@ -176,7 +176,7 @@ func BuildRequest(ctx context.Context,
 }
 
 func BuildMcbContext(ctx context.Context,
-	rpcType mcbeamproto.RPCType,
+	rpcType proto_mcbeam.RPCType,
 	route *route.Route,
 	session *session.Session,
 	msg *message.Message,

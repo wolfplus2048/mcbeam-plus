@@ -1,7 +1,7 @@
 
 syntax="proto3";
 
-package mcbeamproto;
+package proto.mcbeam;
 
 enum MsgType {
     MsgRequest = 0;
@@ -16,6 +16,7 @@ enum RPCType {
 service McbApp {
     rpc Call(Request) returns (Response) {}
 }
+
 service McbGate {
     rpc Push(PushMsg) returns (Response) {}
     rpc PushSession(Session) returns (Response) {}
@@ -27,7 +28,6 @@ message Error {
     string msg = 2;
     map<string, string> metadata = 3;
 }
-
 message Session {
     int64 id = 1;
     string uid = 2;
@@ -41,18 +41,6 @@ message Msg {
     string reply = 4;
     MsgType type = 5;
 }
-
-message Request {
-    RPCType type = 1;
-    Session session = 2;
-    Msg msg = 3;
-    string frontendID = 4;
-    bytes metadata = 5;
-}
-message Response {
-    bytes data = 1;
-    Error error = 2;
-}
 message KickMsg {
     string userId = 1;
 }
@@ -64,4 +52,16 @@ message PushMsg {
     string route = 1;
     string uid = 2;
     bytes data = 3;
+}
+
+message Request {
+    RPCType type = 1;
+    Session session = 2;
+    Msg msg = 3;
+    string frontendID = 4;
+    bytes metadata = 5;
+}
+message Response {
+    bytes data = 1;
+    Error error = 2;
 }

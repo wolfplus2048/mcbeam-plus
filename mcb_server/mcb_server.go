@@ -95,22 +95,22 @@ func (m *McbServer) Handle(handler interface{}, opt ...component.HandlerOption) 
 	return nil
 }
 
-func (m *McbServer) Call(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response) error {
+func (m *McbServer) Call(ctx context.Context, req *proto_mcbeam.Request, res *proto_mcbeam.Response) error {
 	rt, err := route.Decode(req.GetMsg().GetRoute())
 	if err != nil {
 		return e.BadRequest(m.opts.name, "cannot decode route: %s", req.GetMsg().GetRoute())
 	}
 	switch {
-	case req.Type == mcbeamproto.RPCType_User:
+	case req.Type == proto_mcbeam.RPCType_User:
 		return m.handleRPCUser(ctx, req, res, rt)
-	case req.Type == mcbeamproto.RPCType_Sys:
+	case req.Type == proto_mcbeam.RPCType_Sys:
 		return m.handleRPCSys(ctx, req, res, rt)
 	default:
 		return e.BadRequest(m.opts.name, "invalid rpc type:%s", req.Type)
 	}
 }
 
-func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
+func (m *McbServer) handleRPCSys(ctx context.Context, req *proto_mcbeam.Request, res *proto_mcbeam.Response, rt *route.Route) error {
 	handler, ok := m.handlers[rt.Short()]
 	if !ok {
 		return e.NotFound(m.opts.name, "not find method:%s", rt.Method)
@@ -150,7 +150,7 @@ func (m *McbServer) handleRPCSys(ctx context.Context, req *mcbeamproto.Request, 
 	res.Data = data
 	return nil
 }
-func (m *McbServer) handleRPCUser(ctx context.Context, req *mcbeamproto.Request, res *mcbeamproto.Response, rt *route.Route) error {
+func (m *McbServer) handleRPCUser(ctx context.Context, req *proto_mcbeam.Request, res *proto_mcbeam.Response, rt *route.Route) error {
 
 	handler, ok := m.handlers[rt.Short()]
 	if !ok {

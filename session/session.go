@@ -25,7 +25,7 @@ import (
 	"encoding/json"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
-	mcbeamproto "github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"net"
 	"reflect"
 	"strings"
@@ -45,7 +45,6 @@ type NetworkEntity interface {
 	RemoteAddr() net.Addr
 	SendRequest(ctx context.Context, route string, arg interface{}, reply interface{}) error
 }
-
 
 var (
 	sessionBindCallbacks = make([]func(ctx context.Context, s *Session) error, 0)
@@ -638,11 +637,11 @@ func (s *Session) Value(key string) interface{} {
 }
 
 func (s *Session) bindInFront(ctx context.Context) error {
-	sessionData := &mcbeamproto.Session{
+	sessionData := &proto_mcbeam.Session{
 		Id:  s.frontendSessionID,
 		Uid: s.uid,
 	}
-	err := s.entity.SendRequest(ctx, constants.BindRoute, sessionData, &mcbeamproto.Response{})
+	err := s.entity.SendRequest(ctx, constants.BindRoute, sessionData, &proto_mcbeam.Response{})
 	return err
 }
 
@@ -651,12 +650,12 @@ func (s *Session) PushToFront(ctx context.Context) error {
 	if s.IsFrontend {
 		return constants.ErrFrontSessionCantPushToFront
 	}
-	sessionData := &mcbeamproto.Session{
+	sessionData := &proto_mcbeam.Session{
 		Id:   s.frontendSessionID,
 		Uid:  s.uid,
 		Data: s.encodedData,
 	}
-	err := s.entity.SendRequest(ctx, constants.PushSessionRoute, sessionData, &mcbeamproto.Response{})
+	err := s.entity.SendRequest(ctx, constants.PushSessionRoute, sessionData, &proto_mcbeam.Response{})
 	return err
 }
 
