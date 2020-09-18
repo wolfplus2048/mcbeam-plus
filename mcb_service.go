@@ -68,6 +68,12 @@ func (t *mcbService) Init(opts ...Option) error {
 	if t.opts.Registry != nil {
 		srvOpt = append(srvOpt, micro.Registry(t.opts.Registry))
 	}
+	if t.opts.Broker != nil {
+		srvOpt = append(srvOpt, micro.Broker(t.opts.Broker))
+	}
+	if t.opts.Store != nil {
+		srvOpt = append(srvOpt, micro.Store(t.opts.Store))
+	}
 	if t.opts.Service != nil && t.opts.Gateway == nil { //gateway mod to process cmd
 		t.opts.Service.Init(srvOpt...)
 	}

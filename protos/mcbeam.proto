@@ -33,7 +33,9 @@ message Session {
     string uid = 2;
     bytes data = 3;
 }
-
+message SessionClose {
+    string uid = 1;
+}
 message Msg {
     uint64 id = 1;
     string route = 2;
