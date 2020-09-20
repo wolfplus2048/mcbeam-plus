@@ -192,7 +192,7 @@ func BuildMcbContext(ctx context.Context,
 	md["mcb-session-id"] = strconv.FormatInt(session.ID(), 10)
 	md["mcb-session-uid"] = session.UID()
 	md["mcb-session-fid"] = frontendID
-	md["mcb-session-data"] = string(session.GetDataEncoded()[:])
+	md["mcb-session-data"] = string(session.GetDataEncoded())
 	return metadata.NewContext(ctx, md)
 }
 

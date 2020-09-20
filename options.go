@@ -5,19 +5,17 @@ import (
 	"github.com/micro/go-micro/v2/broker"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/store"
-	"github.com/wolfplus2048/mcbeam-plus/gateway"
 	"github.com/wolfplus2048/mcbeam-plus/scheduler"
 )
 
 type Options struct {
-	Name          string
-	Handler       interface{}
-	Service       micro.Service
-	Gateway       gateway.Gateway
-	Registry registry.Registry
-	Broker broker.Broker
-	Store store.Store
-	Scheduler     scheduler.Scheduler
+	Name      string
+	Handler   interface{}
+	Service   micro.Service
+	Registry  registry.Registry
+	Broker    broker.Broker
+	Store     store.Store
+	Scheduler scheduler.Scheduler
 }
 type Option func(o *Options)
 
@@ -52,17 +50,11 @@ func Store(s store.Store) Option {
 		o.Store = s
 	}
 }
-func Gateway(g gateway.Gateway) Option {
-	return func(o *Options) {
-		o.Gateway = g
-	}
-}
 func Scheduler(s scheduler.Scheduler) Option {
 	return func(o *Options) {
 		o.Scheduler = s
 	}
 }
-
 
 func MicroService(s micro.Service) Option {
 	return func(o *Options) {

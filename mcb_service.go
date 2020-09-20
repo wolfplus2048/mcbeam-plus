@@ -3,7 +3,7 @@ package mcbeam
 import (
 	"github.com/micro/go-micro/v2"
 	"github.com/wolfplus2048/mcbeam-plus/component"
-	"github.com/wolfplus2048/mcbeam-plus/gateway"
+	//	"github.com/wolfplus2048/mcbeam-plus/gateway"
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
 	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
@@ -74,11 +74,9 @@ func (t *mcbService) Init(opts ...Option) error {
 	if t.opts.Store != nil {
 		srvOpt = append(srvOpt, micro.Store(t.opts.Store))
 	}
-	if t.opts.Service != nil && t.opts.Gateway == nil { //gateway mod to process cmd
-		t.opts.Service.Init(srvOpt...)
-	}
+	t.opts.Service.Init(srvOpt...)
 
-	var gateOpts []gateway.Option
+	//var gateOpts []gateway.Option
 	//if len(t.opts.ClientAddress) > 0 {
 	//	gateOpts = append(gateOpts, gateway.ClientAddress(t.opts.ClientAddress))
 	//	if t.opts.Gateway == nil {
@@ -86,12 +84,12 @@ func (t *mcbService) Init(opts ...Option) error {
 	//	}
 	//}
 	//
-	if t.opts.Gateway != nil {
-		gateOpts = append(gateOpts, gateway.Service(t.opts.Service))
-		t.opts.Gateway.Init(gateOpts...)
-
-		//proto_mcbeam.RegisterMcbGateHandler(t.opts.Service.Server(), &sys_server.Server{})
-	}
+	//if t.opts.Gateway != nil {
+	//	gateOpts = append(gateOpts, gateway.Service(t.opts.Service))
+	//	t.opts.Gateway.Init(gateOpts...)
+	//
+	//	//proto_mcbeam.RegisterMcbGateHandler(t.opts.Service.Server(), &sys_server.Server{})
+	//}
 
 	proto_mcbeam.RegisterMcbAppHandler(t.opts.Service.Server(), t.remoteSrv)
 	return nil
@@ -118,9 +116,9 @@ func (t *mcbService) start() error {
 		}
 	}
 
-	if t.opts.Gateway != nil {
-		t.opts.Gateway.Start()
-	}
+	//if t.opts.Gateway != nil {
+	//	t.opts.Gateway.Start()
+	//}
 	if t.opts.Scheduler != nil {
 		t.opts.Scheduler.Start()
 	}
@@ -151,9 +149,9 @@ func (t *mcbService) stop() error {
 		v.BeforeShutdown()
 	}
 
-	if t.opts.Gateway != nil {
-		t.opts.Gateway.Stop()
-	}
+	//if t.opts.Gateway != nil {
+	//	t.opts.Gateway.Stop()
+	//}
 	if t.opts.Scheduler != nil {
 		t.opts.Scheduler.Stop()
 	}
