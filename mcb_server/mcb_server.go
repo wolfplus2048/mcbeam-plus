@@ -47,6 +47,12 @@ func NewMcbServer(opts ...Option) *McbServer {
 	}
 	return s
 }
+func (m *McbServer) Init(opts ...Option) {
+	for _, o := range opts {
+		o(&m.opts)
+	}
+}
+
 func (m *McbServer) Handle(handler interface{}, opt ...component.HandlerOption) error {
 	typ := reflect.TypeOf(handler)
 	receiver := reflect.ValueOf(handler)

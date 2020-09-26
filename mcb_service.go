@@ -3,17 +3,16 @@ package mcbeam
 import (
 	"github.com/micro/go-micro/v2"
 	"github.com/wolfplus2048/mcbeam-plus/component"
-	//	"github.com/wolfplus2048/mcbeam-plus/gateway"
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
-	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
+
+	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"sync"
 )
 
 type mcbService struct {
 	opts Options
 	sync.RWMutex
-	remoteSrv *mcb_server.McbServer
 	started   bool
 	handlers  []component.Component
 	modules   []Module
@@ -27,17 +26,12 @@ func newMcbService(opt ...Option) Service {
 		handlers: make([]component.Component, 0),
 		modules:  make([]Module, 0),
 	}
-	t.remoteSrv = mcb_server.NewMcbServer(
-		mcb_server.WithName(t.opts.Name),
-		mcb_server.Serializer(protobuf.NewSerializer()),
-		mcb_server.RpcClient(t.opts.Service.Client()),
-	)
 
 	return t
 }
 
 func (t *mcbService) Register(handler component.Component, opts ...component.HandlerOption) {
-	t.remoteSrv.Handle(handler, opts...)
+	t.opts.McbAppHandler.Handle(handler, opts...)
 	t.handlers = append(t.handlers, handler)
 }
 func (t *mcbService) Module(module Module) {
@@ -76,22 +70,11 @@ func (t *mcbService) Init(opts ...Option) error {
 	}
 	t.opts.Service.Init(srvOpt...)
 
-	//var gateOpts []gateway.Option
-	//if len(t.opts.ClientAddress) > 0 {
-	//	gateOpts = append(gateOpts, gateway.ClientAddress(t.opts.ClientAddress))
-	//	if t.opts.Gateway == nil {
-	//		t.opts.Gateway = gateway.NewTcpGateway()
-	//	}
-	//}
-	//
-	//if t.opts.Gateway != nil {
-	//	gateOpts = append(gateOpts, gateway.Service(t.opts.Service))
-	//	t.opts.Gateway.Init(gateOpts...)
-	//
-	//	//proto_mcbeam.RegisterMcbGateHandler(t.opts.Service.Server(), &sys_server.Server{})
-	//}
+	t.opts.McbAppHandler.Init(
+		mcb_server.RpcClient(t.opts.Service.Client()),
+		mcb_server.Serializer(protobuf.NewSerializer()))
 
-	proto_mcbeam.RegisterMcbAppHandler(t.opts.Service.Server(), t.remoteSrv)
+	proto_mcbeam.RegisterMcbAppHandler(t.opts.Service.Server(), t.opts.McbAppHandler)
 	return nil
 }
 

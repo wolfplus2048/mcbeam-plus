@@ -57,7 +57,6 @@ func main() {
 	go webService()
 	service := mcbeam.NewService(
 		mcbeam.Name("example"),
-		//mcbeam.ClientAddress(":3250"),
 		mcbeam.Registry(etcd.NewRegistry()))
 	if err := service.Init(); err != nil {
 		logger.Fatal(err)
