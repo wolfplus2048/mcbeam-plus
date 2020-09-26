@@ -22,6 +22,7 @@ type Options struct {
 }
 type Option func(o *Options)
 
+
 func newOptions(opt ...Option) Options {
 	opts := Options{
 		Service:   micro.NewService(),
