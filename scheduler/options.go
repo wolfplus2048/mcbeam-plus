@@ -8,10 +8,11 @@ type Condition interface {
 }
 type Option func(options *Options)
 type TimerOption func(options *TimerOptions)
-
+type LogicChan func()
 type Options struct {
 	timerBacklog int
 	Precision    time.Duration
+	logicChan    chan func()
 }
 type TimerOptions struct {
 	Fn        Func
@@ -29,6 +30,11 @@ func newOptions(opt ...Option) Options {
 		o(&opts)
 	}
 	return opts
+}
+func WithLogicChan(ch chan func()) Option {
+	return func(o *Options) {
+		o.logicChan = ch
+	}
 }
 func Backlog(l int) Option {
 	return func(o *Options) {

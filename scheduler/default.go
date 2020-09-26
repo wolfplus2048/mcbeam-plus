@@ -59,11 +59,31 @@ func (d *scheduler) Start() error {
 			case <-d.exit:
 				break
 			case <-ticker.C:
-				d.Cron()
+				if d.opts.logicChan != nil {
+					d.opts.logicChan <- func() {
+						d.Cron()
+					}
+				} else {
+					d.Cron()
+				}
 			case t := <-d.ChCreatedTimer:
-				d.timers.Store(t.id, t)
+				if d.opts.logicChan != nil {
+					d.opts.logicChan <- func() {
+						d.timers.Store(t.id, t)
+					}
+				} else {
+					d.timers.Store(t.id, t)
+				}
+
 			case id := <-d.ChClosingTimer:
-				d.timers.Delete(id)
+				if d.opts.logicChan != nil {
+					d.opts.logicChan <- func() {
+						d.timers.Delete(id)
+					}
+				} else {
+					d.timers.Delete(id)
+				}
+
 			}
 		}
 		ticker.Stop()
