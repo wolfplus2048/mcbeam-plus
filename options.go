@@ -5,6 +5,7 @@ import (
 	"github.com/micro/go-micro/v2/broker"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/store"
+	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
 	"github.com/wolfplus2048/mcbeam-plus/scheduler"
 )
 
@@ -16,8 +17,11 @@ type Options struct {
 	Broker    broker.Broker
 	Store     store.Store
 	Scheduler scheduler.Scheduler
+	HdlrWrappers []mcb_server.HandlerWrapper
+
 }
 type Option func(o *Options)
+
 
 func newOptions(opt ...Option) Options {
 	opts := Options{
@@ -59,5 +63,10 @@ func Scheduler(s scheduler.Scheduler) Option {
 func MicroService(s micro.Service) Option {
 	return func(o *Options) {
 		o.Service = s
+	}
+}
+func WrapHandler(w mcb_server.HandlerWrapper) Option {
+	return func(o *Options) {
+		o.HdlrWrappers = append(o.HdlrWrappers, w)
 	}
 }

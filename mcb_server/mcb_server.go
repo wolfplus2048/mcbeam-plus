@@ -168,6 +168,7 @@ func (m *McbServer) handleRPCUser(ctx context.Context, req *proto_mcbeam.Request
 		logger.Warnf("invalid message type, error: %s", err.Error())
 	}
 	a, err := agent.NewRemote(req.GetSession(), req.Msg.Reply, m.opts.rpcClient, req.FrontendID, m.opts.serializer)
+
 	ctx = context.WithValue(ctx, constants.SessionCtxKey, a.Session)
 	args := []reflect.Value{handler.Receiver, reflect.ValueOf(ctx)}
 	arg, err := unmarshalHandlerArg(handler, m.opts.serializer, req.GetMsg().GetData())
