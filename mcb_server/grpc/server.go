@@ -87,9 +87,9 @@ func prepareEndpoint(method reflect.Method) *methodType {
 		replyType = mtype.In(3)
 		contextType = mtype.In(1)
 	default:
-		if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
-			logger.Errorf("method %v of %v has wrong number of ins: %v", mname, mtype, mtype.NumIn())
-		}
+		//if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+		//	logger.Errorf("method %v of %v has wrong number of ins: %v", mname, mtype, mtype.NumIn())
+		//}
 		return nil
 	}
 
@@ -143,6 +143,7 @@ func prepareEndpoint(method reflect.Method) *methodType {
 		}
 		return nil
 	}
+
 	return &methodType{method: method, ArgType: argType, ReplyType: replyType, ContextType: contextType, stream: stream}
 }
 
@@ -177,6 +178,17 @@ func (server *rServer) register(rcvr interface{}) error {
 		method := s.typ.Method(m)
 		if mt := prepareEndpoint(method); mt != nil {
 			s.method[method.Name] = mt
+			if s.name != "Debug" {
+				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+					if mt.ReplyType != nil {
+						logger.Errorf("registered component %s.%s(arg:%s, rsp:%s) error", s.name, method.Name, mt.ArgType.Elem().Name(), mt.ReplyType.Elem().Name())
+
+					} else {
+						logger.Errorf("registered component %s.%s(arg:%s) error", s.name, method.Name, mt.ArgType.Elem().Name())
+
+					}
+				}
+			}
 		}
 	}
 
