@@ -1,4 +1,4 @@
-package mcb_server
+package mcb_handler
 
 import (
 	"context"

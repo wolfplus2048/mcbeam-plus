@@ -188,7 +188,7 @@ func BuildMcbContext(ctx context.Context,
 	md["mcb-rpc-type"] = strconv.Itoa(int(rpcType))
 	md["mcb-route"] = route.String()
 	md["mcb-msg-type"] = strconv.Itoa(int(msg.Type))
-	md["mcb-msg-replay"] = strconv.Itoa(int(msg.ID))
+	md["mcb-msg-reply"] = strconv.Itoa(int(msg.ID))
 	md["mcb-session-id"] = strconv.FormatInt(session.ID(), 10)
 	md["mcb-session-uid"] = session.UID()
 	md["mcb-session-fid"] = frontendID

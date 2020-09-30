@@ -1,4 +1,4 @@
-package mcb_server
+package mcb_handler
 
 import (
 	"context"
@@ -7,11 +7,10 @@ import (
 )
 
 type Options struct {
-	name       string
-	serializer serialize.Serializer
-	rpcClient  client.Client
+	name         string
+	serializer   serialize.Serializer
+	rpcClient    client.Client
 	HdlrWrappers []HandlerWrapper
-
 }
 type HandlerFunc func(context.Context, interface{}) error
 type HandlerWrapper func(HandlerFunc) HandlerFunc

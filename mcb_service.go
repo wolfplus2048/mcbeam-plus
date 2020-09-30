@@ -2,20 +2,26 @@ package mcbeam
 
 import (
 	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/server"
 	"github.com/wolfplus2048/mcbeam-plus/component"
-	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
+	"github.com/wolfplus2048/mcbeam-plus/mcb_handler"
+	"github.com/wolfplus2048/mcbeam-plus/mcb_server/grpc"
 	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
+	"github.com/wolfplus2048/mcbeam-plus/wrapper"
 
-	"github.com/wolfplus2048/mcbeam-plus/protos"
 	"sync"
 )
+
+func init() {
+	server.DefaultServer = grpc.NewServer()
+}
 
 type mcbService struct {
 	opts Options
 	sync.RWMutex
-	started   bool
-	handlers  []component.Component
-	modules   []Module
+	started  bool
+	handlers []component.Component
+	modules  []Module
 }
 
 func newMcbService(opt ...Option) Service {
@@ -30,8 +36,10 @@ func newMcbService(opt ...Option) Service {
 	return t
 }
 
-func (t *mcbService) Register(handler component.Component, opts ...component.HandlerOption) {
-	t.opts.McbAppHandler.Handle(handler, opts...)
+func (t *mcbService) Register(handler component.Component, opts ...server.HandlerOption) {
+	//t.opts.McbAppHandler.Handle(handler, opts...)
+	s := t.opts.Service.Server()
+	s.Handle(s.NewHandler(handler, opts...))
 	t.handlers = append(t.handlers, handler)
 }
 func (t *mcbService) Module(module Module) {
@@ -68,13 +76,14 @@ func (t *mcbService) Init(opts ...Option) error {
 	if t.opts.Store != nil {
 		srvOpt = append(srvOpt, micro.Store(t.opts.Store))
 	}
+	srvOpt = append(srvOpt, micro.WrapHandler(wrapper.SessionHandler(t.opts.Service.Client())))
 	t.opts.Service.Init(srvOpt...)
 
 	t.opts.McbAppHandler.Init(
-		mcb_server.RpcClient(t.opts.Service.Client()),
-		mcb_server.Serializer(protobuf.NewSerializer()))
+		mcb_handler.RpcClient(t.opts.Service.Client()),
+		mcb_handler.Serializer(protobuf.NewSerializer()))
 
-	proto_mcbeam.RegisterMcbAppHandler(t.opts.Service.Server(), t.opts.McbAppHandler)
+	//proto_mcbeam.RegisterMcbAppHandler(t.opts.Service.Server(), t.opts.McbAppHandler)
 	return nil
 }
 

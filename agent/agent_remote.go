@@ -37,7 +37,7 @@ import (
 	"strings"
 )
 
-// Remote corresponding to another server
+// Remote corresponding to another mcb_server
 type Remote struct {
 	Session      *session.Session // session
 	chDie        chan struct{}    // wait for close
@@ -154,7 +154,7 @@ func (a *Remote) sendPush(m pendingMessage, userID string) (err error) {
 	return err
 }
 
-// SendRequest sends a request to a server
+// SendRequest sends a request to a mcb_server
 func (a *Remote) SendRequest(ctx context.Context, routeStr string, arg interface{}, reply interface{}) error {
 	route, err := route.Decode(routeStr)
 	if err != nil {

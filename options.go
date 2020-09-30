@@ -6,28 +6,27 @@ import (
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/server"
 	"github.com/micro/go-micro/v2/store"
-	"github.com/wolfplus2048/mcbeam-plus/mcb_server"
+	"github.com/wolfplus2048/mcbeam-plus/mcb_handler"
 	"github.com/wolfplus2048/mcbeam-plus/scheduler"
 )
 
 type Options struct {
-	Name      string
-	Handler   interface{}
-	Service   micro.Service
-	Registry  registry.Registry
-	Broker    broker.Broker
-	Store     store.Store
-	Scheduler scheduler.Scheduler
-	McbAppHandler mcb_server.McbAppHandler
+	Name          string
+	Handler       interface{}
+	Service       micro.Service
+	Registry      registry.Registry
+	Broker        broker.Broker
+	Store         store.Store
+	Scheduler     scheduler.Scheduler
+	McbAppHandler mcb_handler.McbAppHandler
 }
 type Option func(o *Options)
 
-
 func newOptions(opt ...Option) Options {
 	opts := Options{
-		Service:   micro.NewService(),
-		Scheduler: scheduler.Default,
-		McbAppHandler: mcb_server.NewMcbServer(),
+		Service:       micro.NewService(),
+		Scheduler:     scheduler.Default,
+		McbAppHandler: mcb_handler.NewMcbServer(),
 	}
 	for _, o := range opt {
 		o(&opts)
@@ -67,7 +66,7 @@ func MicroService(s micro.Service) Option {
 	}
 }
 
-// WrapSubscriber adds a subscriber Wrapper to a list of options passed into the server
+// WrapSubscriber adds a subscriber Wrapper to a list of options passed into the mcb_server
 func WrapSubscriber(w ...server.SubscriberWrapper) Option {
 	return func(o *Options) {
 		var wrappers []server.Option
@@ -81,7 +80,7 @@ func WrapSubscriber(w ...server.SubscriberWrapper) Option {
 	}
 }
 
-// WrapHandler adds a handler Wrapper to a list of options passed into the server
+// WrapHandler adds a handler Wrapper to a list of options passed into the mcb_server
 func WrapHandler(w ...server.HandlerWrapper) Option {
 	return func(o *Options) {
 		var wrappers []server.Option

@@ -1,4 +1,4 @@
-package mcb_server
+package mcb_handler
 
 import (
 	"context"
@@ -11,4 +11,3 @@ type McbAppHandler interface {
 	Call(ctx context.Context, req *proto_mcbeam.Request, res *proto_mcbeam.Response) error
 	Handle(handler interface{}, opt ...component.HandlerOption) error
 }
-

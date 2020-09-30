@@ -489,7 +489,7 @@
     if(gap > gapThreshold) {
       heartbeatTimeoutId = setTimeout(heartbeatTimeoutCb, gap);
     } else {
-      console.error('server heartbeat timeout');
+      console.error('mcb_server heartbeat timeout');
       starx.emit('heartbeat timeout');
       starx.disconnect();
     }
@@ -547,7 +547,7 @@
 
   var processMessage = function(starx, msg) {
     if(!msg.id) {
-      // server push message
+      // mcb_server push message
       starx.emit(msg.route, msg.body);
       return;
     }
