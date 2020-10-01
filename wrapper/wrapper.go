@@ -28,9 +28,8 @@ func SessionHandler(client client.Client) server.HandlerWrapper {
 
 			reply, ok := metadata.Get(ctx, "mcb-session-reply")
 			session := &proto_mcbeam.Session{
-				Id:   aid,
-				Uid:  uid,
-				Data: nil,
+				Id:  aid,
+				Uid: uid,
 			}
 			a, _ := agent.NewRemote(session, reply, client, fid, protobuf.NewSerializer())
 

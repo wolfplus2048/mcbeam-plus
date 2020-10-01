@@ -12,21 +12,21 @@ import (
 
 type Options struct {
 	Name          string
-	Handler       interface{}
 	Service       micro.Service
 	Registry      registry.Registry
 	Broker        broker.Broker
 	Store         store.Store
 	Scheduler     scheduler.Scheduler
 	McbAppHandler mcb_handler.McbAppHandler
+	Concurrency   bool
 }
 type Option func(o *Options)
 
 func newOptions(opt ...Option) Options {
 	opts := Options{
-		Service:       micro.NewService(),
-		Scheduler:     scheduler.Default,
-		McbAppHandler: mcb_handler.NewMcbServer(),
+		Service:     micro.NewService(),
+		Scheduler:   scheduler.Default,
+		Concurrency: false,
 	}
 	for _, o := range opt {
 		o(&opts)
@@ -47,6 +47,11 @@ func Registry(r registry.Registry) Option {
 func Broker(b broker.Broker) Option {
 	return func(o *Options) {
 		o.Broker = b
+	}
+}
+func Concurrency(b bool) Option {
+	return func(o *Options) {
+		o.Concurrency = b
 	}
 }
 func Store(s store.Store) Option {

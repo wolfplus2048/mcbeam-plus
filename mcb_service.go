@@ -2,11 +2,11 @@ package mcbeam
 
 import (
 	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/server"
 	"github.com/wolfplus2048/mcbeam-plus/component"
-	"github.com/wolfplus2048/mcbeam-plus/mcb_handler"
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server/grpc"
-	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
 	"github.com/wolfplus2048/mcbeam-plus/wrapper"
 
 	"sync"
@@ -14,6 +14,7 @@ import (
 
 func init() {
 	server.DefaultServer = grpc.NewServer()
+	logger.Init(logger.WithLevel(logger.DebugLevel))
 }
 
 type mcbService struct {
@@ -79,9 +80,9 @@ func (t *mcbService) Init(opts ...Option) error {
 	srvOpt = append(srvOpt, micro.WrapHandler(wrapper.SessionHandler(t.opts.Service.Client())))
 	t.opts.Service.Init(srvOpt...)
 
-	t.opts.McbAppHandler.Init(
-		mcb_handler.RpcClient(t.opts.Service.Client()),
-		mcb_handler.Serializer(protobuf.NewSerializer()))
+	//t.opts.McbAppHandler.Init(
+	//	mcb_handler.RpcClient(t.opts.Service.Client()),
+	//	mcb_handler.Serializer(protobuf.NewSerializer()))
 
 	//proto_mcbeam.RegisterMcbAppHandler(t.opts.Service.Server(), t.opts.McbAppHandler)
 	return nil
@@ -90,7 +91,12 @@ func (t *mcbService) Init(opts ...Option) error {
 func (t *mcbService) Options() Options {
 	return t.opts
 }
-
+func (t *mcbService) Client() client.Client {
+	return t.opts.Service.Client()
+}
+func (t *mcbService) Server() server.Server {
+	return t.opts.Service.Server()
+}
 func (t *mcbService) start() error {
 	t.Lock()
 	defer t.Unlock()

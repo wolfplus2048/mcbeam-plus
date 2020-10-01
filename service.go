@@ -1,6 +1,7 @@
 package mcbeam
 
 import (
+	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/server"
 	"github.com/wolfplus2048/mcbeam-plus/component"
 	"time"
@@ -11,6 +12,8 @@ type Service interface {
 	Options() Options
 	Register(comp component.Component, opts ...server.HandlerOption)
 	Module(module Module)
+	Client() client.Client
+	Server() server.Server
 	Run() error
 }
 type Module interface {
