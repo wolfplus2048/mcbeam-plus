@@ -2,16 +2,25 @@ package mcbeam
 
 import (
 	"context"
+	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/client/selector"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/wolfplus2048/mcbeam-plus/constants"
-	"github.com/wolfplus2048/mcbeam-plus/message"
-	gateproto "github.com/wolfplus2048/mcbeam-plus/protos"
 	"github.com/wolfplus2048/mcbeam-plus/route"
 	"github.com/wolfplus2048/mcbeam-plus/session"
 	"github.com/wolfplus2048/mcbeam-plus/util"
+)
+
+var (
+	GitCommit string
+	GitTag    string
+	BuildDate string
+
+	name        = "micro"
+	description = "A microservice runtime\n\n	 Use `micro [command] --help` to see command specific help."
+	version     = "latest"
 )
 
 // GetSessionFromCtx retrieves a session from a given context
@@ -29,24 +38,26 @@ func RPC(ctx context.Context, c client.Client, routeStr string, arg proto.Messag
 		logger.Errorf("Failed to decode route: %s", err.Error())
 		return err
 	}
-	data, _ := proto.Marshal(arg)
-	msg := &message.Message{
-		Type:  message.Request,
-		ID:    0,
-		Route: routeStr,
-		Data:  data,
-		Err:   false,
-	}
-	r, _ := util.BuildRequest(ctx, gateproto.RPCType_Sys, route, nil, msg, "")
-
-	req := c.NewRequest(route.SvType, "McbApp.Call", r)
-	rsp := new(gateproto.Response)
+	req := c.NewRequest(route.SvType, route.Short(), arg)
 	so := selector.WithStrategy(util.Select(route.SvID))
 
-	err = c.Call(ctx, req, rsp, client.WithSelectOption(so))
-	if err == nil {
-		err = proto.Unmarshal(rsp.Data, replay)
+	return c.Call(ctx, req, replay, client.WithSelectOption(so))
+}
+
+func buildVersion() string {
+	microVersion := version
+
+	if GitTag != "" {
+		microVersion = GitTag
 	}
 
-	return err
+	if GitCommit != "" {
+		microVersion += fmt.Sprintf("-%s", GitCommit)
+	}
+
+	if BuildDate != "" {
+		microVersion += fmt.Sprintf("-%s", BuildDate)
+	}
+	logger.Debugf("version:%s", microVersion)
+	return microVersion
 }

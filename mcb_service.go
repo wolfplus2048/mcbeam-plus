@@ -68,6 +68,11 @@ func (t *mcbService) Init(opts ...Option) error {
 	if len(t.opts.Name) > 0 {
 		srvOpt = append(srvOpt, micro.Name(t.opts.Name))
 	}
+	if len(t.opts.Version) > 0 {
+		srvOpt = append(srvOpt, micro.Version(t.opts.Version))
+	} else {
+		srvOpt = append(srvOpt, micro.Version(buildVersion()))
+	}
 	if t.opts.Registry != nil {
 		srvOpt = append(srvOpt, micro.Registry(t.opts.Registry))
 	}

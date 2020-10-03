@@ -3,6 +3,7 @@ package mcbeam
 import (
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/broker"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/server"
 	"github.com/micro/go-micro/v2/store"
@@ -12,6 +13,7 @@ import (
 
 type Options struct {
 	Name          string
+	Version       string
 	Service       micro.Service
 	Registry      registry.Registry
 	Broker        broker.Broker
@@ -34,9 +36,25 @@ func newOptions(opt ...Option) Options {
 
 	return opts
 }
-func Name(name string) Option {
+
+// Name of the service
+func Name(n string) Option {
 	return func(o *Options) {
-		o.Name = name
+		o.Name = n
+	}
+}
+
+// Version of the service
+func Version(v string) Option {
+	return func(o *Options) {
+		o.Version = v
+	}
+}
+
+// Metadata associated with the service
+func Metadata(md map[string]string) Option {
+	return func(o *Options) {
+		o.Service.Server().Init(server.Metadata(md))
 	}
 }
 func Registry(r registry.Registry) Option {
@@ -71,13 +89,34 @@ func MicroService(s micro.Service) Option {
 	}
 }
 
-// WrapSubscriber adds a subscriber Wrapper to a list of options passed into the mcb_server
-func WrapSubscriber(w ...server.SubscriberWrapper) Option {
+// WrapClient is a convenience method for wrapping a Client with
+// some middleware component. A list of wrappers can be provided.
+// Wrappers are applied in reverse order so the last is executed first.
+func WrapClient(w ...client.Wrapper) Option {
+	return func(o *Options) {
+		// apply in reverse
+		for i := len(w); i > 0; i-- {
+			c := o.Service.Client()
+			c = w[i-1](c)
+			o.Service.Init(micro.Client(c))
+		}
+	}
+}
+
+// WrapCall is a convenience method for wrapping a Client CallFunc
+func WrapCall(w ...client.CallWrapper) Option {
+	return func(o *Options) {
+		o.Service.Client().Init(client.WrapCall(w...))
+	}
+}
+
+// WrapHandler adds a handler Wrapper to a list of options passed into the server
+func WrapHandler(w ...server.HandlerWrapper) Option {
 	return func(o *Options) {
 		var wrappers []server.Option
 
 		for _, wrap := range w {
-			wrappers = append(wrappers, server.WrapSubscriber(wrap))
+			wrappers = append(wrappers, server.WrapHandler(wrap))
 		}
 
 		// Init once
@@ -85,13 +124,13 @@ func WrapSubscriber(w ...server.SubscriberWrapper) Option {
 	}
 }
 
-// WrapHandler adds a handler Wrapper to a list of options passed into the mcb_server
-func WrapHandler(w ...server.HandlerWrapper) Option {
+// WrapSubscriber adds a subscriber Wrapper to a list of options passed into the server
+func WrapSubscriber(w ...server.SubscriberWrapper) Option {
 	return func(o *Options) {
 		var wrappers []server.Option
 
 		for _, wrap := range w {
-			wrappers = append(wrappers, server.WrapHandler(wrap))
+			wrappers = append(wrappers, server.WrapSubscriber(wrap))
 		}
 
 		// Init once

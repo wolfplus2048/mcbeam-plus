@@ -75,8 +75,10 @@ func extractEndpoint(method reflect.Method) *registry.Endpoint {
 		reqType = mt.In(1)
 		rspType = mt.In(2)
 	case 4:
-		reqType = mt.In(2)
-		rspType = mt.In(3)
+		//reqType = mt.In(2)
+		//rspType = mt.In(3)
+		reqType = mt.In(1)
+		rspType = mt.In(2)
 	default:
 		return nil
 	}
