@@ -181,10 +181,10 @@ func (server *rServer) register(rcvr interface{}) error {
 			if s.name != "Debug" {
 				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
 					if mt.ReplyType != nil {
-						logger.Errorf("registered component %s.%s(arg:%s, rsp:%s)", s.name, method.Name, mt.ArgType.Elem().Name(), mt.ReplyType.Elem().Name())
+						logger.Debugf("registered component %s.%s(arg:%s, rsp:%s)", s.name, method.Name, mt.ArgType.Elem().Name(), mt.ReplyType.Elem().Name())
 
 					} else {
-						logger.Errorf("registered component %s.%s(arg:%s)", s.name, method.Name, mt.ArgType.Elem().Name())
+						logger.Debugf("registered component %s.%s(arg:%s)", s.name, method.Name, mt.ArgType.Elem().Name())
 
 					}
 				}

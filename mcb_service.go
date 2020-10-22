@@ -5,9 +5,12 @@ import (
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/server"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/wolfplus2048/mcbeam-plus/component"
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server/grpc"
 	"github.com/wolfplus2048/mcbeam-plus/wrapper"
+	"github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2"
+	"net/http"
 
 	"sync"
 )
@@ -83,6 +86,18 @@ func (t *mcbService) Init(opts ...Option) error {
 		srvOpt = append(srvOpt, micro.Store(t.opts.Store))
 	}
 	srvOpt = append(srvOpt, micro.WrapHandler(wrapper.SessionHandler(t.opts.Service.Client())))
+	srvOpt = append(srvOpt, micro.WrapHandler(
+		prometheus.NewHandlerWrapper(
+			prometheus.ServiceName(t.opts.Name),
+			prometheus.ServiceVersion(t.opts.Version)),
+		),
+	)
+	srvOpt = append(srvOpt, micro.WrapSubscriber(
+		prometheus.NewSubscriberWrapper(
+			prometheus.ServiceName(t.opts.Name),
+			prometheus.ServiceVersion(t.opts.Version)),
+		),
+	)
 	t.opts.Service.Init(srvOpt...)
 
 	//t.opts.McbAppHandler.Init(
@@ -125,6 +140,8 @@ func (t *mcbService) start() error {
 	if t.opts.Scheduler != nil {
 		t.opts.Scheduler.Start()
 	}
+
+	prometheusBoot()
 	t.started = true
 
 	for _, v := range t.modules {
@@ -172,4 +189,16 @@ func (t *mcbService) stop() error {
 	}
 
 	return nil
+}
+
+func prometheusBoot() {
+	http.Handle("/metrics", promhttp.Handler())
+	go func() {
+		err := http.ListenAndServe(":9913", nil)
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}()
+	logger.Debugf("Metrics [Prometheus] Listening on [::]:%d", 9913)
+
 }

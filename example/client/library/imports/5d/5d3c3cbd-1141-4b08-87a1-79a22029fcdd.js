@@ -507,7 +507,7 @@ cc._RF.push(module, '5d3c3y9EUFLCIeheaIgKfzd', 'starx-wsclient');
     if (gap > gapThreshold) {
       heartbeatTimeoutId = setTimeout(heartbeatTimeoutCb, gap);
     } else {
-      console.error('server heartbeat timeout');
+      console.error('mcb_server heartbeat timeout');
       starx.emit('heartbeat timeout');
       starx.disconnect();
     }
@@ -568,7 +568,7 @@ cc._RF.push(module, '5d3c3y9EUFLCIeheaIgKfzd', 'starx-wsclient');
 
   var processMessage = function processMessage(starx, msg) {
     if (!msg.id) {
-      // server push message
+      // mcb_server push message
       starx.emit(msg.route, msg.body);
       return;
     } //if have a id then find the callback function with the request
