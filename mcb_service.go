@@ -10,6 +10,7 @@ import (
 	"github.com/wolfplus2048/mcbeam-plus/mcb_server/grpc"
 	"github.com/wolfplus2048/mcbeam-plus/wrapper"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2"
+	"net"
 	"net/http"
 
 	"sync"
@@ -192,16 +193,25 @@ func (t *mcbService) stop() error {
 }
 
 func prometheusBoot() {
-	http.Handle("/metrics", promhttp.Handler())
+	mux := http.NewServeMux()
+	mux.Handle("/metrics", promhttp.Handler())
+	server := http.Server{
+		Addr: ":9913",
+		Handler: mux,
+
+	}
+	addr := ":9913"
 	go func() {
-		err := http.ListenAndServe(":9913", nil)
-		if err != nil {
-			err = http.ListenAndServe(":0", nil)
+		ts, err := net.Listen("tcp", addr)
+		if err != nil{
+			addr = ":0"
+			ts, err = net.Listen("tcp", addr)
 		}
+		logger.Debugf("Metrics [Prometheus] Listening on %s", ts.Addr().String())
+		err = server.Serve(ts)
 		if err != nil {
 			logger.Fatal(err)
 		}
 	}()
-	logger.Debugf("Metrics [Prometheus] Listening on [::]:%d", 9913)
 
 }
