@@ -196,6 +196,9 @@ func prometheusBoot() {
 	go func() {
 		err := http.ListenAndServe(":9913", nil)
 		if err != nil {
+			err = http.ListenAndServe(":0", nil)
+		}
+		if err != nil {
 			logger.Fatal(err)
 		}
 	}()
