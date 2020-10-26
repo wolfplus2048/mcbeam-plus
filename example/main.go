@@ -8,8 +8,8 @@ import (
 	"github.com/micro/go-micro/v2/registry/etcd"
 	"github.com/micro/go-micro/v2/web"
 	"github.com/wolfplus2048/mcbeam-plus"
-	proto_example "github.com/wolfplus2048/mcbeam-plus/example/proto"
-	"github.com/wolfplus2048/mcbeam-plus/scheduler"
+	proto_example "github.com/wolfplus2048/mcbeam-plus/v3/example/proto"
+	"github.com/wolfplus2048/mcbeam-plus/v3/scheduler"
 	"net/http"
 	"time"
 )

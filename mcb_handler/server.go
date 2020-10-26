@@ -2,8 +2,8 @@ package mcb_handler
 
 import (
 	"context"
-	"github.com/wolfplus2048/mcbeam-plus/component"
-	"github.com/wolfplus2048/mcbeam-plus/protos"
+	"github.com/wolfplus2048/mcbeam-plus/v3/component"
+	"github.com/wolfplus2048/mcbeam-plus/v3/protos"
 )
 
 type McbAppHandler interface {

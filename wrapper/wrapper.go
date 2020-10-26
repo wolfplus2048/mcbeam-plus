@@ -5,10 +5,10 @@ import (
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/metadata"
 	"github.com/micro/go-micro/v2/server"
-	"github.com/wolfplus2048/mcbeam-plus/agent"
-	"github.com/wolfplus2048/mcbeam-plus/constants"
-	proto_mcbeam "github.com/wolfplus2048/mcbeam-plus/protos"
-	"github.com/wolfplus2048/mcbeam-plus/serialize/protobuf"
+	"github.com/wolfplus2048/mcbeam-plus/v3/agent"
+	"github.com/wolfplus2048/mcbeam-plus/v3/constants"
+	proto_mcbeam "github.com/wolfplus2048/mcbeam-plus/v3/protos"
+	"github.com/wolfplus2048/mcbeam-plus/v3/serialize/protobuf"
 	"strconv"
 )
 

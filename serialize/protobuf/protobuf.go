@@ -22,7 +22,7 @@ package protobuf
 
 import (
 	"github.com/golang/protobuf/proto"
-	"github.com/wolfplus2048/mcbeam-plus/constants"
+	"github.com/wolfplus2048/mcbeam-plus/v3/constants"
 )
 
 // Serializer implements the serialize.Serializer interface

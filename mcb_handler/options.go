@@ -3,7 +3,7 @@ package mcb_handler
 import (
 	"context"
 	"github.com/micro/go-micro/v2/client"
-	"github.com/wolfplus2048/mcbeam-plus/serialize"
+	"github.com/wolfplus2048/mcbeam-plus/v3/serialize"
 )
 
 type Options struct {

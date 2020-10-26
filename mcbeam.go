@@ -7,10 +7,10 @@ import (
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/client/selector"
 	"github.com/micro/go-micro/v2/logger"
-	"github.com/wolfplus2048/mcbeam-plus/constants"
-	"github.com/wolfplus2048/mcbeam-plus/route"
-	"github.com/wolfplus2048/mcbeam-plus/session"
-	"github.com/wolfplus2048/mcbeam-plus/util"
+	"github.com/wolfplus2048/mcbeam-plus/v3/constants"
+	"github.com/wolfplus2048/mcbeam-plus/v3/route"
+	"github.com/wolfplus2048/mcbeam-plus/v3/session"
+	"github.com/wolfplus2048/mcbeam-plus/v3/util"
 )
 
 var (

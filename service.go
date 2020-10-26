@@ -1,9 +1,9 @@
 package mcbeam
 
 import (
-	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/server"
-	"github.com/wolfplus2048/mcbeam-plus/component"
+	"github.com/micro/micro/v3/service/client"
+	"github.com/micro/micro/v3/service/server"
+	"github.com/wolfplus2048/mcbeam-plus/v3/component"
 	"time"
 )
 

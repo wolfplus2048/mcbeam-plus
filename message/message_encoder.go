@@ -22,7 +22,7 @@ package message
 
 import (
 	"encoding/binary"
-	"github.com/wolfplus2048/mcbeam-plus/util/compression"
+	"github.com/wolfplus2048/mcbeam-plus/v3/util/compression"
 )
 
 // Encoder interface

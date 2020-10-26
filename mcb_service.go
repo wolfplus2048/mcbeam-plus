@@ -6,9 +6,9 @@ import (
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/wolfplus2048/mcbeam-plus/component"
-	"github.com/wolfplus2048/mcbeam-plus/mcb_server/grpc"
-	"github.com/wolfplus2048/mcbeam-plus/wrapper"
+	"github.com/wolfplus2048/mcbeam-plus/v3/component"
+	"github.com/wolfplus2048/mcbeam-plus/v3/mcb_server/grpc"
+	"github.com/wolfplus2048/mcbeam-plus/v3/wrapper"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2"
 	"net"
 	"net/http"
@@ -18,7 +18,6 @@ import (
 
 func init() {
 	server.DefaultServer = grpc.NewServer()
-	logger.Init(logger.WithLevel(logger.DebugLevel))
 }
 
 type mcbService struct {

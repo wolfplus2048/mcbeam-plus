@@ -7,8 +7,8 @@ import (
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/server"
 	"github.com/micro/go-micro/v2/store"
-	"github.com/wolfplus2048/mcbeam-plus/mcb_handler"
-	"github.com/wolfplus2048/mcbeam-plus/scheduler"
+	"github.com/wolfplus2048/mcbeam-plus/v3/mcb_handler"
+	"github.com/wolfplus2048/mcbeam-plus/v3/scheduler"
 )
 
 type Options struct {

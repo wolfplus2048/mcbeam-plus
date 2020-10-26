@@ -2,7 +2,7 @@ package scheduler
 
 import (
 	"github.com/micro/go-micro/v2/logger"
-	"github.com/wolfplus2048/mcbeam-plus/constants"
+	"github.com/wolfplus2048/mcbeam-plus/v3/constants"
 	"sync"
 	"sync/atomic"
 	"time"
