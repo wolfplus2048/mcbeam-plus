@@ -1,4 +1,4 @@
-module github.com/wolfplus2048/mcbeam-plus
+module github.com/wolfplus2048/mcbeam-plus/v3
 
 go 1.14
 
